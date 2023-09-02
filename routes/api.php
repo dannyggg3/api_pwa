@@ -9,6 +9,16 @@ use App\Http\Controllers\CiudadController;
 use App\Http\Controllers\ClienteController; 
 use App\Http\Controllers\ComentarioResenaController; 
 use App\Http\Controllers\DatosFacturacionController; 
+use App\Http\Controllers\DetallesCarritoController; 
+use App\Http\Controllers\DetallesOrdenController; 
+use App\Http\Controllers\DireccionesEntregaController; 
+use App\Http\Controllers\EmpresaController; 
+use App\Http\Controllers\EstadoOrdenController;
+use App\Http\Controllers\FacturaElectronicaController;
+use App\Http\Controllers\FormaPagoController;
+use App\Http\Controllers\InfoAdicionalController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -94,5 +104,78 @@ Route::prefix('datosfacturacion')->group(function () {
     Route::put('/{id}', [DatosFacturacionController::class, 'update']);
     Route::delete('/{id}', [DatosFacturacionController::class, 'destroy']);
 });
+ 
+//CRUD Tabla DetallesCarrito
+Route::prefix('detallescarrito')->group(function () {
+    Route::get('/', [DetallesCarritoController::class, 'index']);
+    Route::post('/', [DetallesCarritoController::class, 'store']);
+    Route::get('/{id}', [DetallesCarritoController::class, 'show']);
+    Route::put('/{id}', [DetallesCarritoController::class, 'update']);
+    Route::delete('/{id}', [DetallesCarritoController::class, 'destroy']);
+});
+
+//CRUD Tabla DetallesOrden
+Route::prefix('detallesorden')->group(function () {
+    Route::get('/', [DetallesOrdenController::class, 'index']);
+    Route::post('/', [DetallesOrdenController::class, 'store']);
+    Route::get('/{id}', [DetallesOrdenController::class, 'show']);
+    Route::put('/{id}', [DetallesOrdenController::class, 'update']);
+    Route::delete('/{id}', [DetallesOrdenController::class, 'destroy']);
+});
+
+//CRUD Tabla DireccionesEntrega
+Route::prefix('direccionesentrega')->group(function () {
+    Route::get('/', [DireccionesEntregaController::class, 'index']);
+    Route::post('/', [DireccionesEntregaController::class, 'store']);
+    Route::get('/{id}', [DireccionesEntregaController::class, 'show']);
+    Route::put('/{id}', [DireccionesEntregaController::class, 'update']);
+    Route::delete('/{id}', [DireccionesEntregaController::class, 'destroy']);
+});
+
+//CRUD Tabla Empresa
+Route::prefix('empresa')->group(function () {
+    Route::get('/', [EmpresaController::class, 'index']);
+    Route::post('/', [EmpresaController::class, 'store']);
+    Route::get('/{id}', [EmpresaController::class, 'show']);
+    Route::put('/{id}', [EmpresaController::class, 'update']);
+    Route::delete('/{id}', [EmpresaController::class, 'destroy']);
+});
+
+//CRUD Tabla EstadoOrden
+Route::prefix('estadoorden')->group(function () {
+    Route::get('/', [EstadoOrdenController::class, 'index']);
+    Route::post('/', [EstadoOrdenController::class, 'store']);
+    Route::get('/{id}', [EstadoOrdenController::class, 'show']);
+    Route::put('/{id}', [EstadoOrdenController::class, 'update']);
+    Route::delete('/{id}', [EstadoOrdenController::class, 'destroy']);
+});
+
+//CRUD Tabla FacturaElectronica
+Route::prefix('facturaelectronica')->group(function () {
+    Route::get('/', [FacturaElectronicaController::class, 'index']);
+    Route::post('/', [FacturaElectronicaController::class, 'store']);
+    Route::get('/{id}', [FacturaElectronicaController::class, 'show']);
+    Route::put('/{id}', [FacturaElectronicaController::class, 'update']);
+    Route::delete('/{id}', [FacturaElectronicaController::class, 'destroy']);
+});
+
+//CRUD Tabla FormaPago
+Route::prefix('formapago')->group(function () {
+    Route::get('/', [FormaPagoController::class, 'index']);
+    Route::post('/', [FormaPagoController::class, 'store']);
+    Route::get('/{id}', [FormaPagoController::class, 'show']);
+    Route::put('/{id}', [FormaPagoController::class, 'update']);
+    Route::delete('/{id}', [FormaPagoController::class, 'destroy']);
+});
+
+//CRUD Tabla InfoAdicional
+Route::prefix('infoadicional')->group(function () {
+    Route::get('/', [InfoAdicionalController::class, 'index']);
+    Route::post('/', [InfoAdicionalController::class, 'store']);
+    Route::get('/{id}', [InfoAdicionalController::class, 'show']);
+    Route::put('/{id}', [InfoAdicionalController::class, 'update']);
+    Route::delete('/{id}', [InfoAdicionalController::class, 'destroy']);
+});
+
 
 
