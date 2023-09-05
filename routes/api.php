@@ -31,6 +31,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TipoDocumentoController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\VarianteController;
+use App\Http\Controllers\AuthController;
 
 
 
@@ -50,6 +51,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+
+Route::controller(AuthController::class)->group(function () {
+    Route::post('login', 'login');
+    Route::post('register', 'register');
+    Route::post('logout', 'logout');
+    Route::post('refresh', 'refresh');
+
+});
 
 
 //CRUD Tabla Banner
@@ -302,6 +312,7 @@ Route::prefix('tipodocumento')->group(function () {
 
 //CRUD Tabla Usuario
 Route::prefix('usuarios')->group(function () {
+    Route::post('/login', [UsuarioController::class, 'login']);
     Route::get('/', [UsuarioController::class, 'index']);
     Route::post('/', [UsuarioController::class, 'store']);
     Route::get('/{id}', [UsuarioController::class, 'show']);
