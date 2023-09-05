@@ -6,17 +6,32 @@ use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CarritoCompraController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\CiudadController;
-use App\Http\Controllers\ClienteController; 
-use App\Http\Controllers\ComentarioResenaController; 
-use App\Http\Controllers\DatosFacturacionController; 
-use App\Http\Controllers\DetallesCarritoController; 
-use App\Http\Controllers\DetallesOrdenController; 
-use App\Http\Controllers\DireccionesEntregaController; 
-use App\Http\Controllers\EmpresaController; 
+use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ComentarioResenaController;
+use App\Http\Controllers\DatosFacturacionController;
+use App\Http\Controllers\DetallesCarritoController;
+use App\Http\Controllers\DetallesOrdenController;
+use App\Http\Controllers\DireccionesEntregaController;
+use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\EstadoOrdenController;
 use App\Http\Controllers\FacturaElectronicaController;
 use App\Http\Controllers\FormaPagoController;
 use App\Http\Controllers\InfoAdicionalController;
+use App\Http\Controllers\MarcaController;
+use App\Http\Controllers\NotificacionController;
+use App\Http\Controllers\OfertasEspecialesController;
+use App\Http\Controllers\OrdenController;
+use App\Http\Controllers\PagosOrdenController;
+use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\ProductoDeseadoController;
+use App\Http\Controllers\ProvinciaController;
+use App\Http\Controllers\PublicidadController;
+use App\Http\Controllers\SliderController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TipoDocumentoController;
+use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\VarianteController;
+
 
 
 
@@ -104,7 +119,7 @@ Route::prefix('datosfacturacion')->group(function () {
     Route::put('/{id}', [DatosFacturacionController::class, 'update']);
     Route::delete('/{id}', [DatosFacturacionController::class, 'destroy']);
 });
- 
+
 //CRUD Tabla DetallesCarrito
 Route::prefix('detallescarrito')->group(function () {
     Route::get('/', [DetallesCarritoController::class, 'index']);
@@ -176,6 +191,133 @@ Route::prefix('infoadicional')->group(function () {
     Route::put('/{id}', [InfoAdicionalController::class, 'update']);
     Route::delete('/{id}', [InfoAdicionalController::class, 'destroy']);
 });
+
+//CRUD Tabla Marca
+Route::prefix('marca')->group(function () {
+    Route::get('/', [MarcaController::class, 'index']);
+    Route::post('/', [MarcaController::class, 'store']);
+    Route::get('/{id}', [MarcaController::class, 'show']);
+    Route::put('/{id}', [MarcaController::class, 'update']);
+    Route::delete('/{id}', [MarcaController::class, 'destroy']);
+});
+
+//CRUD Tabla Notificacion
+Route::prefix('notificacion')->group(function () {
+    Route::get('/', [NotificacionController::class, 'index']);
+    Route::post('/', [NotificacionController::class, 'store']);
+    Route::get('/{id}', [NotificacionController::class, 'show']);
+    Route::put('/{id}', [NotificacionController::class, 'update']);
+    Route::delete('/{id}', [NotificacionController::class, 'destroy']);
+});
+
+//CRUD Tabla OfertasEspeciales
+Route::prefix('ofertasespeciales')->group(function () {
+    Route::get('/', [OfertasEspecialesController::class, 'index']);
+    Route::post('/', [OfertasEspecialesController::class, 'store']);
+    Route::get('/{id}', [OfertasEspecialesController::class, 'show']);
+    Route::put('/{id}', [OfertasEspecialesController::class, 'update']);
+    Route::delete('/{id}', [OfertasEspecialesController::class, 'destroy']);
+});
+
+//CRUD Tabla Orden
+Route::prefix('orden')->group(function () {
+    Route::get('/', [OrdenController::class, 'index']);
+    Route::post('/', [OrdenController::class, 'store']);
+    Route::get('/{id}', [OrdenController::class, 'show']);
+    Route::put('/{id}', [OrdenController::class, 'update']);
+    Route::delete('/{id}', [OrdenController::class, 'destroy']);
+});
+
+//CRUD Tabla PagosOrden
+Route::prefix('pagosorden')->group(function () {
+    Route::get('/', [PagosOrdenController::class, 'index']);
+    Route::post('/', [PagosOrdenController::class, 'store']);
+    Route::get('/{id}', [PagosOrdenController::class, 'show']);
+    Route::put('/{id}', [PagosOrdenController::class, 'update']);
+    Route::delete('/{id}', [PagosOrdenController::class, 'destroy']);
+});
+
+//CRUD Tabla Producto
+Route::prefix('producto')->group(function () {
+    Route::get('/', [ProductoController::class, 'index']);
+    Route::post('/', [ProductoController::class, 'store']);
+    Route::get('/{id}', [ProductoController::class, 'show']);
+    Route::put('/{id}', [ProductoController::class, 'update']);
+    Route::delete('/{id}', [ProductoController::class, 'destroy']);
+});
+
+//CRUD Tabla ProductoDeseado
+Route::prefix('productodeseado')->group(function () {
+    Route::get('/', [ProductoDeseadoController::class, 'index']);
+    Route::post('/', [ProductoDeseadoController::class, 'store']);
+    Route::get('/{id}', [ProductoDeseadoController::class, 'show']);
+    Route::put('/{id}', [ProductoDeseadoController::class, 'update']);
+    Route::delete('/{id}', [ProductoDeseadoController::class, 'destroy']);
+});
+
+//CRUD Tabla Provincia
+Route::prefix('provincia')->group(function () {
+    Route::get('/', [ProvinciaController::class, 'index']);
+    Route::post('/', [ProvinciaController::class, 'store']);
+    Route::get('/{id}', [ProvinciaController::class, 'show']);
+    Route::put('/{id}', [ProvinciaController::class, 'update']);
+    Route::delete('/{id}', [ProvinciaController::class, 'destroy']);
+});
+
+//CRUD Tabla Publicidad
+Route::prefix('publicidad')->group(function () {
+    Route::get('/', [PublicidadController::class, 'index']);
+    Route::post('/', [PublicidadController::class, 'store']);
+    Route::get('/{id}', [PublicidadController::class, 'show']);
+    Route::put('/{id}', [PublicidadController::class, 'update']);
+    Route::delete('/{id}', [PublicidadController::class, 'destroy']);
+});
+
+//CRUD Tabla Slider
+Route::prefix('slider')->group(function () {
+    Route::get('/', [SliderController::class, 'index']);
+    Route::post('/', [SliderController::class, 'store']);
+    Route::get('/{id}', [SliderController::class, 'show']);
+    Route::put('/{id}', [SliderController::class, 'update']);
+    Route::delete('/{id}', [SliderController::class, 'destroy']);
+});
+
+//Crud para la tabla Role
+Route::prefix('roles')->group(function () {
+    Route::get('/', [RoleController::class, 'index']);
+    Route::post('/', [RoleController::class, 'store']);
+    Route::get('/{id}', [RoleController::class, 'show']);
+    Route::put('/{id}', [RoleController::class, 'update']);
+    Route::delete('/{id}', [RoleController::class, 'destroy']);
+});
+
+//crud tabla TipoDocumento
+Route::prefix('tipodocumento')->group(function () {
+    Route::get('/', [TipoDocumentoController::class, 'index']);
+    Route::post('/', [TipoDocumentoController::class, 'store']);
+    Route::get('/{id}', [TipoDocumentoController::class, 'show']);
+    Route::put('/{id}', [TipoDocumentoController::class, 'update']);
+    Route::delete('/{id}', [TipoDocumentoController::class, 'destroy']);
+});
+
+//CRUD Tabla Usuario
+Route::prefix('usuarios')->group(function () {
+    Route::get('/', [UsuarioController::class, 'index']);
+    Route::post('/', [UsuarioController::class, 'store']);
+    Route::get('/{id}', [UsuarioController::class, 'show']);
+    Route::put('/{id}', [UsuarioController::class, 'update']);
+    Route::delete('/{id}', [UsuarioController::class, 'destroy']);
+});
+
+//CRUD Tabla Variente
+Route::prefix('variantes')->group(function () {
+    Route::get('/', [VarianteController::class, 'index']);
+    Route::post('/', [VarianteController::class, 'store']);
+    Route::get('/{id}', [VarianteController::class, 'show']);
+    Route::put('/{id}', [VarianteController::class, 'update']);
+    Route::delete('/{id}', [VarianteController::class, 'destroy']);
+});
+
 
 
 
