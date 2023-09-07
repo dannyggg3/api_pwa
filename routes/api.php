@@ -54,11 +54,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::controller(AuthController::class)->group(function () {
+
     Route::post('login', 'login');
     Route::post('register', 'register');
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
 
+
+});
+
+
+Route::middleware('auth:api')->group(function() {
+    Route::get('usuariosClientes',[AuthController::class,'clientes']);
 });
 
 
@@ -108,6 +115,7 @@ Route::prefix('clientes')->group(function () {
     Route::get('/{id}', [ClienteController::class, 'show']);
     Route::put('/{id}', [ClienteController::class, 'update']);
     Route::delete('/{id}', [ClienteController::class, 'destroy']);
+
 });
 
 

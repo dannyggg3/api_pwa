@@ -20,20 +20,26 @@ class AuthController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
+
+
+
+
+
+
         $credentials = $request->only('email', 'password');
 
         $token = Auth::attempt($credentials);
         if (!$token) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
-            ], 401);
+                'correctProcess' => false,
+                'message' => 'Credenciales incorrectas',
+            ], 200);
         }
 
         $user = Auth::user();
         return response()->json([
-                'status' => 'success',
-                'user' => $user,
+                'correctProcess' => true,
+                'data' => $user,
                 'authorisation' => [
                     'token' => $token,
                     'type' => 'bearer',
@@ -45,28 +51,24 @@ class AuthController extends Controller
     public function register(Request $request){
 
         try {
-
-
-
              $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
-        ]);
-
-
+            ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'rol_id' => 2
         ]);
 
         $token = Auth::login($user);
         return response()->json([
-            'status' => 'success',
-            'message' => 'User created successfully',
-            'user' => $user,
+            'correctProcess'=> true,
+            'message' => 'Usuario creado exitosamente',
+            'data' => $user,
             'authorisation' => [
                 'token' => $token,
                 'type' => 'bearer',
@@ -74,9 +76,39 @@ class AuthController extends Controller
         ]);
         } catch (\Throwable $th) {
             //return error
-            dd($th);
+            return response()->json([
+                'correctProcess'=> false,
+                'message' => 'Error al crear el usuario',
+                'data' => $th->getMessage(),
+            ]);
         }
     }
+
+
+
+
+    //actualizar clave de un usuario por el id
+    public function updatePassword(Request $request, $id){
+        try {
+            $user = User::find($id);
+            $user->password = Hash::make($request->password);
+            $user->save();
+            return response()->json([
+                'correctProcess' => true,
+                'message' => 'Contraseña actualizada correctamente',
+                'data' => $user,
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'correctProcess' => false,
+                'message' => 'Error al actualizar la contraseña:' . $th->getMessage(),
+            ]);
+        }
+    }
+
+
+
 
     public function logout()
     {
@@ -97,5 +129,25 @@ class AuthController extends Controller
                 'type' => 'bearer',
             ]
         ]);
+    }
+
+
+    //obtener todos los usuarios con rol_id 2
+    public function clientes()
+    {
+        try {
+              //retorna los usuarios con rol_id 2
+            $users = User::where('rol_id', 2)->get();
+            return response()->json([
+                'correctProcess' => true,
+                'data' => $users,
+        ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'correctProcess' => false,
+                'message' => 'Error al obtener los clientes:' . $th->getMessage(),
+            ]);
+        }
     }
 }
