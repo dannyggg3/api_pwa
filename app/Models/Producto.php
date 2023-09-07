@@ -33,4 +33,15 @@ class Producto extends Model
         return $this->belongsTo(Marca::class, 'marca_id');
     }
 
+    //suma de  stock de variantes del producto
+    public function stock()
+    {
+        return $this->variantes()->sum('stock');
+    }
+
+    public function variantes()
+    {
+        return $this->hasMany(Variante::class, 'producto_id');
+    }
+
 }

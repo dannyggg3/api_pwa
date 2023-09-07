@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Producto;
+use App\Models\Categoria;
+use App\Models\Marca;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 class ProductoController extends Controller
 {
@@ -13,12 +16,18 @@ class ProductoController extends Controller
     {
         try {
             // Obtener todos los productos con sus categorías y marcas relacionadas
-            $productos = Producto::with('categoria', 'marca')->get();
+            $productos = Producto::with('categoria', 'marca','variantes')->get();
+            $categorias= Categoria::all();
+            $marcas= Marca::all();
 
             return new JsonResponse([
                 'correctProcess' => true,
-                'data' => $productos,
+                'data' =>   ['productos'=>$productos,
+                            'categorias'=>$categorias,
+                            'marcas'=>$marcas
+                            ] ,
                 'message' => 'Productos obtenidos correctamente'
+
             ]);
         } catch (\Exception $e) {
             return new JsonResponse([
@@ -39,7 +48,7 @@ class ProductoController extends Controller
                 'descripcion' => 'nullable|string',
                 'precio' => 'nullable|numeric',
                 'estado' => 'nullable|string|max:20',
-                'imagen' => 'nullable|string|max:255',
+                'imagen' => 'required|image|max:2048',
                 'caracteristicas' => 'nullable|string|max:255',
             ]);
 
@@ -52,8 +61,29 @@ class ProductoController extends Controller
                 ], 422);
             }
 
+
+            // Sube la imagen al servidor y obtén la URL.
+            if ($request->hasFile('imagen')) {
+                $imagenPath = $request->file('imagen')->store('productos', 'public'); // 'public' es el disco configurado en filesystems.php
+
+                // Genera la URL completa de la imagen.
+                $imagenUrl = Storage::url($imagenPath);
+            } else {
+                $imagenUrl = null;
+            }
+
             // Crear un nuevo producto
-            $producto = Producto::create($request->all());
+            $producto = Producto::create([
+                'categoria_id' => $request->input('categoria_id'),
+                'marca_id' => $request->input('marca_id'),
+                'nombre' => $request->input('nombre'),
+                'descripcion' => $request->input('descripcion'),
+                'precio' => $request->input('precio'),
+                'estado' => $request->input('estado'),
+                'imagen' => $imagenUrl,
+                'caracteristicas' => $request->input('caracteristicas'),
+
+            ]);
 
             return new JsonResponse([
                 'correctProcess' => true,
@@ -90,6 +120,10 @@ class ProductoController extends Controller
     public function update(Request $request, $id)
     {
         try {
+
+            // Actualizar un producto por ID
+            $producto = Producto::findOrFail($id);
+
             // Validar los datos de entrada
             $validator = Validator::make($request->all(), [
                 'categoria_id' => 'nullable|integer',
@@ -98,7 +132,7 @@ class ProductoController extends Controller
                 'descripcion' => 'nullable|string',
                 'precio' => 'nullable|numeric',
                 'estado' => 'nullable|string|max:20',
-                'imagen' => 'nullable|string|max:255',
+                'imagen' => 'nullable|image|max:2048',
                 'caracteristicas' => 'nullable|string|max:255',
             ]);
 
@@ -111,9 +145,33 @@ class ProductoController extends Controller
                 ], 422);
             }
 
-            // Actualizar un producto por ID
-            $producto = Producto::findOrFail($id);
-            $producto->update($request->all());
+             // Verifica si se ha cargado una nueva imagen.
+            if ($request->hasFile('imagen')) {
+                // Elimina la imagen anterior si existe.
+                if ($producto->imagen) {
+                    Storage::disk('public')->delete($producto->imagen);
+                }
+
+                // Sube la nueva imagen al servidor y obtén la URL.
+                $imagenPath = $request->file('imagen')->store('productos', 'public'); // 'public' es el disco configurado en filesystems.php
+
+                // Genera la URL completa de la nueva imagen.
+                $imagenUrl = Storage::url($imagenPath);
+            } else {
+                // Si no se cargó una nueva imagen, conserva la imagen existente.
+                $imagenUrl = $producto->imagen;
+            }
+
+            $producto->update([
+                'categoria_id' => $request->input('categoria_id'),
+                'marca_id' => $request->input('marca_id'),
+                'nombre' => $request->input('nombre'),
+                'descripcion' => $request->input('descripcion'),
+                'precio' => $request->input('precio'),
+                'estado' => $request->input('estado'),
+                'imagen' => $imagenUrl,
+                'caracteristicas' => $request->input('caracteristicas'),
+            ]);
 
             return new JsonResponse([
                 'correctProcess' => true,

@@ -67,7 +67,7 @@ Route::prefix('banners')->group(function () {
     Route::get('/', [BannerController::class, 'index']);
     Route::post('/', [BannerController::class, 'store']);
     Route::get('/{id}', [BannerController::class, 'show']);
-    Route::put('/{id}', [BannerController::class, 'update']);
+    Route::post('/{id}', [BannerController::class, 'update']);
     Route::delete('/{id}', [BannerController::class, 'destroy']);
 });
 
@@ -86,7 +86,7 @@ Route::prefix('categorias')->group(function () {
     Route::get('/', [CategoriaController::class, 'index']);
     Route::post('/', [CategoriaController::class, 'store']);
     Route::get('/{id}', [CategoriaController::class, 'show']);
-    Route::put('/{id}', [CategoriaController::class, 'update']);
+    Route::post('/{id}', [CategoriaController::class, 'update']);
     Route::delete('/{id}', [CategoriaController::class, 'destroy']);
 });
 
@@ -252,7 +252,7 @@ Route::prefix('producto')->group(function () {
     Route::get('/', [ProductoController::class, 'index']);
     Route::post('/', [ProductoController::class, 'store']);
     Route::get('/{id}', [ProductoController::class, 'show']);
-    Route::put('/{id}', [ProductoController::class, 'update']);
+    Route::post('/{id}', [ProductoController::class, 'update']);
     Route::delete('/{id}', [ProductoController::class, 'destroy']);
 });
 
@@ -284,11 +284,11 @@ Route::prefix('publicidad')->group(function () {
 });
 
 //CRUD Tabla Slider
-Route::prefix('slider')->group(function () {
+Route::prefix('sliders')->group(function () {
     Route::get('/', [SliderController::class, 'index']);
     Route::post('/', [SliderController::class, 'store']);
     Route::get('/{id}', [SliderController::class, 'show']);
-    Route::put('/{id}', [SliderController::class, 'update']);
+    Route::post('/{id}', [SliderController::class, 'update']);
     Route::delete('/{id}', [SliderController::class, 'destroy']);
 });
 
@@ -327,6 +327,7 @@ Route::prefix('variantes')->group(function () {
     Route::get('/{id}', [VarianteController::class, 'show']);
     Route::put('/{id}', [VarianteController::class, 'update']);
     Route::delete('/{id}', [VarianteController::class, 'destroy']);
+    Route::get('/product/{id}', [VarianteController::class, 'showProduct']);
 });
 
 

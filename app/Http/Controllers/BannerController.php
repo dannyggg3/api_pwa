@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\Banner;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 
 class BannerController extends Controller
 {
 
-    
+
     public function index()
     {
         try {
@@ -33,13 +34,13 @@ class BannerController extends Controller
         }
     }
 
-    public function store(Request $request)
+      public function store(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
                 'titulo' => 'required|string|max:100',
-                'imagen' => 'required|string|max:255',
                 'estado' => 'required|string|max:20',
+                'imagen' => 'required|image|max:2048', // Asegúrate de que 'imagen' sea un archivo de imagen válido y no supere 2MB.
             ]);
 
             if ($validator->fails()) {
@@ -50,7 +51,22 @@ class BannerController extends Controller
                 ], 422);
             }
 
-            $banner = Banner::create($request->all());
+            // Sube la imagen al servidor y obtén la URL.
+            if ($request->hasFile('imagen')) {
+                $imagenPath = $request->file('imagen')->store('banners', 'public'); // 'public' es el disco configurado en filesystems.php
+
+                // Genera la URL completa de la imagen.
+                $imagenUrl = Storage::url($imagenPath);
+            } else {
+                $imagenUrl = null;
+            }
+
+            // Crea la categoría con la URL de la imagen.
+            $banner = Banner::create([
+                'titulo' => $request->input('titulo'),
+                'estado' => $request->input('estado'),
+                'imagen' => $imagenUrl, // Almacena la URL de la imagen en la base de datos.
+            ]);
 
             return new JsonResponse([
                 'correctProcess' => true,
@@ -64,6 +80,8 @@ class BannerController extends Controller
             ], 500);
         }
     }
+
+
 
     public function show($id)
     {
@@ -83,14 +101,19 @@ class BannerController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+     public function update(Request $request, $id)
     {
         try {
+
+            $banner = Banner::findOrFail($id); // Encuentra la categoría por su ID.
+
             $validator = Validator::make($request->all(), [
                 'titulo' => 'required|string|max:100',
-                'imagen' => 'required|string|max:255',
-                'estado' => 'required|string|max:20',
+                'estado' => 'nullable|string|max:20',
+                'imagen' => 'nullable|image|max:2048', // Asegúrate de que 'imagen' sea un archivo de imagen válido y no supere 2MB.
             ]);
+
+
 
             if ($validator->fails()) {
                 return new JsonResponse([
@@ -100,14 +123,35 @@ class BannerController extends Controller
                 ], 422);
             }
 
-            $banner = Banner::findOrFail($id);
-            $banner->update($request->all());
+            // Verifica si se ha cargado una nueva imagen.
+            if ($request->hasFile('imagen')) {
+                // Elimina la imagen anterior si existe.
+                if ($banner->imagen) {
+                    Storage::disk('public')->delete($banner->imagen);
+                }
+
+                // Sube la nueva imagen al servidor y obtén la URL.
+                $imagenPath = $request->file('imagen')->store('banners', 'public'); // 'public' es el disco configurado en filesystems.php
+
+                // Genera la URL completa de la nueva imagen.
+                $imagenUrl = Storage::url($imagenPath);
+            } else {
+                // Si no se cargó una nueva imagen, conserva la imagen existente.
+                $imagenUrl = $banner->imagen;
+            }
+
+            // Actualiza la categoría con la nueva información, incluida la URL de la imagen.
+            $banner->update([
+                'titulo' => $request->input('titulo'),
+                'estado' => $request->input('estado'),
+                'imagen' => $imagenUrl, // Actualiza la URL de la imagen en la base de datos.
+            ]);
 
             return new JsonResponse([
                 'correctProcess' => true,
                 'data' => $banner,
                 'message' => 'Banner actualizado correctamente'
-            ]);
+            ], 200);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'correctProcess' => false,
@@ -115,6 +159,8 @@ class BannerController extends Controller
             ], 500);
         }
     }
+
+
 
     public function destroy($id)
     {

@@ -6,6 +6,7 @@ use App\Models\Categoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 class CategoriaController extends Controller
 {
@@ -30,13 +31,13 @@ class CategoriaController extends Controller
         }
     }
 
-    public function store(Request $request)
+  public function store(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
                 'nombre' => 'required|string|max:100',
-                'estado' => 'nullable|string|max:20',
-                'imagen' => 'nullable|string|max:255',
+                'estado' => 'required|string|max:20',
+                'imagen' => 'required|image|max:2048', // Asegúrate de que 'imagen' sea un archivo de imagen válido y no supere 2MB.
             ]);
 
             if ($validator->fails()) {
@@ -47,7 +48,22 @@ class CategoriaController extends Controller
                 ], 422);
             }
 
-            $categoria = Categoria::create($request->all());
+            // Sube la imagen al servidor y obtén la URL.
+            if ($request->hasFile('imagen')) {
+                $imagenPath = $request->file('imagen')->store('categorias', 'public'); // 'public' es el disco configurado en filesystems.php
+
+                // Genera la URL completa de la imagen.
+                $imagenUrl = Storage::url($imagenPath);
+            } else {
+                $imagenUrl = null;
+            }
+
+            // Crea la categoría con la URL de la imagen.
+            $categoria = Categoria::create([
+                'nombre' => $request->input('nombre'),
+                'estado' => $request->input('estado'),
+                'imagen' => $imagenUrl, // Almacena la URL de la imagen en la base de datos.
+            ]);
 
             return new JsonResponse([
                 'correctProcess' => true,
@@ -80,14 +96,19 @@ class CategoriaController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+   public function update(Request $request, $id)
     {
         try {
+
+            $categoria = Categoria::findOrFail($id); // Encuentra la categoría por su ID.
+
             $validator = Validator::make($request->all(), [
-                'nombre' => 'nullable|string|max:100',
+                'nombre' => 'required|string|max:100',
                 'estado' => 'nullable|string|max:20',
-                'imagen' => 'nullable|string|max:255',
+                'imagen' => 'nullable|image|max:2048', // Asegúrate de que 'imagen' sea un archivo de imagen válido y no supere 2MB.
             ]);
+
+
 
             if ($validator->fails()) {
                 return new JsonResponse([
@@ -97,14 +118,35 @@ class CategoriaController extends Controller
                 ], 422);
             }
 
-            $categoria = Categoria::findOrFail($id);
-            $categoria->update($request->all());
+            // Verifica si se ha cargado una nueva imagen.
+            if ($request->hasFile('imagen')) {
+                // Elimina la imagen anterior si existe.
+                if ($categoria->imagen) {
+                    Storage::disk('public')->delete($categoria->imagen);
+                }
+
+                // Sube la nueva imagen al servidor y obtén la URL.
+                $imagenPath = $request->file('imagen')->store('categorias', 'public'); // 'public' es el disco configurado en filesystems.php
+
+                // Genera la URL completa de la nueva imagen.
+                $imagenUrl = Storage::url($imagenPath);
+            } else {
+                // Si no se cargó una nueva imagen, conserva la imagen existente.
+                $imagenUrl = $categoria->imagen;
+            }
+
+            // Actualiza la categoría con la nueva información, incluida la URL de la imagen.
+            $categoria->update([
+                'nombre' => $request->input('nombre'),
+                'estado' => $request->input('estado'),
+                'imagen' => $imagenUrl, // Actualiza la URL de la imagen en la base de datos.
+            ]);
 
             return new JsonResponse([
                 'correctProcess' => true,
                 'data' => $categoria,
                 'message' => 'Categoría actualizada correctamente'
-            ]);
+            ], 200);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'correctProcess' => false,

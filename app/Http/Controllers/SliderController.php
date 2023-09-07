@@ -6,6 +6,7 @@ use App\Models\Slider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 class SliderController extends Controller
 {
@@ -28,18 +29,16 @@ class SliderController extends Controller
         }
     }
 
-    public function store(Request $request)
+       public function store(Request $request)
     {
         try {
-            // Validar los datos de entrada
             $validator = Validator::make($request->all(), [
-                'titulo' => 'nullable|string|max:100',
+                'titulo' => 'required|string|max:100',
+                'estado' => 'required|string|max:20',
                 'descripcion' => 'nullable|string',
-                'imagen' => 'nullable|string|max:255',
-                'estado' => 'nullable|string|max:20',
+                'imagen' => 'required|image|max:2048', // Asegúrate de que 'imagen' sea un archivo de imagen válido y no supere 2MB.
             ]);
 
-            // Si la validación falla, retornar un error de validación
             if ($validator->fails()) {
                 return new JsonResponse([
                     'correctProcess' => false,
@@ -48,8 +47,23 @@ class SliderController extends Controller
                 ], 422);
             }
 
-            // Crear un nuevo slider
-            $slider = Slider::create($request->all());
+            // Sube la imagen al servidor y obtén la URL.
+            if ($request->hasFile('imagen')) {
+                $imagenPath = $request->file('imagen')->store('sliders', 'public'); // 'public' es el disco configurado en filesystems.php
+
+                // Genera la URL completa de la imagen.
+                $imagenUrl = Storage::url($imagenPath);
+            } else {
+                $imagenUrl = null;
+            }
+
+            // Crea la categoría con la URL de la imagen.
+            $slider = Slider::create([
+                'titulo' => $request->input('titulo'),
+                'descripcion' => $request->input('descripcion'),
+                'estado' => $request->input('estado'),
+                'imagen' => $imagenUrl, // Almacena la URL de la imagen en la base de datos.
+            ]);
 
             return new JsonResponse([
                 'correctProcess' => true,
@@ -63,6 +77,8 @@ class SliderController extends Controller
             ], 500);
         }
     }
+
+
 
     public function show($id)
     {
@@ -86,15 +102,18 @@ class SliderController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            // Validar los datos de entrada
+
+            $slider = Slider::findOrFail($id); // Encuentra la categoría por su ID.
+
             $validator = Validator::make($request->all(), [
-                'titulo' => 'nullable|string|max:100',
-                'descripcion' => 'nullable|string',
-                'imagen' => 'nullable|string|max:255',
+                'titulo' => 'required|string|max:100',
                 'estado' => 'nullable|string|max:20',
+                'descripcion' => 'nullable|string|max:200',
+                'imagen' => 'nullable|image|max:2048', // Asegúrate de que 'imagen' sea un archivo de imagen válido y no supere 2MB.
             ]);
 
-            // Si la validación falla, retornar un error de validación
+
+
             if ($validator->fails()) {
                 return new JsonResponse([
                     'correctProcess' => false,
@@ -103,15 +122,36 @@ class SliderController extends Controller
                 ], 422);
             }
 
-            // Actualizar un slider por ID
-            $slider = Slider::findOrFail($id);
-            $slider->update($request->all());
+            // Verifica si se ha cargado una nueva imagen.
+            if ($request->hasFile('imagen')) {
+                // Elimina la imagen anterior si existe.
+                if ($slider->imagen) {
+                    Storage::disk('public')->delete($slider->imagen);
+                }
+
+                // Sube la nueva imagen al servidor y obtén la URL.
+                $imagenPath = $request->file('imagen')->store('sliders', 'public'); // 'public' es el disco configurado en filesystems.php
+
+                // Genera la URL completa de la nueva imagen.
+                $imagenUrl = Storage::url($imagenPath);
+            } else {
+                // Si no se cargó una nueva imagen, conserva la imagen existente.
+                $imagenUrl = $slider->imagen;
+            }
+
+            // Actualiza la categoría con la nueva información, incluida la URL de la imagen.
+            $slider->update([
+                'titulo' => $request->input('titulo'),
+                'descripcion' => $request->input('descripcion'),
+                'estado' => $request->input('estado'),
+                'imagen' => $imagenUrl, // Actualiza la URL de la imagen en la base de datos.
+            ]);
 
             return new JsonResponse([
                 'correctProcess' => true,
                 'data' => $slider,
                 'message' => 'Slider actualizado correctamente'
-            ]);
+            ], 200);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'correctProcess' => false,
@@ -119,6 +159,8 @@ class SliderController extends Controller
             ], 500);
         }
     }
+
+
 
     public function destroy($id)
     {

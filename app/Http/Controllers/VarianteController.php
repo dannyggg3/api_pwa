@@ -24,7 +24,7 @@ class VarianteController extends Controller
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -38,6 +38,8 @@ class VarianteController extends Controller
                 'talla' => 'nullable|string|max:50',
                 'stock' => 'nullable|integer',
                 'estado' => 'nullable|string|max:20',
+                'codigo_color' => 'required|string|max:20',
+                'precio' => 'nullable|numeric',
             ]);
 
             // Si la validación falla, retornar un error de validación
@@ -46,8 +48,23 @@ class VarianteController extends Controller
                     'correctProcess' => false,
                     'message' => 'Error de validación',
                     'errors' => $validator->errors()
-                ], 422);
+                ], 200);
             }
+
+
+            //BUSCA SI YA EXISTE POR TALLA Y COLOR
+            $variante = Variante::where('producto_id', $request->producto_id)
+                ->where('talla', $request->talla)
+                ->where('color', $request->color)
+                ->first();
+
+            if($variante){
+                return new JsonResponse([
+                    'correctProcess' => false,
+                    'message' => 'Ya existe una variante con la talla y color ingresados'
+                ], 200);
+            }
+
 
             // Crear una nueva variante
             $variante = Variante::create($request->all());
@@ -56,12 +73,12 @@ class VarianteController extends Controller
                 'correctProcess' => true,
                 'data' => $variante,
                 'message' => 'Variante creada correctamente'
-            ], 201);
+            ], 200);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -80,7 +97,28 @@ class VarianteController extends Controller
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
+        }
+    }
+
+      public function showProduct($id)
+    {
+        try {
+            // Obtener una variante por ID con su producto relacionado ordenar por color
+
+
+            $variante = Variante::where('producto_id', $id)->orderBy('color', 'asc')->get();
+
+            return new JsonResponse([
+                'correctProcess' => true,
+                'data' => $variante,
+                'message' => 'Variantes obtenida correctamente'
+            ]);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'correctProcess' => false,
+                'message' => $e->getMessage()
+            ], 200);
         }
     }
 
@@ -94,6 +132,8 @@ class VarianteController extends Controller
                 'talla' => 'nullable|string|max:50',
                 'stock' => 'nullable|integer',
                 'estado' => 'nullable|string|max:20',
+                'codigo_color' => 'required|string|max:20',
+                'precio' => 'nullable|numeric',
             ]);
 
             // Si la validación falla, retornar un error de validación
@@ -102,7 +142,7 @@ class VarianteController extends Controller
                     'correctProcess' => false,
                     'message' => 'Error de validación',
                     'errors' => $validator->errors()
-                ], 422);
+                ], 200);
             }
 
             // Actualizar una variante por ID
@@ -118,7 +158,7 @@ class VarianteController extends Controller
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -137,7 +177,7 @@ class VarianteController extends Controller
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 }
