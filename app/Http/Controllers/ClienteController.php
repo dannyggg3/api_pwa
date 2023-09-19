@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\AuthController;
 
 class ClienteController extends Controller
 {
@@ -26,7 +28,7 @@ class ClienteController extends Controller
             return response()->json([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -39,9 +41,11 @@ class ClienteController extends Controller
                 'nombre' => 'required|string|max:100',
                 'direccion' => 'nullable|string|max:255',
                 'telefono' => 'nullable|string|max:20',
-                'estado' => 'nullable|string|max:20',
+                'estado' => 'nullable',
                 'imagen' => 'nullable|string|max:255',
                 'tipo_documento_id' => 'required|integer',
+                'email' => 'required|string|email|max:255',
+                'password' => 'required|string|min:6',
             ]);
 
             if ($validator->fails()) {
@@ -49,8 +53,42 @@ class ClienteController extends Controller
                     'correctProcess' => false,
                     'message' => 'Error de validación',
                     'errors' => $validator->errors()
-                ], 422);
+                ], 200);
             }
+
+
+            //valida si ya existe el email y la cedula
+
+            $email = User::where('email', $request->email)->first();
+            $cedula = Cliente::where('documento', $request->documento)->first();
+
+            if($email || $cedula){
+                return new JsonResponse([
+                    'correctProcess' => false,
+                    'message' => 'El email o la cedula ya existe'
+                ], 200);
+            }
+
+
+            $primerControlador = new AuthController();
+
+            $request->merge([
+                'name'=>$request->nombre,
+            ]);
+
+            $primerControlador->register($request);
+
+           //obtener el id del usuario creado
+            $usuario = User::where('email', $request->email)->first();
+
+            if($usuario){
+                $request->merge([
+                    'usuario_id' => $usuario->id
+                ]);
+            }
+
+
+
 
             $cliente = Cliente::create($request->all());
 
@@ -58,12 +96,12 @@ class ClienteController extends Controller
                 'correctProcess' => true,
                 'data' => $cliente,
                 'message' => 'Cliente creado correctamente'
-            ], 201);
+            ], 200);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -81,7 +119,7 @@ class ClienteController extends Controller
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -97,6 +135,8 @@ class ClienteController extends Controller
                 'estado' => 'nullable|string|max:20',
                 'imagen' => 'nullable|string|max:255',
                 'tipo_documento_id' => 'nullable|integer',
+                'email' => 'nullable',
+                'password' => 'nullable',
             ]);
 
             if ($validator->fails()) {
@@ -104,8 +144,32 @@ class ClienteController extends Controller
                     'correctProcess' => false,
                     'message' => 'Error de validación',
                     'errors' => $validator->errors()
-                ], 422);
+                ], 200);
             }
+
+           //valida si ya existe el email y la cedual en otro usuario
+            $email = User::where('email', $request->email)->where('id', '!=',  $request->usuario_id)->first();
+            $cedula = Cliente::where('documento', $request->documento)->where('id', '!=', $id)->first();
+
+            if($email || $cedula){
+                return new JsonResponse([
+                    'correctProcess' => false,
+                    'message' => 'El email o la cedula ya existe'
+                ], 200);
+            }
+
+            //si viene datos en el password se actualiza
+            $primerControlador = new AuthController();
+
+            $request->merge([
+                'name'=>$request->nombre,
+            ]);
+
+            if($request->password != '' ){
+                $primerControlador->updatePassword($request,  $request->usuario_id);
+            }
+
+
 
             $cliente = Cliente::findOrFail($id);
             $cliente->update($request->all());
@@ -119,7 +183,7 @@ class ClienteController extends Controller
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -137,7 +201,7 @@ class ClienteController extends Controller
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 }

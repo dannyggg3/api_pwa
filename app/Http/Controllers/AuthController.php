@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -90,6 +91,12 @@ class AuthController extends Controller
     //actualizar clave de un usuario por el id
     public function updatePassword(Request $request, $id){
         try {
+
+            $validator = Validator::make($request->all(), [
+
+                'password' => 'required|string|min:6',
+            ]);
+
             $user = User::find($id);
             $user->password = Hash::make($request->password);
             $user->save();
