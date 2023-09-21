@@ -10,7 +10,7 @@ class Provincia extends Model
     use HasFactory;
 
     protected $table = 'provincias';
-
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
     protected $fillable = [

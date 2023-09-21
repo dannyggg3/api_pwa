@@ -160,7 +160,7 @@ Route::prefix('direccionesentrega')->group(function () {
     Route::get('/', [DireccionesEntregaController::class, 'index']);
     Route::post('/', [DireccionesEntregaController::class, 'store']);
     Route::get('/{id}', [DireccionesEntregaController::class, 'show']);
-    Route::put('/{id}', [DireccionesEntregaController::class, 'update']);
+    Route::post('/{id}', [DireccionesEntregaController::class, 'update']);
     Route::delete('/{id}', [DireccionesEntregaController::class, 'destroy']);
 });
 

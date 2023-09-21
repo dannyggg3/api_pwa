@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class DireccionesEntrega extends Model
 {
-    
+
     protected $table = 'direccionesentrega';
     public $timestamps = false;
     protected $fillable = [
@@ -15,17 +16,16 @@ class DireccionesEntrega extends Model
         'cedula',
         'direccion',
         'estado',
-        'ciudades_id',
+        'parroquia_id',
         'comentarios',
     ];
 
-    public function ciudad()
-    {
-        return $this->belongsTo(Ciudades::class, 'ciudades_id');
-    }
-
+    public function parroquia()
+{
+    return $this->belongsTo(Parroquias::class, 'parroquia_id', 'id');
+}
     public function cliente()
     {
-        return $this->belongsTo(Clientes::class, 'cliente_id');
+        return $this->belongsTo(Cliente::class, 'cliente_id');
     }
 }

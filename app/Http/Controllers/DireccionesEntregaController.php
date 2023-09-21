@@ -8,13 +8,32 @@ use App\Models\DireccionesEntrega;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
+use App\Models\Parroquias;
+use App\Models\Ciudad;
+use App\Models\Provincia;
+
 
 class DireccionesEntregaController extends Controller
 {
    public function index()
     {
         try {
-            $direccionesEntrega = DireccionesEntrega::with('ciudad')->get();
+            $direccionesEntrega = DireccionesEntrega::with('cliente')->get();
+
+            foreach ($direccionesEntrega as $direccionEntrega) {
+
+                //parroquia
+                    $parroquia=Parroquias::where('id',$direccionEntrega->parroquia_id)->first();
+                    $direccionEntrega->parroquia=$parroquia;
+
+                //ciudad
+                    $ciudad=Ciudad::where('id',$parroquia->ciudad_id)->first();
+                    $direccionEntrega->ciudad=$ciudad;
+
+                //provincia
+                    $provincia=Provincia::where('id',$ciudad->provincias_id)->first();
+                    $direccionEntrega->provincia=$provincia;
+            }
 
             return new JsonResponse([
                 'correctProcess' => true,
@@ -25,7 +44,7 @@ class DireccionesEntregaController extends Controller
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -37,7 +56,7 @@ class DireccionesEntregaController extends Controller
                 'cedula' => 'nullable|string|max:45',
                 'direccion' => 'nullable|string|max:255',
                 'estado' => 'nullable|string|max:20',
-                'ciudades_id' => 'required|integer',
+                'parroquia_id' => 'required|string',
                 'comentarios' => 'nullable|string|max:255',
             ]);
 
@@ -46,7 +65,7 @@ class DireccionesEntregaController extends Controller
                     'correctProcess' => false,
                     'message' => 'Error de validación',
                     'errors' => $validator->errors()
-                ], 422);
+                ], 200);
             }
 
             $direccionEntrega = DireccionesEntrega::create($request->all());
@@ -60,7 +79,7 @@ class DireccionesEntregaController extends Controller
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -78,7 +97,7 @@ class DireccionesEntregaController extends Controller
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -90,7 +109,7 @@ class DireccionesEntregaController extends Controller
                 'cedula' => 'nullable|string|max:45',
                 'direccion' => 'nullable|string|max:255',
                 'estado' => 'nullable|string|max:20',
-                'ciudades_id' => 'required|integer',
+                'parroquia_id' => 'required|string',
                 'comentarios' => 'nullable|string|max:255',
             ]);
 
@@ -99,7 +118,7 @@ class DireccionesEntregaController extends Controller
                     'correctProcess' => false,
                     'message' => 'Error de validación',
                     'errors' => $validator->errors()
-                ], 422);
+                ], 200);
             }
 
             $direccionEntrega = DireccionesEntrega::findOrFail($id);
@@ -114,7 +133,7 @@ class DireccionesEntregaController extends Controller
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -127,12 +146,12 @@ class DireccionesEntregaController extends Controller
             return new JsonResponse([
                 'correctProcess' => true,
                 'message' => 'Dirección de entrega eliminada correctamente'
-            ], 204);
+            ], 200);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 }
