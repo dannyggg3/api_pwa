@@ -1,188 +1,438 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Versión del servidor:         8.0.30 - MySQL Community Server - GPL
+-- Versión del servidor:         5.7.33 - MySQL Community Server (GPL)
 -- SO del servidor:              Win64
--- HeidiSQL Versión:             12.1.0.6537
+-- HeidiSQL Versión:             11.2.0.6213
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
 -- Volcando estructura de base de datos para pwa_ecommerce
-CREATE DATABASE IF NOT EXISTS `pwa_ecommerce` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `pwa_ecommerce` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `pwa_ecommerce`;
 
 -- Volcando estructura para tabla pwa_ecommerce.banners
 CREATE TABLE IF NOT EXISTS `banners` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `titulo` varchar(100) DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.banners: ~0 rows (aproximadamente)
 DELETE FROM `banners`;
+/*!40000 ALTER TABLE `banners` DISABLE KEYS */;
+INSERT INTO `banners` (`id`, `titulo`, `imagen`, `estado`) VALUES
+	(1, 'BANNER 1', '/storage/banners/eA21968Q9Nlk2PAHioDsRyzelYB1YtQGwiBGmYqC.jpg', '1');
+/*!40000 ALTER TABLE `banners` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.carritocompras
 CREATE TABLE IF NOT EXISTS `carritocompras` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `cliente_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cliente_id` int(11) DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `cliente_id` (`cliente_id`),
   CONSTRAINT `carritocompras_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.carritocompras: ~0 rows (aproximadamente)
 DELETE FROM `carritocompras`;
+/*!40000 ALTER TABLE `carritocompras` DISABLE KEYS */;
+/*!40000 ALTER TABLE `carritocompras` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.categorias
 CREATE TABLE IF NOT EXISTS `categorias` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
   `estado` varchar(20) DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.categorias: ~0 rows (aproximadamente)
 DELETE FROM `categorias`;
+/*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
+INSERT INTO `categorias` (`id`, `nombre`, `estado`, `imagen`) VALUES
+	(8, 'UNIFORMES', '1', '/storage/categorias/GNapBUScGGUX7itYOwR1wfng4PVVoQbQbAflnZCz.jpg'),
+	(9, 'ROPA INTERIOR', '1', '/storage/categorias/WOhJmZsMfgVTnFnNap2mxCKITWEwU26B6L2LJtHG.jpg');
+/*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.ciudades
 CREATE TABLE IF NOT EXISTS `ciudades` (
-  `id` int NOT NULL,
+  `id` varchar(50) NOT NULL DEFAULT '',
   `ciudad` varchar(100) DEFAULT NULL,
-  `provincias_id` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_ciudades_provincias_idx` (`provincias_id`),
-  CONSTRAINT `fk_ciudades_provincias` FOREIGN KEY (`provincias_id`) REFERENCES `provincias` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `provincias_id` varchar(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla pwa_ecommerce.ciudades: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.ciudades: ~25 rows (aproximadamente)
 DELETE FROM `ciudades`;
+/*!40000 ALTER TABLE `ciudades` DISABLE KEYS */;
+INSERT INTO `ciudades` (`id`, `ciudad`, `provincias_id`) VALUES
+	('0101', 'CUENCA', '01'),
+	('0102', 'GIRÓN', '01'),
+	('0103', 'GUALACEO', '01'),
+	('0104', 'NABÓN', '01'),
+	('0105', 'PAUTE', '01'),
+	('0106', 'PUCARA', '01'),
+	('0107', 'SAN FERNANDO', '01'),
+	('0108', 'SANTA ISABEL', '01'),
+	('0109', 'SIGSIG', '01'),
+	('0110', 'OÑA', '01'),
+	('0111', 'CHORDELEG', '01'),
+	('0112', 'EL PAN', '01'),
+	('0113', 'SEVILLA DE ORO', '01'),
+	('0114', 'GUACHAPALA', '01'),
+	('0115', 'CAMILO PONCE ENRÍQUEZ', '01'),
+	('0201', 'GUARANDA', '02'),
+	('0202', 'CHILLANES', '02'),
+	('0203', 'CHIMBO', '02'),
+	('0204', 'ECHEANDÍA', '02'),
+	('0205', 'SAN MIGUEL', '02'),
+	('0206', 'CALUMA', '02'),
+	('0207', 'LAS NAVES', '02'),
+	('0301', 'AZOGUES', '03'),
+	('0302', 'BIBLIÁN', '03'),
+	('0303', 'CAÑAR', '03'),
+	('0304', 'LA TRONCAL', '03'),
+	('0305', 'EL TAMBO', '03'),
+	('0306', 'DÉLEG', '03'),
+	('0307', 'SUSCAL', '03'),
+	('0401', 'TULCÁN', '04'),
+	('0402', 'BOLÍVAR', '04'),
+	('0403', 'ESPEJO', '04'),
+	('0404', 'MIRA', '04'),
+	('0405', 'MONTÚFAR', '04'),
+	('0406', 'SAN PEDRO DE HUACA', '04'),
+	('0501', 'LATACUNGA', '05'),
+	('0502', 'LA MANÁ', '05'),
+	('0503', 'PANGUA', '05'),
+	('0504', 'PUJILÍ', '05'),
+	('0505', 'SALCEDO', '05'),
+	('0506', 'SAQUISILÍ', '05'),
+	('0507', 'CANTÒN SIGCHOS', '05'),
+	('0508', 'LASO', '05'),
+	('0601', 'RIOBAMBA', '06'),
+	('0602', 'ALAUSÍ', '06'),
+	('0603', 'COLTA', '06'),
+	('0604', 'CHAMBO', '06'),
+	('0605', 'CHUNCHI', '06'),
+	('0606', 'GUAMOTE', '06'),
+	('0607', 'GUANO', '06'),
+	('0608', 'PALLATANGA', '06'),
+	('0609', 'PENIPE', '06'),
+	('0610', 'CUMANDÁ', '06'),
+	('0701', 'MACHALA', '07'),
+	('0702', 'ARENILLAS', '07'),
+	('0703', 'ATAHUALPA', '07'),
+	('0704', 'BALSAS', '07'),
+	('0705', 'CHILLA', '07'),
+	('0706', 'EL GUABO', '07'),
+	('0707', 'HUAQUILLAS', '07'),
+	('0708', 'MARCABELÍ', '07'),
+	('0709', 'PASAJE', '07'),
+	('0710', 'PIÑAS', '07'),
+	('0711', 'PORTOVELO', '07'),
+	('0712', 'SANTA ROSA', '07'),
+	('0713', 'ZARUMA', '07'),
+	('0714', 'LAS LAJAS', '07'),
+	('0801', 'ESMERALDAS', '08'),
+	('0802', 'ELOY ALFARO', '08'),
+	('0803', 'MUISNE', '08'),
+	('0804', 'QUININDÉ', '08'),
+	('0805', 'SAN LORENZO', '08'),
+	('0806', 'ATACAMES', '08'),
+	('0807', 'RIOVERDE', '08'),
+	('0808', 'LA CONCORDIA', '08'),
+	('0901', 'GUAYAQUIL', '09'),
+	('0902', 'ALFREDO BAQUERIZO MORENO (JUJÁN)', '09'),
+	('0903', 'BALAO', '09'),
+	('0904', 'BALZAR', '09'),
+	('0905', 'COLIMES', '09'),
+	('0906', 'DAULE', '09'),
+	('0907', 'DURÁN', '09'),
+	('0908', 'EL EMPALME', '09'),
+	('0909', 'EL TRIUNFO', '09'),
+	('0910', 'MILAGRO', '09'),
+	('0911', 'NARANJAL', '09'),
+	('0912', 'NARANJITO', '09'),
+	('0913', 'PALESTINA', '09'),
+	('0914', 'PEDRO CARBO', '09'),
+	('0916', 'SAMBORONDÓN', '09'),
+	('0918', 'SANTA LUCÍA', '09'),
+	('0919', 'SALITRE (URBINA JADO)', '09'),
+	('0920', 'SAN JACINTO DE YAGUACHI', '09'),
+	('0921', 'PLAYAS', '09'),
+	('0922', 'SIMÓN BOLÍVAR', '09'),
+	('0923', 'CORONEL MARCELINO MARIDUEÑA', '09'),
+	('0924', 'LOMAS DE SARGENTILLO', '09'),
+	('0925', 'NOBOL', '09'),
+	('0927', 'ANTONIO ELIZALDE', '09'),
+	('0928', 'ISIDRO AYORA', '09'),
+	('1001', 'IBARRA', '10'),
+	('1002', 'ANTONIO ANTE', '10'),
+	('1003', 'COTACACHI', '10'),
+	('1004', 'OTAVALO', '10'),
+	('1005', 'PIMAMPIRO', '10'),
+	('1006', 'SAN MIGUEL DE URCUQUÍ', '10'),
+	('1101', 'LOJA', '11'),
+	('1102', 'CALVAS', '11'),
+	('1103', 'CATAMAYO', '11'),
+	('1104', 'CELICA', '11'),
+	('1105', 'CHAGUARPAMBA', '11'),
+	('1106', 'ESPÍNDOLA', '11'),
+	('1107', 'GONZANAMÁ', '11'),
+	('1108', 'MACARÁ', '11'),
+	('1109', 'PALTAS', '11'),
+	('1110', 'PUYANGO', '11'),
+	('1111', 'SARAGURO', '11'),
+	('1112', 'SOZORANGA', '11'),
+	('1113', 'ZAPOTILLO', '11'),
+	('1114', 'PINDAL', '11'),
+	('1115', 'QUILANGA', '11'),
+	('1116', 'OLMEDO', '11'),
+	('1201', 'BABAHOYO', '12'),
+	('1202', 'BABA', '12'),
+	('1203', 'MONTALVO', '12'),
+	('1204', 'PUEBLO VIEJO', '12'),
+	('1205', 'QUEVEDO', '12'),
+	('1206', 'URDANETA', '12'),
+	('1207', 'VENTANAS', '12'),
+	('1208', 'VÍNCES', '12'),
+	('1209', 'PALENQUE', '12'),
+	('1210', 'BUENA FE', '12'),
+	('1211', 'VALENCIA', '12'),
+	('1212', 'MOCACHE', '12'),
+	('1213', 'QUINSALOMA', '12'),
+	('1301', 'PORTOVIEJO', '13'),
+	('1302', 'BOLÍVAR', '13'),
+	('1303', 'CHONE', '13'),
+	('1304', 'EL CARMEN', '13'),
+	('1305', 'FLAVIO ALFARO', '13'),
+	('1306', 'JIPIJAPA', '13'),
+	('1307', 'JUNÍN', '13'),
+	('1308', 'MANTA', '13'),
+	('1309', 'MONTECRISTI', '13'),
+	('1310', 'PAJÁN', '13'),
+	('1311', 'PICHINCHA', '13'),
+	('1312', 'ROCAFUERTE', '13'),
+	('1313', 'SANTA ANA', '13'),
+	('1314', 'SUCRE', '13'),
+	('1315', 'TOSAGUA', '13'),
+	('1316', '24 DE MAYO', '13'),
+	('1317', 'PEDERNALES', '13'),
+	('1318', 'OLMEDO', '13'),
+	('1319', 'PUERTO LÓPEZ', '13'),
+	('1320', 'JAMA', '13'),
+	('1321', 'JARAMIJÓ', '13'),
+	('1322', 'SAN VICENTE', '13'),
+	('1401', 'MORONA', '14'),
+	('1402', 'GUALAQUIZA', '14'),
+	('1403', 'LIMÓN INDANZA', '14'),
+	('1404', 'PALORA', '14'),
+	('1405', 'SANTIAGO', '14'),
+	('1406', 'SUCÚA', '14'),
+	('1407', 'HUAMBOYA', '14'),
+	('1408', 'SAN JUAN BOSCO', '14'),
+	('1409', 'TAISHA', '14'),
+	('1410', 'LOGROÑO', '14'),
+	('1411', 'PABLO SEXTO', '14'),
+	('1412', 'CANTÒN TIWINTZA', '14'),
+	('1501', 'TENA', '15'),
+	('1502', 'AGUARICO', '15'),
+	('1503', 'ARCHIDONA', '15'),
+	('1504', 'EL CHACO', '15'),
+	('1505', 'JOYA DE LOS SACHAS', '15'),
+	('1506', 'ORELLANA', '15'),
+	('1507', 'QUIJOS', '15'),
+	('1508', 'LORETO', '15'),
+	('1509', 'CARLOS JULIO AROSEMENA TOLA', '15'),
+	('1601', 'PASTAZA', '16'),
+	('1602', 'MERA', '16'),
+	('1603', 'SANTA CLARA', '16'),
+	('1604', 'ARAJUNO', '16'),
+	('1701', 'QUITO', '17'),
+	('1702', 'CAYAMBE', '17'),
+	('1703', 'MEJIA', '17'),
+	('1704', 'PEDRO MONCAYO', '17'),
+	('1705', 'RUMIÑAHUI', '17'),
+	('1706', 'SANTO DOMINGO', '17'),
+	('1707', 'SAN MIGUEL DE LOS BANCOS', '17'),
+	('1708', 'PEDRO VICENTE MALDONADO', '17'),
+	('1709', 'PUERTO QUITO', '17'),
+	('1801', 'AMBATO', '18'),
+	('1802', 'BAÑOS', '18'),
+	('1803', 'CEVALLOS', '18'),
+	('1804', 'MOCHA', '18'),
+	('1805', 'PATATE', '18'),
+	('1806', 'QUERO', '18'),
+	('1807', 'PELILEO', '18'),
+	('1808', 'PÍLLARO', '18'),
+	('1809', 'TISALEO', '18'),
+	('1901', 'ZAMORA', '19'),
+	('1902', 'CHINCHIPE', '19'),
+	('1903', 'NANGARITZA', '19'),
+	('1904', 'YACUAMBI', '19'),
+	('1905', 'YANTZAZA', '19'),
+	('1906', 'EL PANGUI', '19'),
+	('1907', 'CENTINELA DEL CÓNDOR', '19'),
+	('1908', 'PALANDA', '19'),
+	('1909', 'PAQUISHA', '19'),
+	('2001', 'SAN CRISTÓBAL', '20'),
+	('2002', 'ISABELA', '20'),
+	('2003', 'SANTA CRUZ', '20'),
+	('2101', 'LAGO AGRIO', '21'),
+	('2102', 'GONZALO PIZARRO', '21'),
+	('2103', 'PUTUMAYO', '21'),
+	('2104', 'SHUSHUFINDI', '21'),
+	('2105', 'SUCUMBIOS', '21'),
+	('2106', 'CASCALES', '21'),
+	('2107', 'CUYABENO', '21'),
+	('2201', 'ORELLANA', '22'),
+	('2202', 'AGUARICO', '22'),
+	('2203', 'JOYA DE LOS SACHAS', '22'),
+	('2204', 'LORETO', '22'),
+	('2301', 'SANTO DOMINGO', '23'),
+	('2401', 'SANTA ELENA', '24'),
+	('2402', 'LA LIBERTAD', '24'),
+	('2403', 'SALINAS', '24');
+/*!40000 ALTER TABLE `ciudades` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.clientes
 CREATE TABLE IF NOT EXISTS `clientes` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `usuario_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `usuario_id` bigint(20) DEFAULT NULL,
   `documento` varchar(45) DEFAULT NULL,
   `nombre` varchar(100) NOT NULL,
   `direccion` varchar(255) DEFAULT NULL,
   `telefono` varchar(20) DEFAULT NULL,
-  `estado` varchar(20) DEFAULT NULL,
+  `estado` varchar(50) DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
-  `tipo_documento_id` int NOT NULL,
+  `tipo_documento_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `usuario_id` (`usuario_id`),
   KEY `fk_clientes_tipo_documento1_idx` (`tipo_documento_id`),
-  CONSTRAINT `clientes_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`),
   CONSTRAINT `fk_clientes_tipo_documento1` FOREIGN KEY (`tipo_documento_id`) REFERENCES `tipo_documento` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla pwa_ecommerce.clientes: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.clientes: ~2 rows (aproximadamente)
 DELETE FROM `clientes`;
+/*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
+INSERT INTO `clientes` (`id`, `usuario_id`, `documento`, `nombre`, `direccion`, `telefono`, `estado`, `imagen`, `tipo_documento_id`) VALUES
+	(1, 4, '0503341810', 'TANIA PESANTEZ', 'LATACUNGA', '0996269763', '1', NULL, 2),
+	(2, 8, '0504353211', 'DANNY GARCIA', 'Latacunga', '0996269763', '1', NULL, 1);
+/*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.comentariosreseñas
 CREATE TABLE IF NOT EXISTS `comentariosreseñas` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `cliente_id` int DEFAULT NULL,
-  `producto_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cliente_id` int(11) DEFAULT NULL,
+  `producto_id` int(11) DEFAULT NULL,
   `comentario` text,
-  `puntuacion` int DEFAULT NULL,
+  `puntuacion` int(11) DEFAULT NULL,
   `fecha_comentario` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `cliente_id` (`cliente_id`),
   KEY `producto_id` (`producto_id`),
   CONSTRAINT `comentariosreseñas_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
   CONSTRAINT `comentariosreseñas_ibfk_2` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.comentariosreseñas: ~0 rows (aproximadamente)
 DELETE FROM `comentariosreseñas`;
+/*!40000 ALTER TABLE `comentariosreseñas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `comentariosreseñas` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.datosfacturacion
 CREATE TABLE IF NOT EXISTS `datosfacturacion` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `cliente_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cliente_id` int(11) DEFAULT NULL,
   `nombre` varchar(100) DEFAULT NULL,
   `ruc_cedula` varchar(20) DEFAULT NULL,
   `direccion` varchar(255) DEFAULT NULL,
   `ciudad` varchar(100) DEFAULT NULL,
   `telefono` varchar(20) DEFAULT NULL,
-  `tipo_documento_id` int NOT NULL,
+  `tipo_documento_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `cliente_id` (`cliente_id`),
   KEY `fk_datosfacturacion_tipo_documento1_idx` (`tipo_documento_id`),
   CONSTRAINT `datosfacturacion_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
   CONSTRAINT `fk_datosfacturacion_tipo_documento1` FOREIGN KEY (`tipo_documento_id`) REFERENCES `tipo_documento` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.datosfacturacion: ~0 rows (aproximadamente)
 DELETE FROM `datosfacturacion`;
+/*!40000 ALTER TABLE `datosfacturacion` DISABLE KEYS */;
+/*!40000 ALTER TABLE `datosfacturacion` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.detallescarrito
 CREATE TABLE IF NOT EXISTS `detallescarrito` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `carrito_id` int DEFAULT NULL,
-  `variante_id` int DEFAULT NULL,
-  `cantidad` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `carrito_id` int(11) DEFAULT NULL,
+  `variante_id` int(11) DEFAULT NULL,
+  `cantidad` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `carrito_id` (`carrito_id`),
   KEY `variante_id` (`variante_id`),
   CONSTRAINT `detallescarrito_ibfk_1` FOREIGN KEY (`carrito_id`) REFERENCES `carritocompras` (`id`),
   CONSTRAINT `detallescarrito_ibfk_2` FOREIGN KEY (`variante_id`) REFERENCES `variantes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.detallescarrito: ~0 rows (aproximadamente)
 DELETE FROM `detallescarrito`;
+/*!40000 ALTER TABLE `detallescarrito` DISABLE KEYS */;
+/*!40000 ALTER TABLE `detallescarrito` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.detallesorden
 CREATE TABLE IF NOT EXISTS `detallesorden` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `orden_id` int DEFAULT NULL,
-  `variante_id` int DEFAULT NULL,
-  `cantidad` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `orden_id` int(11) DEFAULT NULL,
+  `variante_id` int(11) DEFAULT NULL,
+  `cantidad` int(11) DEFAULT NULL,
   `subtotal` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `orden_id` (`orden_id`),
   KEY `variante_id` (`variante_id`),
   CONSTRAINT `detallesorden_ibfk_1` FOREIGN KEY (`orden_id`) REFERENCES `ordenes` (`id`),
   CONSTRAINT `detallesorden_ibfk_2` FOREIGN KEY (`variante_id`) REFERENCES `variantes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.detallesorden: ~0 rows (aproximadamente)
 DELETE FROM `detallesorden`;
+/*!40000 ALTER TABLE `detallesorden` DISABLE KEYS */;
+/*!40000 ALTER TABLE `detallesorden` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.direccionesentrega
 CREATE TABLE IF NOT EXISTS `direccionesentrega` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `cliente_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cliente_id` int(11) DEFAULT NULL,
   `cedula` varchar(45) DEFAULT NULL,
   `direccion` varchar(255) DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
-  `ciudades_id` int NOT NULL,
+  `parroquia_id` varchar(50) NOT NULL DEFAULT '',
   `comentarios` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `cliente_id` (`cliente_id`),
-  KEY `fk_direccionesentrega_ciudades1_idx` (`ciudades_id`),
-  CONSTRAINT `direccionesentrega_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
-  CONSTRAINT `fk_direccionesentrega_ciudades1` FOREIGN KEY (`ciudades_id`) REFERENCES `ciudades` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `direccionesentrega_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.direccionesentrega: ~0 rows (aproximadamente)
 DELETE FROM `direccionesentrega`;
+/*!40000 ALTER TABLE `direccionesentrega` DISABLE KEYS */;
+INSERT INTO `direccionesentrega` (`id`, `cliente_id`, `cedula`, `direccion`, `estado`, `parroquia_id`, `comentarios`) VALUES
+	(1, 1, '0503341810001', 'Latacunga', '1', '010101', 'comen');
+/*!40000 ALTER TABLE `direccionesentrega` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.empresa
 CREATE TABLE IF NOT EXISTS `empresa` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `ruc` varchar(45) DEFAULT NULL,
   `razon_social` varchar(255) DEFAULT NULL,
   `direccion` varchar(255) DEFAULT NULL,
@@ -197,42 +447,48 @@ CREATE TABLE IF NOT EXISTS `empresa` (
   `usuario` varchar(50) DEFAULT NULL,
   `clave` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.empresa: ~0 rows (aproximadamente)
 DELETE FROM `empresa`;
+/*!40000 ALTER TABLE `empresa` DISABLE KEYS */;
+/*!40000 ALTER TABLE `empresa` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.estado_orden
 CREATE TABLE IF NOT EXISTS `estado_orden` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `estado` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.estado_orden: ~0 rows (aproximadamente)
 DELETE FROM `estado_orden`;
+/*!40000 ALTER TABLE `estado_orden` DISABLE KEYS */;
+/*!40000 ALTER TABLE `estado_orden` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.facturas_electronicas
 CREATE TABLE IF NOT EXISTS `facturas_electronicas` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `factura` varchar(45) DEFAULT NULL,
   `estado` varchar(45) DEFAULT NULL,
   `numero_autorizacion` varchar(100) DEFAULT NULL,
   `clave_acceso` varchar(100) DEFAULT NULL,
   `fecha` varchar(45) DEFAULT NULL,
   `descargada` varchar(45) DEFAULT NULL,
-  `ordenes_id` int NOT NULL,
+  `ordenes_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_facturas_ordenes1_idx` (`ordenes_id`),
   CONSTRAINT `fk_facturas_ordenes1` FOREIGN KEY (`ordenes_id`) REFERENCES `ordenes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.facturas_electronicas: ~0 rows (aproximadamente)
 DELETE FROM `facturas_electronicas`;
+/*!40000 ALTER TABLE `facturas_electronicas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `facturas_electronicas` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.failed_jobs
 CREATE TABLE IF NOT EXISTS `failed_jobs` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -245,53 +501,64 @@ CREATE TABLE IF NOT EXISTS `failed_jobs` (
 
 -- Volcando datos para la tabla pwa_ecommerce.failed_jobs: ~0 rows (aproximadamente)
 DELETE FROM `failed_jobs`;
+/*!40000 ALTER TABLE `failed_jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `failed_jobs` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.formas_pago
 CREATE TABLE IF NOT EXISTS `formas_pago` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `pago` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.formas_pago: ~0 rows (aproximadamente)
 DELETE FROM `formas_pago`;
+/*!40000 ALTER TABLE `formas_pago` DISABLE KEYS */;
+/*!40000 ALTER TABLE `formas_pago` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.info_adicional
 CREATE TABLE IF NOT EXISTS `info_adicional` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(45) DEFAULT NULL,
   `descripcion` varchar(255) DEFAULT NULL,
-  `ordenes_id` int NOT NULL,
+  `ordenes_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_info_adicional_ordenes1_idx` (`ordenes_id`),
   CONSTRAINT `fk_info_adicional_ordenes1` FOREIGN KEY (`ordenes_id`) REFERENCES `ordenes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.info_adicional: ~0 rows (aproximadamente)
 DELETE FROM `info_adicional`;
+/*!40000 ALTER TABLE `info_adicional` DISABLE KEYS */;
+/*!40000 ALTER TABLE `info_adicional` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.marcas
 CREATE TABLE IF NOT EXISTS `marcas` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
   `estado` varchar(20) DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.marcas: ~0 rows (aproximadamente)
 DELETE FROM `marcas`;
+/*!40000 ALTER TABLE `marcas` DISABLE KEYS */;
+INSERT INTO `marcas` (`id`, `nombre`, `estado`, `imagen`) VALUES
+	(1, 'ROMAYA', '1', NULL);
+/*!40000 ALTER TABLE `marcas` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.migrations
 CREATE TABLE IF NOT EXISTS `migrations` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `batch` int NOT NULL,
+  `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.migrations: ~9 rows (aproximadamente)
 DELETE FROM `migrations`;
+/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(1, '2014_10_12_000000_create_users_table', 1),
 	(2, '2014_10_12_100000_create_password_resets_table', 1),
@@ -302,27 +569,30 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(7, '2016_06_01_000003_create_oauth_refresh_tokens_table', 2),
 	(8, '2016_06_01_000004_create_oauth_clients_table', 2),
 	(9, '2016_06_01_000005_create_oauth_personal_access_clients_table', 2);
+/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.notificaciones
 CREATE TABLE IF NOT EXISTS `notificaciones` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `usuario_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `usuario_id` int(11) DEFAULT NULL,
   `mensaje` text,
   `leida` tinyint(1) DEFAULT NULL,
   `fecha_envio` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `usuario_id` (`usuario_id`),
   CONSTRAINT `notificaciones_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.notificaciones: ~0 rows (aproximadamente)
 DELETE FROM `notificaciones`;
+/*!40000 ALTER TABLE `notificaciones` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notificaciones` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.oauth_access_tokens
 CREATE TABLE IF NOT EXISTS `oauth_access_tokens` (
   `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` bigint unsigned DEFAULT NULL,
-  `client_id` bigint unsigned NOT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `client_id` bigint(20) unsigned NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `scopes` text COLLATE utf8mb4_unicode_ci,
   `revoked` tinyint(1) NOT NULL,
@@ -335,12 +605,14 @@ CREATE TABLE IF NOT EXISTS `oauth_access_tokens` (
 
 -- Volcando datos para la tabla pwa_ecommerce.oauth_access_tokens: ~0 rows (aproximadamente)
 DELETE FROM `oauth_access_tokens`;
+/*!40000 ALTER TABLE `oauth_access_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `oauth_access_tokens` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.oauth_auth_codes
 CREATE TABLE IF NOT EXISTS `oauth_auth_codes` (
   `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` bigint unsigned NOT NULL,
-  `client_id` bigint unsigned NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `client_id` bigint(20) unsigned NOT NULL,
   `scopes` text COLLATE utf8mb4_unicode_ci,
   `revoked` tinyint(1) NOT NULL,
   `expires_at` datetime DEFAULT NULL,
@@ -350,11 +622,13 @@ CREATE TABLE IF NOT EXISTS `oauth_auth_codes` (
 
 -- Volcando datos para la tabla pwa_ecommerce.oauth_auth_codes: ~0 rows (aproximadamente)
 DELETE FROM `oauth_auth_codes`;
+/*!40000 ALTER TABLE `oauth_auth_codes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `oauth_auth_codes` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.oauth_clients
 CREATE TABLE IF NOT EXISTS `oauth_clients` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint unsigned DEFAULT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `secret` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `provider` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -368,25 +642,29 @@ CREATE TABLE IF NOT EXISTS `oauth_clients` (
   KEY `oauth_clients_user_id_index` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla pwa_ecommerce.oauth_clients: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.oauth_clients: ~2 rows (aproximadamente)
 DELETE FROM `oauth_clients`;
+/*!40000 ALTER TABLE `oauth_clients` DISABLE KEYS */;
 INSERT INTO `oauth_clients` (`id`, `user_id`, `name`, `secret`, `provider`, `redirect`, `personal_access_client`, `password_client`, `revoked`, `created_at`, `updated_at`) VALUES
-	(1, NULL, 'Laravel Personal Access Client', 'R2u2AOaRPhI5l2Y8EI9WVKrnBoTtVEkOwekHlsMM', NULL, 'http://localhost', 1, 0, 0, '2023-09-05 06:10:56', '2023-09-05 06:10:56'),
-	(2, NULL, 'Laravel Password Grant Client', 'qkBQg29FBIXDSKcIV0v30G4sg1LpUA7WK1xqPQBe', 'users', 'http://localhost', 0, 1, 0, '2023-09-05 06:10:56', '2023-09-05 06:10:56');
+	(1, NULL, 'Laravel Personal Access Client', 'R2u2AOaRPhI5l2Y8EI9WVKrnBoTtVEkOwekHlsMM', NULL, 'http://localhost', 1, 0, 0, '2023-09-05 01:10:56', '2023-09-05 01:10:56'),
+	(2, NULL, 'Laravel Password Grant Client', 'qkBQg29FBIXDSKcIV0v30G4sg1LpUA7WK1xqPQBe', 'users', 'http://localhost', 0, 1, 0, '2023-09-05 01:10:56', '2023-09-05 01:10:56');
+/*!40000 ALTER TABLE `oauth_clients` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.oauth_personal_access_clients
 CREATE TABLE IF NOT EXISTS `oauth_personal_access_clients` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `client_id` bigint unsigned NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `client_id` bigint(20) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla pwa_ecommerce.oauth_personal_access_clients: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.oauth_personal_access_clients: ~0 rows (aproximadamente)
 DELETE FROM `oauth_personal_access_clients`;
+/*!40000 ALTER TABLE `oauth_personal_access_clients` DISABLE KEYS */;
 INSERT INTO `oauth_personal_access_clients` (`id`, `client_id`, `created_at`, `updated_at`) VALUES
-	(1, 1, '2023-09-05 06:10:56', '2023-09-05 06:10:56');
+	(1, 1, '2023-09-05 01:10:56', '2023-09-05 01:10:56');
+/*!40000 ALTER TABLE `oauth_personal_access_clients` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.oauth_refresh_tokens
 CREATE TABLE IF NOT EXISTS `oauth_refresh_tokens` (
@@ -400,32 +678,36 @@ CREATE TABLE IF NOT EXISTS `oauth_refresh_tokens` (
 
 -- Volcando datos para la tabla pwa_ecommerce.oauth_refresh_tokens: ~0 rows (aproximadamente)
 DELETE FROM `oauth_refresh_tokens`;
+/*!40000 ALTER TABLE `oauth_refresh_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `oauth_refresh_tokens` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.ofertasespeciales
 CREATE TABLE IF NOT EXISTS `ofertasespeciales` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `producto_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `producto_id` int(11) DEFAULT NULL,
   `descuento` decimal(5,2) DEFAULT NULL,
   `fecha_inicio` date DEFAULT NULL,
   `fecha_fin` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `producto_id` (`producto_id`),
   CONSTRAINT `ofertasespeciales_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.ofertasespeciales: ~0 rows (aproximadamente)
 DELETE FROM `ofertasespeciales`;
+/*!40000 ALTER TABLE `ofertasespeciales` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ofertasespeciales` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.ordenes
 CREATE TABLE IF NOT EXISTS `ordenes` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `cliente_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cliente_id` int(11) DEFAULT NULL,
   `fecha` date DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   `total` decimal(10,2) DEFAULT NULL,
-  `estado_orden_id` int NOT NULL,
-  `datosfacturacion_id` int NOT NULL,
-  `direccionesentrega_id` int NOT NULL,
+  `estado_orden_id` int(11) NOT NULL,
+  `datosfacturacion_id` int(11) NOT NULL,
+  `direccionesentrega_id` int(11) NOT NULL,
   `subtotal12` decimal(12,2) DEFAULT NULL,
   `subtotaliva0` decimal(12,2) DEFAULT NULL,
   `subtotal_sin_impuestos` decimal(12,2) DEFAULT NULL,
@@ -440,28 +722,1419 @@ CREATE TABLE IF NOT EXISTS `ordenes` (
   CONSTRAINT `fk_ordenes_direccionesentrega1` FOREIGN KEY (`direccionesentrega_id`) REFERENCES `direccionesentrega` (`id`),
   CONSTRAINT `fk_ordenes_estado_orden1` FOREIGN KEY (`estado_orden_id`) REFERENCES `estado_orden` (`id`),
   CONSTRAINT `ordenes_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.ordenes: ~0 rows (aproximadamente)
 DELETE FROM `ordenes`;
+/*!40000 ALTER TABLE `ordenes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ordenes` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.pagos_orden
 CREATE TABLE IF NOT EXISTS `pagos_orden` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `total` decimal(12,2) DEFAULT NULL,
   `plazo` varchar(45) DEFAULT NULL,
   `tiempo` varchar(45) DEFAULT NULL,
-  `formas_pago_id` int NOT NULL,
-  `ordenes_id` int NOT NULL,
+  `formas_pago_id` int(11) NOT NULL,
+  `ordenes_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_pagos_orden_formas_pago1_idx` (`formas_pago_id`),
   KEY `fk_pagos_orden_ordenes1_idx` (`ordenes_id`),
   CONSTRAINT `fk_pagos_orden_formas_pago1` FOREIGN KEY (`formas_pago_id`) REFERENCES `formas_pago` (`id`),
   CONSTRAINT `fk_pagos_orden_ordenes1` FOREIGN KEY (`ordenes_id`) REFERENCES `ordenes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.pagos_orden: ~0 rows (aproximadamente)
 DELETE FROM `pagos_orden`;
+/*!40000 ALTER TABLE `pagos_orden` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pagos_orden` ENABLE KEYS */;
+
+-- Volcando estructura para tabla pwa_ecommerce.parroquias
+CREATE TABLE IF NOT EXISTS `parroquias` (
+  `id` varchar(50) NOT NULL,
+  `parroquia` varchar(50) DEFAULT NULL,
+  `ciudad_id` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Volcando datos para la tabla pwa_ecommerce.parroquias: ~1.373 rows (aproximadamente)
+DELETE FROM `parroquias`;
+/*!40000 ALTER TABLE `parroquias` DISABLE KEYS */;
+INSERT INTO `parroquias` (`id`, `parroquia`, `ciudad_id`) VALUES
+	('010101', 'BELLAVISTA', '0101'),
+	('010102', 'CAÑARIBAMBA', '0101'),
+	('010103', 'EL BATÁN', '0101'),
+	('010104', 'EL SAGRARIO', '0101'),
+	('010105', 'EL VECINO', '0101'),
+	('010106', 'GIL RAMÍREZ DÁVALOS', '0101'),
+	('010107', 'HUAYNACÁPAC', '0101'),
+	('010108', 'MACHÁNGARA', '0101'),
+	('010109', 'MONAY', '0101'),
+	('010110', 'SAN BLAS', '0101'),
+	('010111', 'SAN SEBASTIÁN', '0101'),
+	('010112', 'SUCRE', '0101'),
+	('010113', 'TOTORACOCHA', '0101'),
+	('010114', 'YANUNCAY', '0101'),
+	('010115', 'HERMANO MIGUEL', '0101'),
+	('010151', 'BAÑOS', '0101'),
+	('010152', 'CUMBE', '0101'),
+	('010153', 'CHAUCHA', '0101'),
+	('010154', 'CHECA (JIDCAY)', '0101'),
+	('010155', 'CHIQUINTAD', '0101'),
+	('010156', 'LLACAO', '0101'),
+	('010157', 'MOLLETURO', '0101'),
+	('010158', 'NULTI', '0101'),
+	('010159', 'OCTAVIO CORDERO PALACIOS (SANTA ROSA)', '0101'),
+	('010160', 'PACCHA', '0101'),
+	('010161', 'QUINGEO', '0101'),
+	('010162', 'RICAURTE', '0101'),
+	('010163', 'SAN JOAQUÍN', '0101'),
+	('010164', 'SANTA ANA', '0101'),
+	('010165', 'SAYAUSÍ', '0101'),
+	('010166', 'SIDCAY', '0101'),
+	('010167', 'SININCAY', '0101'),
+	('010168', 'TARQUI', '0101'),
+	('010169', 'TURI', '0101'),
+	('010170', 'VALLE', '0101'),
+	('010171', 'VICTORIA DEL PORTETE (IRQUIS)', '0101'),
+	('010250', 'GIRÓN', '0102'),
+	('010251', 'ASUNCIÓN', '0102'),
+	('010252', 'SAN GERARDO', '0102'),
+	('010350', 'GUALACEO', '0103'),
+	('010351', 'CHORDELEG', '0103'),
+	('010352', 'DANIEL CÓRDOVA TORAL (EL ORIENTE)', '0103'),
+	('010353', 'JADÁN', '0103'),
+	('010354', 'MARIANO MORENO', '0103'),
+	('010355', 'PRINCIPAL', '0103'),
+	('010356', 'REMIGIO CRESPO TORAL (GÚLAG)', '0103'),
+	('010357', 'SAN JUAN', '0103'),
+	('010358', 'ZHIDMAD', '0103'),
+	('010359', 'LUIS CORDERO VEGA', '0103'),
+	('010360', 'SIMÓN BOLÍVAR (CAB. EN GAÑANZOL)', '0103'),
+	('010450', 'NABÓN', '0104'),
+	('010451', 'COCHAPATA', '0104'),
+	('010452', 'EL PROGRESO (CAB.EN ZHOTA)', '0104'),
+	('010453', 'LAS NIEVES (CHAYA)', '0104'),
+	('010454', 'OÑA', '0104'),
+	('010455', 'LA PAZ', '0104'),
+	('010550', 'PAUTE', '0105'),
+	('010551', 'AMALUZA', '0105'),
+	('010552', 'BULÁN (JOSÉ VÍCTOR IZQUIERDO)', '0105'),
+	('010553', 'CHICÁN (GUILLERMO ORTEGA)', '0105'),
+	('010554', 'EL CABO', '0105'),
+	('010555', 'GUACHAPALA', '0105'),
+	('010556', 'GUARAINAG', '0105'),
+	('010557', 'PALMAS', '0105'),
+	('010558', 'PAN', '0105'),
+	('010559', 'SAN CRISTÓBAL (CARLOS ORDÓÑEZ LAZO)', '0105'),
+	('010560', 'SEVILLA DE ORO', '0105'),
+	('010561', 'TOMEBAMBA', '0105'),
+	('010562', 'DUG DUG', '0105'),
+	('010650', 'PUCARÁ', '0106'),
+	('010652', 'SAN RAFAEL DE SHARUG', '0106'),
+	('010750', 'SAN FERNANDO', '0107'),
+	('010751', 'CHUMBLÍN', '0107'),
+	('010850', 'SANTA ISABEL (CHAGUARURCO)', '0108'),
+	('010851', 'ABDÓN CALDERÓN  (LA UNIÓN)', '0108'),
+	('010853', 'ZHAGLLI (SHAGLLI)', '0108'),
+	('010854', 'SAN SALVADOR DE CAÑARIBAMBA', '0108'),
+	('010950', 'SIGSIG', '0109'),
+	('010951', 'CUCHIL (CUTCHIL)', '0109'),
+	('010952', 'GIMA', '0109'),
+	('010953', 'GUEL', '0109'),
+	('010954', 'LUDO', '0109'),
+	('010955', 'SAN BARTOLOMÉ', '0109'),
+	('010956', 'SAN JOSÉ DE RARANGA', '0109'),
+	('011050', 'SAN FELIPE DE OÑA CABECERA CANTONAL', '0110'),
+	('011051', 'SUSUDEL', '0110'),
+	('011150', 'CHORDELEG', '0111'),
+	('011151', 'PRINCIPAL', '0111'),
+	('011152', 'LA UNIÓN', '0111'),
+	('011153', 'LUIS GALARZA ORELLANA (CAB.EN DELEGSOL)', '0111'),
+	('011154', 'SAN MARTÍN DE PUZHIO', '0111'),
+	('011250', 'EL PAN', '0112'),
+	('011251', 'AMALUZA', '0112'),
+	('011252', 'PALMAS', '0112'),
+	('011253', 'SAN VICENTE', '0112'),
+	('011350', 'SEVILLA DE ORO', '0113'),
+	('011351', 'AMALUZA', '0113'),
+	('011352', 'PALMAS', '0113'),
+	('011450', 'GUACHAPALA', '0114'),
+	('011550', 'CAMILO PONCE ENRÍQUEZ', '0115'),
+	('011551', 'EL CARMEN DE PIJILÍ', '0115'),
+	('020101', 'ÁNGEL POLIBIO CHÁVES', '0201'),
+	('020102', 'GABRIEL IGNACIO VEINTIMILLA', '0201'),
+	('020103', 'GUANUJO', '0201'),
+	('020151', 'FACUNDO VELA', '0201'),
+	('020152', 'GUANUJO', '0201'),
+	('020153', 'JULIO E. MORENO (CATANAHUÁN GRANDE)', '0201'),
+	('020154', 'LAS NAVES', '0201'),
+	('020155', 'SALINAS', '0201'),
+	('020156', 'SAN LORENZO', '0201'),
+	('020157', 'SAN SIMÓN (YACOTO)', '0201'),
+	('020158', 'SANTA FÉ (SANTA FÉ)', '0201'),
+	('020159', 'SIMIÁTUG', '0201'),
+	('020160', 'SAN LUIS DE PAMBIL', '0201'),
+	('020251', 'SAN JOSÉ DEL TAMBO (TAMBOPAMBA)', '0202'),
+	('020350', 'SAN JOSÉ DE CHIMBO', '0203'),
+	('020351', 'ASUNCIÓN (ASANCOTO)', '0203'),
+	('020352', 'CALUMA', '0203'),
+	('020353', 'MAGDALENA (CHAPACOTO)', '0203'),
+	('020354', 'SAN SEBASTIÁN', '0203'),
+	('020355', 'TELIMBELA', '0203'),
+	('020450', 'ECHEANDÍA', '0204'),
+	('020551', 'BALSAPAMBA', '0205'),
+	('020552', 'BILOVÁN', '0205'),
+	('020553', 'RÉGULO DE MORA', '0205'),
+	('020554', 'SAN PABLO  (SAN PABLO DE ATENAS)', '0205'),
+	('020555', 'SANTIAGO', '0205'),
+	('020556', 'SAN VICENTE', '0205'),
+	('020650', 'CALUMA', '0206'),
+	('020701', 'LAS MERCEDES', '0207'),
+	('020702', 'LAS NAVES', '0207'),
+	('030101', 'AURELIO BAYAS MARTÍNEZ', '0301'),
+	('030102', 'AZOGUES', '0301'),
+	('030103', 'BORRERO', '0301'),
+	('030104', 'SAN FRANCISCO', '0301'),
+	('030151', 'COJITAMBO', '0301'),
+	('030152', 'DÉLEG', '0301'),
+	('030153', 'GUAPÁN', '0301'),
+	('030154', 'JAVIER LOYOLA (CHUQUIPATA)', '0301'),
+	('030155', 'LUIS CORDERO', '0301'),
+	('030156', 'PINDILIG', '0301'),
+	('030157', 'RIVERA', '0301'),
+	('030158', 'SAN MIGUEL', '0301'),
+	('030159', 'SOLANO', '0301'),
+	('030160', 'TADAY', '0301'),
+	('030250', 'BIBLIÁN', '0302'),
+	('030251', 'NAZÓN (CAB. EN PAMPA DE DOMÍNGUEZ)', '0302'),
+	('030252', 'SAN FRANCISCO DE SAGEO', '0302'),
+	('030253', 'TURUPAMBA', '0302'),
+	('030254', 'JERUSALÉN', '0302'),
+	('030350', 'CAÑAR', '0303'),
+	('030351', 'CHONTAMARCA', '0303'),
+	('030352', 'CHOROCOPTE', '0303'),
+	('030353', 'GENERAL MORALES (SOCARTE)', '0303'),
+	('030354', 'GUALLETURO', '0303'),
+	('030355', 'HONORATO VÁSQUEZ (TAMBO VIEJO)', '0303'),
+	('030356', 'INGAPIRCA', '0303'),
+	('030357', 'JUNCAL', '0303'),
+	('030358', 'SAN ANTONIO', '0303'),
+	('030359', 'SUSCAL', '0303'),
+	('030360', 'TAMBO', '0303'),
+	('030361', 'ZHUD', '0303'),
+	('030362', 'VENTURA', '0303'),
+	('030363', 'DUCUR', '0303'),
+	('030450', 'LA TRONCAL', '0304'),
+	('030451', 'MANUEL J. CALLE', '0304'),
+	('030452', 'PANCHO NEGRO', '0304'),
+	('030550', 'EL TAMBO', '0305'),
+	('030650', 'DÉLEG', '0306'),
+	('030651', 'SOLANO', '0306'),
+	('030750', 'SUSCAL', '0307'),
+	('040101', 'GONZÁLEZ SUÁREZ', '0401'),
+	('040102', 'TULCÁN', '0401'),
+	('040150', 'TULCÁN Y CAPITAL PROVINCIAL', '0401'),
+	('040151', 'EL CARMELO (EL PUN)', '0401'),
+	('040152', 'HUACA', '0401'),
+	('040153', 'JULIO ANDRADE (OREJUELA)', '0401'),
+	('040154', 'MALDONADO', '0401'),
+	('040155', 'PIOTER', '0401'),
+	('040156', 'TOBAR DONOSO (LA BOCANA DE CAMUMBÍ)', '0401'),
+	('040157', 'TUFIÑO', '0401'),
+	('040158', 'URBINA (TAYA)', '0401'),
+	('040159', 'EL CHICAL', '0401'),
+	('040160', 'MARISCAL SUCRE', '0401'),
+	('040161', 'SANTA MARTHA DE CUBA', '0401'),
+	('040250', 'BOLÍVAR', '0402'),
+	('040251', 'GARCÍA MORENO', '0402'),
+	('040252', 'LOS ANDES', '0402'),
+	('040253', 'MONTE OLIVO', '0402'),
+	('040254', 'SAN VICENTE DE PUSIR', '0402'),
+	('040255', 'SAN RAFAEL', '0402'),
+	('040301', 'EL ÁNGEL', '0403'),
+	('040302', '27 DE SEPTIEMBRE', '0403'),
+	('040350', 'EL ANGEL', '0403'),
+	('040351', 'EL GOALTAL', '0403'),
+	('040352', 'LA LIBERTAD (ALIZO)', '0403'),
+	('040353', 'SAN ISIDRO', '0403'),
+	('040450', 'MIRA (CHONTAHUASI)', '0404'),
+	('040451', 'CONCEPCIÓN', '0404'),
+	('040452', 'JIJÓN Y CAAMAÑO (CAB. EN RÍO BLANCO)', '0404'),
+	('040453', 'JUAN MONTALVO (SAN IGNACIO DE QUIL)', '0404'),
+	('040501', 'GONZÁLEZ SUÁREZ', '0405'),
+	('040502', 'SAN JOSÉ', '0405'),
+	('040551', 'CRISTÓBAL COLÓN', '0405'),
+	('040552', 'CHITÁN DE NAVARRETE', '0405'),
+	('040553', 'FERNÁNDEZ SALVADOR', '0405'),
+	('040554', 'LA PAZ', '0405'),
+	('040555', 'PIARTAL', '0405'),
+	('040650', 'HUACA', '0406'),
+	('040651', 'MARISCAL SUCRE', '0406'),
+	('050101', 'ELOY ALFARO  (SAN FELIPE)', '0501'),
+	('050102', 'IGNACIO FLORES (PARQUE FLORES)', '0501'),
+	('050103', 'JUAN MONTALVO (SAN SEBASTIÁN)', '0501'),
+	('050104', 'LA MATRIZ', '0501'),
+	('050105', 'SAN BUENAVENTURA', '0501'),
+	('050151', 'ALAQUES (ALÁQUEZ)', '0501'),
+	('050152', 'BELISARIO QUEVEDO (GUANAILÍN)', '0501'),
+	('050153', 'GUAITACAMA (GUAYTACAMA)', '0501'),
+	('050154', 'JOSEGUANGO BAJO', '0501'),
+	('050155', 'LAS PAMPAS', '0501'),
+	('050156', 'MULALÓ', '0501'),
+	('050157', '11 DE NOVIEMBRE (ILINCHISI)', '0501'),
+	('050158', 'POALÓ', '0501'),
+	('050159', 'SAN JUAN DE PASTOCALLE', '0501'),
+	('050160', 'SIGCHOS', '0501'),
+	('050161', 'TANICUCHÍ', '0501'),
+	('050162', 'TOACASO', '0501'),
+	('050163', 'PALO QUEMADO', '0501'),
+	('050201', 'EL CARMEN', '0502'),
+	('050202', 'LA MANÁ', '0502'),
+	('050203', 'EL TRIUNFO', '0502'),
+	('050251', 'GUASAGANDA (CAB.EN GUASAGANDA  CENTRO', '0502'),
+	('050252', 'PUCAYACU', '0502'),
+	('050350', 'EL CORAZÓN', '0503'),
+	('050351', 'MORASPUNGO', '0503'),
+	('050352', 'PINLLOPATA', '0503'),
+	('050353', 'RAMÓN CAMPAÑA', '0503'),
+	('050450', 'PUJILÍ', '0504'),
+	('050451', 'ANGAMARCA', '0504'),
+	('050452', 'CHUCCHILÁN (CHUGCHILÁN)', '0504'),
+	('050453', 'GUANGAJE', '0504'),
+	('050454', 'ISINLIBÍ (ISINLIVÍ)', '0504'),
+	('050455', 'LA VICTORIA', '0504'),
+	('050456', 'PILALÓ', '0504'),
+	('050457', 'TINGO', '0504'),
+	('050458', 'ZUMBAHUA', '0504'),
+	('050550', 'SAN MIGUEL', '0505'),
+	('050551', 'ANTONIO JOSÉ HOLGUÍN  (SANTA LUCÍA)', '0505'),
+	('050552', 'CUSUBAMBA', '0505'),
+	('050553', 'MULALILLO', '0505'),
+	('050554', 'MULLIQUINDIL (SANTA ANA)', '0505'),
+	('050555', 'PANSALEO', '0505'),
+	('050650', 'SAQUISILÍ', '0506'),
+	('050651', 'CANCHAGUA', '0506'),
+	('050652', 'CHANTILÍN', '0506'),
+	('050653', 'COCHAPAMBA', '0506'),
+	('050750', 'SIGCHOS', '0507'),
+	('050751', 'CHUGCHILLÁN', '0507'),
+	('050752', 'ISINLIVÍ', '0507'),
+	('050753', 'LAS PAMPAS', '0507'),
+	('050754', 'PALO QUEMADO', '0507'),
+	('060101', 'LIZARZABURU', '0601'),
+	('060102', 'MALDONADO', '0601'),
+	('060103', 'VELASCO', '0601'),
+	('060104', 'VELOZ', '0601'),
+	('060105', 'YARUQUÍES', '0601'),
+	('060151', 'CACHA (CAB. EN MACHÁNGARA)', '0601'),
+	('060152', 'CALPI', '0601'),
+	('060153', 'CUBIJÍES', '0601'),
+	('060154', 'FLORES', '0601'),
+	('060155', 'LICÁN', '0601'),
+	('060156', 'LICTO', '0601'),
+	('060157', 'PUNGALÁ', '0601'),
+	('060158', 'PUNÍN', '0601'),
+	('060159', 'QUIMIAG', '0601'),
+	('060160', 'SAN JUAN', '0601'),
+	('060161', 'SAN LUIS', '0601'),
+	('060250', 'ALAUSÍ', '0602'),
+	('060251', 'ACHUPALLAS', '0602'),
+	('060252', 'CUMANDÁ', '0602'),
+	('060253', 'GUASUNTOS', '0602'),
+	('060254', 'HUIGRA', '0602'),
+	('060255', 'MULTITUD', '0602'),
+	('060256', 'PISTISHÍ (NARIZ DEL DIABLO)', '0602'),
+	('060257', 'PUMALLACTA', '0602'),
+	('060258', 'SEVILLA', '0602'),
+	('060259', 'SIBAMBE', '0602'),
+	('060260', 'TIXÁN', '0602'),
+	('060301', 'CAJABAMBA', '0603'),
+	('060302', 'SICALPA', '0603'),
+	('060350', 'VILLA LA UNIÓN (CAJABAMBA)', '0603'),
+	('060351', 'CAÑI', '0603'),
+	('060352', 'COLUMBE', '0603'),
+	('060353', 'JUAN DE VELASCO (PANGOR)', '0603'),
+	('060354', 'SANTIAGO DE QUITO (CAB. EN SAN ANTONIO DE QUITO)', '0603'),
+	('060450', 'CHAMBO', '0604'),
+	('060550', 'CHUNCHI', '0605'),
+	('060551', 'CAPZOL', '0605'),
+	('060552', 'COMPUD', '0605'),
+	('060553', 'GONZOL', '0605'),
+	('060554', 'LLAGOS', '0605'),
+	('060650', 'GUAMOTE', '0606'),
+	('060651', 'CEBADAS', '0606'),
+	('060652', 'PALMIRA', '0606'),
+	('060701', 'EL ROSARIO', '0607'),
+	('060702', 'LA MATRIZ', '0607'),
+	('060750', 'GUANO', '0607'),
+	('060751', 'GUANANDO', '0607'),
+	('060752', 'ILAPO', '0607'),
+	('060753', 'LA PROVIDENCIA', '0607'),
+	('060754', 'SAN ANDRÉS', '0607'),
+	('060755', 'SAN GERARDO DE PACAICAGUÁN', '0607'),
+	('060756', 'SAN ISIDRO DE PATULÚ', '0607'),
+	('060757', 'SAN JOSÉ DEL CHAZO', '0607'),
+	('060758', 'SANTA FÉ DE GALÁN', '0607'),
+	('060759', 'VALPARAÍSO', '0607'),
+	('060850', 'PALLATANGA', '0608'),
+	('060950', 'PENIPE', '0609'),
+	('060951', 'EL ALTAR', '0609'),
+	('060952', 'MATUS', '0609'),
+	('060953', 'PUELA', '0609'),
+	('060954', 'SAN ANTONIO DE BAYUSHIG', '0609'),
+	('060955', 'LA CANDELARIA', '0609'),
+	('060956', 'BILBAO (CAB.EN QUILLUYACU)', '0609'),
+	('061050', 'CUMANDÁ', '0610'),
+	('070101', 'LA PROVIDENCIA', '0701'),
+	('070102', 'MACHALA', '0701'),
+	('070103', 'PUERTO BOLÍVAR', '0701'),
+	('070104', 'NUEVE DE MAYO', '0701'),
+	('070105', 'EL CAMBIO', '0701'),
+	('070151', 'EL CAMBIO', '0701'),
+	('070152', 'EL RETIRO', '0701'),
+	('070250', 'ARENILLAS', '0702'),
+	('070251', 'CHACRAS', '0702'),
+	('070252', 'LA LIBERTAD', '0702'),
+	('070253', 'LAS LAJAS (CAB. EN LA VICTORIA)', '0702'),
+	('070254', 'PALMALES', '0702'),
+	('070255', 'CARCABÓN', '0702'),
+	('070350', 'PACCHA', '0703'),
+	('070351', 'AYAPAMBA', '0703'),
+	('070352', 'CORDONCILLO', '0703'),
+	('070353', 'MILAGRO', '0703'),
+	('070354', 'SAN JOSÉ', '0703'),
+	('070355', 'SAN JUAN DE CERRO AZUL', '0703'),
+	('070450', 'BALSAS', '0704'),
+	('070451', 'BELLAMARÍA', '0704'),
+	('070550', 'CHILLA', '0705'),
+	('070650', 'EL GUABO', '0706'),
+	('070651', 'BARBONES (SUCRE)', '0706'),
+	('070652', 'LA IBERIA', '0706'),
+	('070653', 'TENDALES (CAB.EN PUERTO TENDALES)', '0706'),
+	('070654', 'RÍO BONITO', '0706'),
+	('070701', 'ECUADOR', '0707'),
+	('070702', 'EL PARAÍSO', '0707'),
+	('070703', 'HUALTACO', '0707'),
+	('070704', 'MILTON REYES', '0707'),
+	('070705', 'UNIÓN LOJANA', '0707'),
+	('070750', 'HUAQUILLAS', '0707'),
+	('070850', 'MARCABELÍ', '0708'),
+	('070851', 'EL INGENIO', '0708'),
+	('070901', 'BOLÍVAR', '0709'),
+	('070902', 'LOMA DE FRANCO', '0709'),
+	('070903', 'OCHOA LEÓN (MATRIZ)', '0709'),
+	('070904', 'TRES CERRITOS', '0709'),
+	('070951', 'BUENAVISTA', '0709'),
+	('070952', 'CASACAY', '0709'),
+	('070953', 'LA PEAÑA', '0709'),
+	('070954', 'PROGRESO', '0709'),
+	('070955', 'UZHCURRUMI', '0709'),
+	('070956', 'CAÑAQUEMADA', '0709'),
+	('071001', 'LA MATRIZ', '0710'),
+	('071002', 'LA SUSAYA', '0710'),
+	('071003', 'PIÑAS GRANDE', '0710'),
+	('071050', 'PIÑAS', '0710'),
+	('071051', 'CAPIRO (CAB. EN LA CAPILLA DE CAPIRO)', '0710'),
+	('071052', 'LA BOCANA', '0710'),
+	('071053', 'MOROMORO (CAB. EN EL VADO)', '0710'),
+	('071054', 'PIEDRAS', '0710'),
+	('071055', 'SAN ROQUE (AMBROSIO MALDONADO)', '0710'),
+	('071056', 'SARACAY', '0710'),
+	('071150', 'PORTOVELO', '0711'),
+	('071151', 'CURTINCAPA', '0711'),
+	('071152', 'MORALES', '0711'),
+	('071153', 'SALATÍ', '0711'),
+	('071201', 'SANTA ROSA', '0712'),
+	('071202', 'PUERTO JELÍ', '0712'),
+	('071203', 'BALNEARIO JAMBELÍ (SATÉLITE)', '0712'),
+	('071204', 'JUMÓN (SATÉLITE)', '0712'),
+	('071205', 'NUEVO SANTA ROSA', '0712'),
+	('071250', 'SANTA ROSA', '0712'),
+	('071251', 'BELLAVISTA', '0712'),
+	('071252', 'JAMBELÍ', '0712'),
+	('071253', 'LA AVANZADA', '0712'),
+	('071254', 'SAN ANTONIO', '0712'),
+	('071255', 'TORATA', '0712'),
+	('071256', 'VICTORIA', '0712'),
+	('071257', 'BELLAMARÍA', '0712'),
+	('071350', 'ZARUMA', '0713'),
+	('071351', 'ABAÑÍN', '0713'),
+	('071352', 'ARCAPAMBA', '0713'),
+	('071353', 'GUANAZÁN', '0713'),
+	('071354', 'GUIZHAGUIÑA', '0713'),
+	('071355', 'HUERTAS', '0713'),
+	('071356', 'MALVAS', '0713'),
+	('071357', 'MULUNCAY GRANDE', '0713'),
+	('071358', 'SINSAO', '0713'),
+	('071359', 'SALVIAS', '0713'),
+	('071401', 'LA VICTORIA', '0714'),
+	('071402', 'PLATANILLOS', '0714'),
+	('071403', 'VALLE HERMOSO', '0714'),
+	('071450', 'LA VICTORIA', '0714'),
+	('071451', 'LA LIBERTAD', '0714'),
+	('071452', 'EL PARAÍSO', '0714'),
+	('071453', 'SAN ISIDRO', '0714'),
+	('080101', 'BARTOLOMÉ RUIZ (CÉSAR FRANCO CARRIÓN)', '0801'),
+	('080102', '5 DE AGOSTO', '0801'),
+	('080103', 'ESMERALDAS', '0801'),
+	('080104', 'LUIS TELLO  (LAS PALMAS)', '0801'),
+	('080105', 'SIMÓN PLATA TORRES', '0801'),
+	('080151', 'ATACAMES', '0801'),
+	('080152', 'CAMARONES (CAB. EN SAN VICENTE)', '0801'),
+	('080153', 'CRNEL. CARLOS CONCHA TORRES (CAB.EN HUELE)', '0801'),
+	('080154', 'CHINCA', '0801'),
+	('080155', 'CHONTADURO', '0801'),
+	('080156', 'CHUMUNDÉ', '0801'),
+	('080157', 'LAGARTO', '0801'),
+	('080158', 'LA UNIÓN', '0801'),
+	('080159', 'MAJUA', '0801'),
+	('080160', 'MONTALVO (CAB. EN HORQUETA)', '0801'),
+	('080161', 'RÍO VERDE', '0801'),
+	('080162', 'ROCAFUERTE', '0801'),
+	('080163', 'SAN MATEO', '0801'),
+	('080164', 'SÚA (CAB. EN LA BOCANA)', '0801'),
+	('080165', 'TABIAZO', '0801'),
+	('080166', 'TACHINA', '0801'),
+	('080167', 'TONCHIGÜE', '0801'),
+	('080168', 'VUELTA LARGA', '0801'),
+	('080250', 'VALDEZ (LIMONES)', '0802'),
+	('080251', 'ANCHAYACU', '0802'),
+	('080252', 'ATAHUALPA (CAB. EN CAMARONES)', '0802'),
+	('080253', 'BORBÓN', '0802'),
+	('080254', 'LA TOLA', '0802'),
+	('080255', 'LUIS VARGAS TORRES (CAB. EN PLAYA DE ORO)', '0802'),
+	('080256', 'MALDONADO', '0802'),
+	('080257', 'PAMPANAL DE BOLÍVAR', '0802'),
+	('080258', 'SAN FRANCISCO DE ONZOLE', '0802'),
+	('080259', 'SANTO DOMINGO DE ONZOLE', '0802'),
+	('080260', 'SELVA ALEGRE', '0802'),
+	('080261', 'TELEMBÍ', '0802'),
+	('080262', 'COLÓN ELOY DEL MARÍA', '0802'),
+	('080263', 'SAN JOSÉ DE CAYAPAS', '0802'),
+	('080264', 'TIMBIRÉ', '0802'),
+	('080265', 'SANTA LUCÍA DE LAS PEÑAS', '0802'),
+	('080350', 'MUISNE', '0803'),
+	('080351', 'BOLÍVAR', '0803'),
+	('080352', 'DAULE', '0803'),
+	('080353', 'GALERA', '0803'),
+	('080354', 'QUINGUE (OLMEDO PERDOMO FRANCO)', '0803'),
+	('080355', 'SALIMA', '0803'),
+	('080356', 'SAN FRANCISCO', '0803'),
+	('080357', 'SAN GREGORIO', '0803'),
+	('080358', 'SAN JOSÉ DE CHAMANGA (CAB.EN CHAMANGA)', '0803'),
+	('080450', 'ROSA ZÁRATE (QUININDÉ)', '0804'),
+	('080451', 'CUBE', '0804'),
+	('080452', 'CHURA (CHANCAMA) (CAB. EN EL YERBERO)', '0804'),
+	('080453', 'MALIMPIA', '0804'),
+	('080454', 'VICHE', '0804'),
+	('080455', 'LA UNIÓN', '0804'),
+	('080550', 'SAN LORENZO', '0805'),
+	('080551', 'ALTO TAMBO (CAB. EN GUADUAL)', '0805'),
+	('080552', 'ANCÓN (PICHANGAL) (CAB. EN PALMA REAL)', '0805'),
+	('080553', 'CALDERÓN', '0805'),
+	('080554', 'CARONDELET', '0805'),
+	('080555', '5 DE JUNIO (CAB. EN UIMBI)', '0805'),
+	('080556', 'CONCEPCIÓN', '0805'),
+	('080557', 'MATAJE (CAB. EN SANTANDER)', '0805'),
+	('080558', 'SAN JAVIER DE CACHAVÍ (CAB. EN SAN JAVIER)', '0805'),
+	('080559', 'SANTA RITA', '0805'),
+	('080560', 'TAMBILLO', '0805'),
+	('080561', 'TULULBÍ (CAB. EN RICAURTE)', '0805'),
+	('080562', 'URBINA', '0805'),
+	('080650', 'ATACAMES', '0806'),
+	('080651', 'LA UNIÓN', '0806'),
+	('080652', 'SÚA  (CAB. EN LA BOCANA)', '0806'),
+	('080653', 'TONCHIGÜE', '0806'),
+	('080654', 'TONSUPA', '0806'),
+	('080750', 'RIOVERDE', '0807'),
+	('080751', 'CHONTADURO', '0807'),
+	('080752', 'CHUMUNDÉ', '0807'),
+	('080753', 'LAGARTO', '0807'),
+	('080754', 'MONTALVO (CAB. EN HORQUETA)', '0807'),
+	('080755', 'ROCAFUERTE', '0807'),
+	('080850', 'LA CONCORDIA', '0808'),
+	('080851', 'MONTERREY', '0808'),
+	('080852', 'LA VILLEGAS', '0808'),
+	('080853', 'PLAN PILOTO', '0808'),
+	('090101', 'AYACUCHO', '0901'),
+	('090102', 'BOLÍVAR  (SAGRARIO)', '0901'),
+	('090103', 'CARBO (CONCEPCIÓN)', '0901'),
+	('090104', 'FEBRES CORDERO', '0901'),
+	('090105', 'GARCÍA MORENO', '0901'),
+	('090106', 'LETAMENDI', '0901'),
+	('090107', 'NUEVE DE OCTUBRE', '0901'),
+	('090108', 'OLMEDO  (SAN ALEJO)', '0901'),
+	('090109', 'ROCA', '0901'),
+	('090110', 'ROCAFUERTE', '0901'),
+	('090111', 'SUCRE', '0901'),
+	('090112', 'TARQUI', '0901'),
+	('090113', 'URDANETA', '0901'),
+	('090114', 'XIMENA', '0901'),
+	('090115', 'PASCUALES', '0901'),
+	('090150', 'GUAYAQUIL Y CAPITAL PROVINCIAL', '0901'),
+	('090151', 'CHONGÓN', '0901'),
+	('090152', 'JUAN GÓMEZ RENDÓN (PROGRESO)', '0901'),
+	('090153', 'MORRO', '0901'),
+	('090154', 'PASCUALES', '0901'),
+	('090155', 'PLAYAS (GRAL. VILLAMIL)', '0901'),
+	('090156', 'POSORJA', '0901'),
+	('090157', 'PUNÁ', '0901'),
+	('090158', 'TENGUEL', '0901'),
+	('090250', 'ALFREDO BAQUERIZO MORENO (JUJÁN)', '0902'),
+	('090350', 'BALAO', '0903'),
+	('090450', 'BALZAR', '0904'),
+	('090550', 'COLIMES', '0905'),
+	('090551', 'SAN JACINTO', '0905'),
+	('090601', 'DAULE', '0906'),
+	('090602', 'LA AURORA (SATÉLITE)', '0906'),
+	('090603', 'BANIFE', '0906'),
+	('090604', 'EMILIANO CAICEDO MARCOS', '0906'),
+	('090605', 'MAGRO', '0906'),
+	('090606', 'PADRE JUAN BAUTISTA AGUIRRE', '0906'),
+	('090607', 'SANTA CLARA', '0906'),
+	('090608', 'VICENTE PIEDRAHITA', '0906'),
+	('090651', 'ISIDRO AYORA (SOLEDAD)', '0906'),
+	('090652', 'JUAN BAUTISTA AGUIRRE (LOS TINTOS)', '0906'),
+	('090653', 'LAUREL', '0906'),
+	('090654', 'LIMONAL', '0906'),
+	('090655', 'LOMAS DE SARGENTILLO', '0906'),
+	('090656', 'LOS LOJAS (ENRIQUE BAQUERIZO MORENO)', '0906'),
+	('090657', 'PIEDRAHITA (NOBOL)', '0906'),
+	('090701', 'ELOY ALFARO (DURÁN)', '0907'),
+	('090702', 'EL RECREO', '0907'),
+	('090850', 'VELASCO IBARRA (EL EMPALME)', '0908'),
+	('090851', 'GUAYAS (PUEBLO NUEVO)', '0908'),
+	('090852', 'EL ROSARIO', '0908'),
+	('090950', 'EL TRIUNFO', '0909'),
+	('091050', 'MILAGRO', '0910'),
+	('091051', 'CHOBO', '0910'),
+	('091052', 'GENERAL ELIZALDE (BUCAY)', '0910'),
+	('091053', 'MARISCAL SUCRE (HUAQUES)', '0910'),
+	('091054', 'ROBERTO ASTUDILLO (CAB. EN CRUCE DE VENECIA)', '0910'),
+	('091150', 'NARANJAL', '0911'),
+	('091151', 'JESÚS MARÍA', '0911'),
+	('091152', 'SAN CARLOS', '0911'),
+	('091153', 'SANTA ROSA DE FLANDES', '0911'),
+	('091154', 'TAURA', '0911'),
+	('091250', 'NARANJITO', '0912'),
+	('091450', 'PEDRO CARBO', '0914'),
+	('091451', 'VALLE DE LA VIRGEN', '0914'),
+	('091452', 'SABANILLA', '0914'),
+	('091601', 'SAMBORONDÓN', '0916'),
+	('091602', 'LA PUNTILLA (SATÉLITE)', '0916'),
+	('091651', 'TARIFA', '0916'),
+	('091850', 'SANTA LUCÍA', '0918'),
+	('091901', 'BOCANA', '0919'),
+	('091902', 'CANDILEJOS', '0919'),
+	('091903', 'CENTRAL', '0919'),
+	('091904', 'PARAÍSO', '0919'),
+	('091905', 'SAN MATEO', '0919'),
+	('091951', 'GRAL. VERNAZA (DOS ESTEROS)', '0919'),
+	('091952', 'LA VICTORIA (ÑAUZA)', '0919'),
+	('091953', 'JUNQUILLAL', '0919'),
+	('092050', 'SAN JACINTO DE YAGUACHI', '0920'),
+	('092051', 'CRNEL. LORENZO DE GARAICOA (PEDREGAL)', '0920'),
+	('092052', 'CRNEL. MARCELINO MARIDUEÑA (SAN CARLOS)', '0920'),
+	('092053', 'GRAL. PEDRO J. MONTERO (BOLICHE)', '0920'),
+	('092054', 'SIMÓN BOLÍVAR', '0920'),
+	('092055', 'YAGUACHI VIEJO (CONE)', '0920'),
+	('092056', 'VIRGEN DE FÁTIMA', '0920'),
+	('092150', 'GENERAL VILLAMIL (PLAYAS)', '0921'),
+	('092250', 'SIMÓN BOLÍVAR', '0922'),
+	('092251', 'CRNEL.LORENZO DE GARAICOA (PEDREGAL)', '0922'),
+	('092350', 'CORONEL MARCELINO MARIDUEÑA (SAN CARLOS)', '0923'),
+	('092450', 'LOMAS DE SARGENTILLO', '0924'),
+	('092451', 'ISIDRO AYORA (SOLEDAD)', '0924'),
+	('092550', 'NARCISA DE JESÚS (NOBOL)', '0925'),
+	('092750', 'GENERAL ANTONIO ELIZALDE (BUCAY)', '0927'),
+	('092850', 'ISIDRO AYORA', '0928'),
+	('100101', 'CARANQUI', '1001'),
+	('100102', 'GUAYAQUIL DE ALPACHACA', '1001'),
+	('100103', 'SAGRARIO', '1001'),
+	('100104', 'SAN FRANCISCO', '1001'),
+	('100105', 'LA DOLOROSA DEL PRIORATO', '1001'),
+	('100150', 'SAN MIGUEL DE IBARRA Y CAPITAL PROVINCIAL', '1001'),
+	('100151', 'AMBUQUÍ', '1001'),
+	('100152', 'ANGOCHAGUA', '1001'),
+	('100153', 'CAROLINA', '1001'),
+	('100154', 'LA ESPERANZA', '1001'),
+	('100155', 'LITA', '1001'),
+	('100156', 'SALINAS', '1001'),
+	('100157', 'SAN ANTONIO', '1001'),
+	('100201', 'ANDRADE MARÍN  (LOURDES)', '1002'),
+	('100202', 'ATUNTAQUI', '1002'),
+	('100250', 'ATUNTAQUI', '1002'),
+	('100251', 'IMBAYA (SAN LUIS DE COBUENDO)', '1002'),
+	('100252', 'SAN FRANCISCO DE NATABUELA', '1002'),
+	('100253', 'SAN JOSÉ DE CHALTURA', '1002'),
+	('100254', 'SAN ROQUE', '1002'),
+	('100301', 'SAGRARIO', '1003'),
+	('100302', 'SAN FRANCISCO', '1003'),
+	('100350', 'COTACACHI', '1003'),
+	('100351', 'APUELA', '1003'),
+	('100352', 'GARCÍA MORENO (LLURIMAGUA)', '1003'),
+	('100353', 'IMANTAG', '1003'),
+	('100354', 'PEÑAHERRERA', '1003'),
+	('100355', 'PLAZA GUTIÉRREZ (CALVARIO)', '1003'),
+	('100356', 'QUIROGA', '1003'),
+	('100357', '6 DE JULIO DE CUELLAJE (CAB. EN CUELLAJE)', '1003'),
+	('100358', 'VACAS GALINDO (EL CHURO) (CAB.EN SAN MIGUEL ALTO', '1003'),
+	('100401', 'JORDÁN', '1004'),
+	('100402', 'SAN LUIS', '1004'),
+	('100450', 'OTAVALO', '1004'),
+	('100451', 'DR. MIGUEL EGAS CABEZAS (PEGUCHE)', '1004'),
+	('100452', 'EUGENIO ESPEJO (CALPAQUÍ)', '1004'),
+	('100453', 'GONZÁLEZ SUÁREZ', '1004'),
+	('100454', 'PATAQUÍ', '1004'),
+	('100455', 'SAN JOSÉ DE QUICHINCHE', '1004'),
+	('100456', 'SAN JUAN DE ILUMÁN', '1004'),
+	('100457', 'SAN PABLO', '1004'),
+	('100458', 'SAN RAFAEL', '1004'),
+	('100459', 'SELVA ALEGRE (CAB.EN SAN MIGUEL DE PAMPLONA)', '1004'),
+	('100550', 'PIMAMPIRO', '1005'),
+	('100551', 'CHUGÁ', '1005'),
+	('100552', 'MARIANO ACOSTA', '1005'),
+	('100553', 'SAN FRANCISCO DE SIGSIPAMBA', '1005'),
+	('100650', 'URCUQUÍ CABECERA CANTONAL', '1006'),
+	('100651', 'CAHUASQUÍ', '1006'),
+	('100652', 'LA MERCED DE BUENOS AIRES', '1006'),
+	('100653', 'PABLO ARENAS', '1006'),
+	('100654', 'SAN BLAS', '1006'),
+	('100655', 'TUMBABIRO', '1006'),
+	('110101', 'EL SAGRARIO', '1101'),
+	('110102', 'SAN SEBASTIÁN', '1101'),
+	('110103', 'SUCRE', '1101'),
+	('110104', 'VALLE', '1101'),
+	('110150', 'LOJA', '1101'),
+	('110151', 'CHANTACO', '1101'),
+	('110152', 'CHUQUIRIBAMBA', '1101'),
+	('110153', 'EL CISNE', '1101'),
+	('110154', 'GUALEL', '1101'),
+	('110155', 'JIMBILLA', '1101'),
+	('110156', 'MALACATOS (VALLADOLID)', '1101'),
+	('110157', 'SAN LUCAS', '1101'),
+	('110158', 'SAN PEDRO DE VILCABAMBA', '1101'),
+	('110159', 'SANTIAGO', '1101'),
+	('110160', 'TAQUIL (MIGUEL RIOFRÍO)', '1101'),
+	('110161', 'VILCABAMBA (VICTORIA)', '1101'),
+	('110162', 'YANGANA (ARSENIO CASTILLO)', '1101'),
+	('110163', 'QUINARA', '1101'),
+	('110201', 'CARIAMANGA', '1102'),
+	('110202', 'CHILE', '1102'),
+	('110203', 'SAN VICENTE', '1102'),
+	('110250', 'CARIAMANGA', '1102'),
+	('110251', 'COLAISACA', '1102'),
+	('110252', 'EL LUCERO', '1102'),
+	('110253', 'UTUANA', '1102'),
+	('110254', 'SANGUILLÍN', '1102'),
+	('110301', 'CATAMAYO', '1103'),
+	('110302', 'SAN JOSÉ', '1103'),
+	('110350', 'CATAMAYO (LA TOMA)', '1103'),
+	('110351', 'EL TAMBO', '1103'),
+	('110352', 'GUAYQUICHUMA', '1103'),
+	('110353', 'SAN PEDRO DE LA BENDITA', '1103'),
+	('110354', 'ZAMBI', '1103'),
+	('110450', 'CELICA', '1104'),
+	('110451', 'CRUZPAMBA (CAB. EN CARLOS BUSTAMANTE)', '1104'),
+	('110452', 'CHAQUINAL', '1104'),
+	('110453', '12 DE DICIEMBRE (CAB. EN ACHIOTES)', '1104'),
+	('110454', 'PINDAL (FEDERICO PÁEZ)', '1104'),
+	('110455', 'POZUL (SAN JUAN DE POZUL)', '1104'),
+	('110456', 'SABANILLA', '1104'),
+	('110457', 'TNTE. MAXIMILIANO RODRÍGUEZ LOAIZA', '1104'),
+	('110550', 'CHAGUARPAMBA', '1105'),
+	('110551', 'BUENAVISTA', '1105'),
+	('110552', 'EL ROSARIO', '1105'),
+	('110553', 'SANTA RUFINA', '1105'),
+	('110554', 'AMARILLOS', '1105'),
+	('110650', 'AMALUZA', '1106'),
+	('110651', 'BELLAVISTA', '1106'),
+	('110652', 'JIMBURA', '1106'),
+	('110653', 'SANTA TERESITA', '1106'),
+	('110654', '27 DE ABRIL (CAB. EN LA NARANJA)', '1106'),
+	('110655', 'EL INGENIO', '1106'),
+	('110656', 'EL AIRO', '1106'),
+	('110750', 'GONZANAMÁ', '1107'),
+	('110751', 'CHANGAIMINA (LA LIBERTAD)', '1107'),
+	('110752', 'FUNDOCHAMBA', '1107'),
+	('110753', 'NAMBACOLA', '1107'),
+	('110754', 'PURUNUMA (EGUIGUREN)', '1107'),
+	('110755', 'QUILANGA (LA PAZ)', '1107'),
+	('110756', 'SACAPALCA', '1107'),
+	('110757', 'SAN ANTONIO DE LAS ARADAS (CAB. EN LAS ARADAS)', '1107'),
+	('110801', 'GENERAL ELOY ALFARO (SAN SEBASTIÁN)', '1108'),
+	('110802', 'MACARÁ (MANUEL ENRIQUE RENGEL SUQUILANDA)', '1108'),
+	('110850', 'MACARÁ', '1108'),
+	('110851', 'LARAMA', '1108'),
+	('110852', 'LA VICTORIA', '1108'),
+	('110853', 'SABIANGO (LA CAPILLA)', '1108'),
+	('110901', 'CATACOCHA', '1109'),
+	('110902', 'LOURDES', '1109'),
+	('110950', 'CATACOCHA', '1109'),
+	('110951', 'CANGONAMÁ', '1109'),
+	('110952', 'GUACHANAMÁ', '1109'),
+	('110953', 'LA TINGUE', '1109'),
+	('110954', 'LAURO GUERRERO', '1109'),
+	('110955', 'OLMEDO (SANTA BÁRBARA)', '1109'),
+	('110956', 'ORIANGA', '1109'),
+	('110957', 'SAN ANTONIO', '1109'),
+	('110958', 'CASANGA', '1109'),
+	('110959', 'YAMANA', '1109'),
+	('111050', 'ALAMOR', '1110'),
+	('111051', 'CIANO', '1110'),
+	('111052', 'EL ARENAL', '1110'),
+	('111053', 'EL LIMO (MARIANA DE JESÚS)', '1110'),
+	('111054', 'MERCADILLO', '1110'),
+	('111055', 'VICENTINO', '1110'),
+	('111150', 'SARAGURO', '1111'),
+	('111151', 'EL PARAÍSO DE CELÉN', '1111'),
+	('111152', 'EL TABLÓN', '1111'),
+	('111153', 'LLUZHAPA', '1111'),
+	('111154', 'MANÚ', '1111'),
+	('111155', 'SAN ANTONIO DE QUMBE (CUMBE)', '1111'),
+	('111156', 'SAN PABLO DE TENTA', '1111'),
+	('111157', 'SAN SEBASTIÁN DE YÚLUC', '1111'),
+	('111158', 'SELVA ALEGRE', '1111'),
+	('111159', 'URDANETA (PAQUISHAPA)', '1111'),
+	('111160', 'SUMAYPAMBA', '1111'),
+	('111250', 'SOZORANGA', '1112'),
+	('111251', 'NUEVA FÁTIMA', '1112'),
+	('111252', 'TACAMOROS', '1112'),
+	('111350', 'ZAPOTILLO', '1113'),
+	('111351', 'MANGAHURCO (CAZADEROS)', '1113'),
+	('111352', 'GARZAREAL', '1113'),
+	('111353', 'LIMONES', '1113'),
+	('111354', 'PALETILLAS', '1113'),
+	('111355', 'BOLASPAMBA', '1113'),
+	('111450', 'PINDAL', '1114'),
+	('111451', 'CHAQUINAL', '1114'),
+	('111452', '12 DE DICIEMBRE (CAB.EN ACHIOTES)', '1114'),
+	('111453', 'MILAGROS', '1114'),
+	('111550', 'QUILANGA', '1115'),
+	('111551', 'FUNDOCHAMBA', '1115'),
+	('111552', 'SAN ANTONIO DE LAS ARADAS (CAB. EN LAS ARADAS)', '1115'),
+	('111650', 'OLMEDO', '1116'),
+	('111651', 'LA TINGUE', '1116'),
+	('120101', 'CLEMENTE BAQUERIZO', '1201'),
+	('120102', 'DR. CAMILO PONCE', '1201'),
+	('120103', 'BARREIRO', '1201'),
+	('120104', 'EL SALTO', '1201'),
+	('120150', 'BABAHOYO', '1201'),
+	('120151', 'BARREIRO (SANTA RITA)', '1201'),
+	('120152', 'CARACOL', '1201'),
+	('120153', 'FEBRES CORDERO (LAS JUNTAS)', '1201'),
+	('120154', 'PIMOCHA', '1201'),
+	('120155', 'LA UNIÓN', '1201'),
+	('120250', 'BABA', '1202'),
+	('120251', 'GUARE', '1202'),
+	('120252', 'ISLA DE BEJUCAL', '1202'),
+	('120350', 'MONTALVO', '1203'),
+	('120450', 'PUEBLOVIEJO', '1204'),
+	('120451', 'PUERTO PECHICHE', '1204'),
+	('120452', 'SAN JUAN', '1204'),
+	('120501', 'QUEVEDO', '1205'),
+	('120502', 'SAN CAMILO', '1205'),
+	('120503', 'SAN JOSÉ', '1205'),
+	('120504', 'GUAYACÁN', '1205'),
+	('120505', 'NICOLÁS INFANTE DÍAZ', '1205'),
+	('120506', 'SAN CRISTÓBAL', '1205'),
+	('120507', 'SIETE DE OCTUBRE', '1205'),
+	('120508', '24 DE MAYO', '1205'),
+	('120509', 'VENUS DEL RÍO QUEVEDO', '1205'),
+	('120510', 'VIVA ALFARO', '1205'),
+	('120550', 'QUEVEDO', '1205'),
+	('120551', 'BUENA FÉ', '1205'),
+	('120552', 'MOCACHE', '1205'),
+	('120553', 'SAN CARLOS', '1205'),
+	('120554', 'VALENCIA', '1205'),
+	('120555', 'LA ESPERANZA', '1205'),
+	('120650', 'CATARAMA', '1206'),
+	('120651', 'RICAURTE', '1206'),
+	('120701', '10 DE NOVIEMBRE', '1207'),
+	('120750', 'VENTANAS', '1207'),
+	('120751', 'QUINSALOMA', '1207'),
+	('120752', 'ZAPOTAL', '1207'),
+	('120753', 'CHACARITA', '1207'),
+	('120754', 'LOS ÁNGELES', '1207'),
+	('120850', 'VINCES', '1208'),
+	('120851', 'ANTONIO SOTOMAYOR (CAB. EN PLAYAS DE VINCES)', '1208'),
+	('120852', 'PALENQUE', '1208'),
+	('120950', 'PALENQUE', '1209'),
+	('121001', 'SAN JACINTO DE BUENA FÉ', '1210'),
+	('121002', '7 DE AGOSTO', '1210'),
+	('121003', '11 DE OCTUBRE', '1210'),
+	('121050', 'SAN JACINTO DE BUENA FÉ', '1210'),
+	('121051', 'PATRICIA PILAR', '1210'),
+	('121150', 'VALENCIA', '1211'),
+	('121250', 'MOCACHE', '1212'),
+	('121350', 'QUINSALOMA', '1213'),
+	('130101', 'PORTOVIEJO', '1301'),
+	('130102', '12 DE MARZO', '1301'),
+	('130103', 'COLÓN', '1301'),
+	('130104', 'PICOAZÁ', '1301'),
+	('130105', 'SAN PABLO', '1301'),
+	('130106', 'ANDRÉS DE VERA', '1301'),
+	('130107', 'FRANCISCO PACHECO', '1301'),
+	('130108', '18 DE OCTUBRE', '1301'),
+	('130109', 'SIMÓN BOLÍVAR', '1301'),
+	('130150', 'PORTOVIEJO', '1301'),
+	('130151', 'ABDÓN CALDERÓN (SAN FRANCISCO)', '1301'),
+	('130152', 'ALHAJUELA (BAJO GRANDE)', '1301'),
+	('130153', 'CRUCITA', '1301'),
+	('130154', 'PUEBLO NUEVO', '1301'),
+	('130155', 'RIOCHICO (RÍO CHICO)', '1301'),
+	('130156', 'SAN PLÁCIDO', '1301'),
+	('130157', 'CHIRIJOS', '1301'),
+	('130250', 'CALCETA', '1302'),
+	('130251', 'MEMBRILLO', '1302'),
+	('130252', 'QUIROGA', '1302'),
+	('130301', 'CHONE', '1303'),
+	('130302', 'SANTA RITA', '1303'),
+	('130350', 'CHONE', '1303'),
+	('130351', 'BOYACÁ', '1303'),
+	('130352', 'CANUTO', '1303'),
+	('130353', 'CONVENTO', '1303'),
+	('130354', 'CHIBUNGA', '1303'),
+	('130355', 'ELOY ALFARO', '1303'),
+	('130356', 'RICAURTE', '1303'),
+	('130357', 'SAN ANTONIO', '1303'),
+	('130401', 'EL CARMEN', '1304'),
+	('130402', '4 DE DICIEMBRE', '1304'),
+	('130450', 'EL CARMEN', '1304'),
+	('130451', 'WILFRIDO LOOR MOREIRA (MAICITO)', '1304'),
+	('130452', 'SAN PEDRO DE SUMA', '1304'),
+	('130550', 'FLAVIO ALFARO', '1305'),
+	('130551', 'SAN FRANCISCO DE NOVILLO (CAB. EN', '1305'),
+	('130552', 'ZAPALLO', '1305'),
+	('130601', 'DR. MIGUEL MORÁN LUCIO', '1306'),
+	('130602', 'MANUEL INOCENCIO PARRALES Y GUALE', '1306'),
+	('130603', 'SAN LORENZO DE JIPIJAPA', '1306'),
+	('130650', 'JIPIJAPA', '1306'),
+	('130651', 'AMÉRICA', '1306'),
+	('130652', 'EL ANEGADO (CAB. EN ELOY ALFARO)', '1306'),
+	('130653', 'JULCUY', '1306'),
+	('130654', 'LA UNIÓN', '1306'),
+	('130655', 'MACHALILLA', '1306'),
+	('130656', 'MEMBRILLAL', '1306'),
+	('130657', 'PEDRO PABLO GÓMEZ', '1306'),
+	('130658', 'PUERTO DE CAYO', '1306'),
+	('130659', 'PUERTO LÓPEZ', '1306'),
+	('130750', 'JUNÍN', '1307'),
+	('130801', 'LOS ESTEROS', '1308'),
+	('130802', 'MANTA', '1308'),
+	('130803', 'SAN MATEO', '1308'),
+	('130804', 'TARQUI', '1308'),
+	('130805', 'ELOY ALFARO', '1308'),
+	('130850', 'MANTA', '1308'),
+	('130851', 'SAN LORENZO', '1308'),
+	('130852', 'SANTA MARIANITA (BOCA DE PACOCHE)', '1308'),
+	('130901', 'ANIBAL SAN ANDRÉS', '1309'),
+	('130902', 'MONTECRISTI', '1309'),
+	('130903', 'EL COLORADO', '1309'),
+	('130904', 'GENERAL ELOY ALFARO', '1309'),
+	('130905', 'LEONIDAS PROAÑO', '1309'),
+	('130950', 'MONTECRISTI', '1309'),
+	('130951', 'JARAMIJÓ', '1309'),
+	('130952', 'LA PILA', '1309'),
+	('131050', 'PAJÁN', '1310'),
+	('131051', 'CAMPOZANO (LA PALMA DE PAJÁN)', '1310'),
+	('131052', 'CASCOL', '1310'),
+	('131053', 'GUALE', '1310'),
+	('131054', 'LASCANO', '1310'),
+	('131150', 'PICHINCHA', '1311'),
+	('131151', 'BARRAGANETE', '1311'),
+	('131152', 'SAN SEBASTIÁN', '1311'),
+	('131250', 'ROCAFUERTE', '1312'),
+	('131301', 'SANTA ANA', '1313'),
+	('131302', 'LODANA', '1313'),
+	('131350', 'SANTA ANA DE VUELTA LARGA', '1313'),
+	('131351', 'AYACUCHO', '1313'),
+	('131352', 'HONORATO VÁSQUEZ (CAB. EN VÁSQUEZ)', '1313'),
+	('131353', 'LA UNIÓN', '1313'),
+	('131354', 'OLMEDO', '1313'),
+	('131355', 'SAN PABLO (CAB. EN PUEBLO NUEVO)', '1313'),
+	('131401', 'BAHÍA DE CARÁQUEZ', '1314'),
+	('131402', 'LEONIDAS PLAZA GUTIÉRREZ', '1314'),
+	('131450', 'BAHÍA DE CARÁQUEZ', '1314'),
+	('131451', 'CANOA', '1314'),
+	('131452', 'COJIMÍES', '1314'),
+	('131453', 'CHARAPOTÓ', '1314'),
+	('131454', '10 DE AGOSTO', '1314'),
+	('131455', 'JAMA', '1314'),
+	('131456', 'PEDERNALES', '1314'),
+	('131457', 'SAN ISIDRO', '1314'),
+	('131458', 'SAN VICENTE', '1314'),
+	('131550', 'TOSAGUA', '1315'),
+	('131551', 'BACHILLERO', '1315'),
+	('131552', 'ANGEL PEDRO GILER (LA ESTANCILLA)', '1315'),
+	('131650', 'SUCRE', '1316'),
+	('131651', 'BELLAVISTA', '1316'),
+	('131652', 'NOBOA', '1316'),
+	('131653', 'ARQ. SIXTO DURÁN BALLÉN', '1316'),
+	('131750', 'PEDERNALES', '1317'),
+	('131751', 'COJIMÍES', '1317'),
+	('131752', '10 DE AGOSTO', '1317'),
+	('131753', 'ATAHUALPA', '1317'),
+	('131850', 'OLMEDO', '1318'),
+	('131950', 'PUERTO LÓPEZ', '1319'),
+	('131951', 'MACHALILLA', '1319'),
+	('131952', 'SALANGO', '1319'),
+	('132050', 'JAMA', '1320'),
+	('132150', 'JARAMIJÓ', '1321'),
+	('132250', 'SAN VICENTE', '1322'),
+	('132251', 'CANOA', '1322'),
+	('140150', 'MACAS', '1401'),
+	('140151', 'ALSHI (CAB. EN 9 DE OCTUBRE)', '1401'),
+	('140152', 'CHIGUAZA', '1401'),
+	('140153', 'GENERAL PROAÑO', '1401'),
+	('140154', 'HUASAGA (CAB.EN WAMPUIK)', '1401'),
+	('140155', 'MACUMA', '1401'),
+	('140156', 'SAN ISIDRO', '1401'),
+	('140157', 'SEVILLA DON BOSCO', '1401'),
+	('140158', 'SINAÍ', '1401'),
+	('140159', 'TAISHA', '1401'),
+	('140160', 'ZUÑA (ZÚÑAC)', '1401'),
+	('140161', 'TUUTINENTZA', '1401'),
+	('140162', 'CUCHAENTZA', '1401'),
+	('140163', 'SAN JOSÉ DE MORONA', '1401'),
+	('140164', 'RÍO BLANCO', '1401'),
+	('140201', 'GUALAQUIZA', '1402'),
+	('140202', 'MERCEDES MOLINA', '1402'),
+	('140250', 'GUALAQUIZA', '1402'),
+	('140251', 'AMAZONAS (ROSARIO DE CUYES)', '1402'),
+	('140252', 'BERMEJOS', '1402'),
+	('140253', 'BOMBOIZA', '1402'),
+	('140254', 'CHIGÜINDA', '1402'),
+	('140255', 'EL ROSARIO', '1402'),
+	('140256', 'NUEVA TARQUI', '1402'),
+	('140257', 'SAN MIGUEL DE CUYES', '1402'),
+	('140258', 'EL IDEAL', '1402'),
+	('140350', 'GENERAL LEONIDAS PLAZA GUTIÉRREZ (LIMÓN)', '1403'),
+	('140351', 'INDANZA', '1403'),
+	('140352', 'PAN DE AZÚCAR', '1403'),
+	('140353', 'SAN ANTONIO (CAB. EN SAN ANTONIO CENTRO', '1403'),
+	('140354', 'SAN CARLOS DE LIMÓN (SAN CARLOS DEL', '1403'),
+	('140355', 'SAN JUAN BOSCO', '1403'),
+	('140356', 'SAN MIGUEL DE CONCHAY', '1403'),
+	('140357', 'SANTA SUSANA DE CHIVIAZA (CAB. EN CHIVIAZA)', '1403'),
+	('140358', 'YUNGANZA (CAB. EN EL ROSARIO)', '1403'),
+	('140450', 'PALORA (METZERA)', '1404'),
+	('140451', 'ARAPICOS', '1404'),
+	('140452', 'CUMANDÁ (CAB. EN COLONIA AGRÍCOLA SEVILLA DEL ORO)', '1404'),
+	('140453', 'HUAMBOYA', '1404'),
+	('140454', 'SANGAY (CAB. EN NAYAMANACA)', '1404'),
+	('140550', 'SANTIAGO DE MÉNDEZ', '1405'),
+	('140551', 'COPAL', '1405'),
+	('140552', 'CHUPIANZA', '1405'),
+	('140553', 'PATUCA', '1405'),
+	('140554', 'SAN LUIS DE EL ACHO (CAB. EN EL ACHO)', '1405'),
+	('140555', 'SANTIAGO', '1405'),
+	('140556', 'TAYUZA', '1405'),
+	('140557', 'SAN FRANCISCO DE CHINIMBIMI', '1405'),
+	('140650', 'SUCÚA', '1406'),
+	('140651', 'ASUNCIÓN', '1406'),
+	('140652', 'HUAMBI', '1406'),
+	('140653', 'LOGROÑO', '1406'),
+	('140654', 'YAUPI', '1406'),
+	('140655', 'SANTA MARIANITA DE JESÚS', '1406'),
+	('140750', 'HUAMBOYA', '1407'),
+	('140751', 'CHIGUAZA', '1407'),
+	('140752', 'PABLO SEXTO', '1407'),
+	('140850', 'SAN JUAN BOSCO', '1408'),
+	('140851', 'PAN DE AZÚCAR', '1408'),
+	('140852', 'SAN CARLOS DE LIMÓN', '1408'),
+	('140853', 'SAN JACINTO DE WAKAMBEIS', '1408'),
+	('140854', 'SANTIAGO DE PANANZA', '1408'),
+	('140950', 'TAISHA', '1409'),
+	('140951', 'HUASAGA (CAB. EN WAMPUIK)', '1409'),
+	('140952', 'MACUMA', '1409'),
+	('140953', 'TUUTINENTZA', '1409'),
+	('140954', 'PUMPUENTSA', '1409'),
+	('141050', 'LOGROÑO', '1410'),
+	('141051', 'YAUPI', '1410'),
+	('141052', 'SHIMPIS', '1410'),
+	('141150', 'PABLO SEXTO', '1411'),
+	('141250', 'SANTIAGO', '1412'),
+	('141251', 'SAN JOSÉ DE MORONA', '1412'),
+	('150150', 'TENA', '1501'),
+	('150151', 'AHUANO', '1501'),
+	('150152', 'CARLOS JULIO AROSEMENA TOLA (ZATZA-YACU)', '1501'),
+	('150153', 'CHONTAPUNTA', '1501'),
+	('150154', 'PANO', '1501'),
+	('150155', 'PUERTO MISAHUALLI', '1501'),
+	('150156', 'PUERTO NAPO', '1501'),
+	('150157', 'TÁLAG', '1501'),
+	('150158', 'SAN JUAN DE MUYUNA', '1501'),
+	('150350', 'ARCHIDONA', '1503'),
+	('150351', 'AVILA', '1503'),
+	('150352', 'COTUNDO', '1503'),
+	('150353', 'LORETO', '1503'),
+	('150354', 'SAN PABLO DE USHPAYACU', '1503'),
+	('150355', 'PUERTO MURIALDO', '1503'),
+	('150450', 'EL CHACO', '1504'),
+	('150451', 'GONZALO DíAZ DE PINEDA (EL BOMBÓN)', '1504'),
+	('150452', 'LINARES', '1504'),
+	('150453', 'OYACACHI', '1504'),
+	('150454', 'SANTA ROSA', '1504'),
+	('150455', 'SARDINAS', '1504'),
+	('150750', 'BAEZA', '1507'),
+	('150751', 'COSANGA', '1507'),
+	('150752', 'CUYUJA', '1507'),
+	('150753', 'PAPALLACTA', '1507'),
+	('150754', 'SAN FRANCISCO DE BORJA (VIRGILIO DÁVILA)', '1507'),
+	('150755', 'SAN JOSÉ DEL PAYAMINO', '1507'),
+	('150756', 'SUMACO', '1507'),
+	('150950', 'CARLOS JULIO AROSEMENA TOLA', '1509'),
+	('160150', 'PUYO', '1601'),
+	('160151', 'ARAJUNO', '1601'),
+	('160152', 'CANELOS', '1601'),
+	('160153', 'CURARAY', '1601'),
+	('160154', 'DIEZ DE AGOSTO', '1601'),
+	('160155', 'FÁTIMA', '1601'),
+	('160156', 'MONTALVO (ANDOAS)', '1601'),
+	('160157', 'POMONA', '1601'),
+	('160158', 'RÍO CORRIENTES', '1601'),
+	('160159', 'RÍO TIGRE', '1601'),
+	('160160', 'SANTA CLARA', '1601'),
+	('160161', 'SARAYACU', '1601'),
+	('160162', 'SIMÓN BOLÍVAR (CAB. EN MUSHULLACTA)', '1601'),
+	('160163', 'TARQUI', '1601'),
+	('160164', 'TENIENTE HUGO ORTIZ', '1601'),
+	('160165', 'VERACRUZ (INDILLAMA) (CAB. EN INDILLAMA)', '1601'),
+	('160166', 'EL TRIUNFO', '1601'),
+	('160250', 'MERA', '1602'),
+	('160251', 'MADRE TIERRA', '1602'),
+	('160252', 'SHELL', '1602'),
+	('160350', 'SANTA CLARA', '1603'),
+	('160351', 'SAN JOSÉ', '1603'),
+	('160450', 'ARAJUNO', '1604'),
+	('160451', 'CURARAY', '1604'),
+	('170101', 'BELISARIO QUEVEDO', '1701'),
+	('170102', 'CARCELÉN', '1701'),
+	('170103', 'CENTRO HISTÓRICO', '1701'),
+	('170104', 'COCHAPAMBA', '1701'),
+	('170105', 'COMITÉ DEL PUEBLO', '1701'),
+	('170106', 'COTOCOLLAO', '1701'),
+	('170107', 'CHILIBULO', '1701'),
+	('170108', 'CHILLOGALLO', '1701'),
+	('170109', 'CHIMBACALLE', '1701'),
+	('170110', 'EL CONDADO', '1701'),
+	('170111', 'GUAMANÍ', '1701'),
+	('170112', 'IÑAQUITO', '1701'),
+	('170113', 'ITCHIMBÍA', '1701'),
+	('170114', 'JIPIJAPA', '1701'),
+	('170115', 'KENNEDY', '1701'),
+	('170116', 'LA ARGELIA', '1701'),
+	('170117', 'LA CONCEPCIÓN', '1701'),
+	('170118', 'LA ECUATORIANA', '1701'),
+	('170119', 'LA FERROVIARIA', '1701'),
+	('170120', 'LA LIBERTAD', '1701'),
+	('170121', 'LA MAGDALENA', '1701'),
+	('170122', 'LA MENA', '1701'),
+	('170123', 'MARISCAL SUCRE', '1701'),
+	('170124', 'PONCEANO', '1701'),
+	('170125', 'PUENGASÍ', '1701'),
+	('170126', 'QUITUMBE', '1701'),
+	('170127', 'RUMIPAMBA', '1701'),
+	('170128', 'SAN BARTOLO', '1701'),
+	('170129', 'SAN ISIDRO DEL INCA', '1701'),
+	('170130', 'SAN JUAN', '1701'),
+	('170131', 'SOLANDA', '1701'),
+	('170132', 'TURUBAMBA', '1701'),
+	('170150', 'QUITO DISTRITO METROPOLITANO', '1701'),
+	('170151', 'ALANGASÍ', '1701'),
+	('170152', 'AMAGUAÑA', '1701'),
+	('170153', 'ATAHUALPA', '1701'),
+	('170154', 'CALACALÍ', '1701'),
+	('170155', 'CALDERÓN', '1701'),
+	('170156', 'CONOCOTO', '1701'),
+	('170157', 'CUMBAYÁ', '1701'),
+	('170158', 'CHAVEZPAMBA', '1701'),
+	('170159', 'CHECA', '1701'),
+	('170160', 'EL QUINCHE', '1701'),
+	('170161', 'GUALEA', '1701'),
+	('170162', 'GUANGOPOLO', '1701'),
+	('170163', 'GUAYLLABAMBA', '1701'),
+	('170164', 'LA MERCED', '1701'),
+	('170165', 'LLANO CHICO', '1701'),
+	('170166', 'LLOA', '1701'),
+	('170167', 'MINDO', '1701'),
+	('170168', 'NANEGAL', '1701'),
+	('170169', 'NANEGALITO', '1701'),
+	('170170', 'NAYÓN', '1701'),
+	('170171', 'NONO', '1701'),
+	('170172', 'PACTO', '1701'),
+	('170173', 'PEDRO VICENTE MALDONADO', '1701'),
+	('170174', 'PERUCHO', '1701'),
+	('170175', 'PIFO', '1701'),
+	('170176', 'PÍNTAG', '1701'),
+	('170177', 'POMASQUI', '1701'),
+	('170178', 'PUÉLLARO', '1701'),
+	('170179', 'PUEMBO', '1701'),
+	('170180', 'SAN ANTONIO', '1701'),
+	('170181', 'SAN JOSÉ DE MINAS', '1701'),
+	('170182', 'SAN MIGUEL DE LOS BANCOS', '1701'),
+	('170183', 'TABABELA', '1701'),
+	('170184', 'TUMBACO', '1701'),
+	('170185', 'YARUQUÍ', '1701'),
+	('170186', 'ZAMBIZA', '1701'),
+	('170187', 'PUERTO QUITO', '1701'),
+	('170201', 'AYORA', '1702'),
+	('170202', 'CAYAMBE', '1702'),
+	('170203', 'JUAN MONTALVO', '1702'),
+	('170250', 'CAYAMBE', '1702'),
+	('170251', 'ASCÁZUBI', '1702'),
+	('170252', 'CANGAHUA', '1702'),
+	('170253', 'OLMEDO (PESILLO)', '1702'),
+	('170254', 'OTÓN', '1702'),
+	('170255', 'SANTA ROSA DE CUZUBAMBA', '1702'),
+	('170350', 'MACHACHI', '1703'),
+	('170351', 'ALÓAG', '1703'),
+	('170352', 'ALOASÍ', '1703'),
+	('170353', 'CUTUGLAHUA', '1703'),
+	('170354', 'EL CHAUPI', '1703'),
+	('170355', 'MANUEL CORNEJO ASTORGA (TANDAPI)', '1703'),
+	('170356', 'TAMBILLO', '1703'),
+	('170357', 'UYUMBICHO', '1703'),
+	('170450', 'TABACUNDO', '1704'),
+	('170451', 'LA ESPERANZA', '1704'),
+	('170452', 'MALCHINGUÍ', '1704'),
+	('170453', 'TOCACHI', '1704'),
+	('170454', 'TUPIGACHI', '1704'),
+	('170501', 'SANGOLQUÍ', '1705'),
+	('170502', 'SAN PEDRO DE TABOADA', '1705'),
+	('170503', 'SAN RAFAEL', '1705'),
+	('170550', 'SANGOLQUI', '1705'),
+	('170551', 'COTOGCHOA', '1705'),
+	('170552', 'RUMIPAMBA', '1705'),
+	('170750', 'SAN MIGUEL DE LOS BANCOS', '1707'),
+	('170751', 'MINDO', '1707'),
+	('170752', 'PEDRO VICENTE MALDONADO', '1707'),
+	('170753', 'PUERTO QUITO', '1707'),
+	('170850', 'PEDRO VICENTE MALDONADO', '1708'),
+	('170950', 'PUERTO QUITO', '1709'),
+	('180101', 'ATOCHA – FICOA', '1801'),
+	('180102', 'CELIANO MONGE', '1801'),
+	('180103', 'HUACHI CHICO', '1801'),
+	('180104', 'HUACHI LORETO', '1801'),
+	('180105', 'LA MERCED', '1801'),
+	('180106', 'LA PENÍNSULA', '1801'),
+	('180107', 'MATRIZ', '1801'),
+	('180108', 'PISHILATA', '1801'),
+	('180109', 'SAN FRANCISCO', '1801'),
+	('180151', 'AMBATILLO', '1801'),
+	('180152', 'ATAHUALPA (CHISALATA)', '1801'),
+	('180153', 'AUGUSTO N. MARTÍNEZ (MUNDUGLEO)', '1801'),
+	('180154', 'CONSTANTINO FERNÁNDEZ (CAB. EN CULLITAHUA)', '1801'),
+	('180155', 'HUACHI GRANDE', '1801'),
+	('180156', 'IZAMBA', '1801'),
+	('180157', 'JUAN BENIGNO VELA', '1801'),
+	('180158', 'MONTALVO', '1801'),
+	('180159', 'PASA', '1801'),
+	('180160', 'PICAIHUA', '1801'),
+	('180161', 'PILAGÜÍN (PILAHÜÍN)', '1801'),
+	('180162', 'QUISAPINCHA (QUIZAPINCHA)', '1801'),
+	('180163', 'SAN BARTOLOMÉ DE PINLLOG', '1801'),
+	('180164', 'SAN FERNANDO (PASA SAN FERNANDO)', '1801'),
+	('180165', 'SANTA ROSA', '1801'),
+	('180166', 'TOTORAS', '1801'),
+	('180167', 'CUNCHIBAMBA', '1801'),
+	('180168', 'UNAMUNCHO', '1801'),
+	('180251', 'LLIGUA', '1802'),
+	('180252', 'RÍO NEGRO', '1802'),
+	('180253', 'RÍO VERDE', '1802'),
+	('180254', 'ULBA', '1802'),
+	('180350', 'CEVALLOS', '1803'),
+	('180450', 'MOCHA', '1804'),
+	('180451', 'PINGUILÍ', '1804'),
+	('180550', 'PATATE', '1805'),
+	('180551', 'EL TRIUNFO', '1805'),
+	('180552', 'LOS ANDES (CAB. EN POATUG)', '1805'),
+	('180553', 'SUCRE (CAB. EN SUCRE-PATATE URCU)', '1805'),
+	('180650', 'QUERO', '1806'),
+	('180651', 'RUMIPAMBA', '1806'),
+	('180652', 'YANAYACU - MOCHAPATA (CAB. EN YANAYACU)', '1806'),
+	('180701', 'PELILEO', '1807'),
+	('180702', 'PELILEO GRANDE', '1807'),
+	('180751', 'BENÍTEZ (PACHANLICA)', '1807'),
+	('180752', 'BOLÍVAR', '1807'),
+	('180753', 'COTALÓ', '1807'),
+	('180754', 'CHIQUICHA (CAB. EN CHIQUICHA GRANDE)', '1807'),
+	('180755', 'EL ROSARIO (RUMICHACA)', '1807'),
+	('180756', 'GARCÍA MORENO (CHUMAQUI)', '1807'),
+	('180757', 'GUAMBALÓ (HUAMBALÓ)', '1807'),
+	('180758', 'SALASACA', '1807'),
+	('180801', 'CIUDAD NUEVA', '1808'),
+	('180802', 'PÍLLARO', '1808'),
+	('180851', 'BAQUERIZO MORENO', '1808'),
+	('180852', 'EMILIO MARÍA TERÁN (RUMIPAMBA)', '1808'),
+	('180853', 'MARCOS ESPINEL (CHACATA)', '1808'),
+	('180854', 'PRESIDENTE URBINA (CHAGRAPAMBA -PATZUCUL)', '1808'),
+	('180855', 'SAN ANDRÉS', '1808'),
+	('180856', 'SAN JOSÉ DE POALÓ', '1808'),
+	('180857', 'SAN MIGUELITO', '1808'),
+	('180950', 'TISALEO', '1809'),
+	('180951', 'QUINCHICOTO', '1809'),
+	('190101', 'EL LIMÓN', '1901'),
+	('190102', 'ZAMORA', '1901'),
+	('190151', 'CUMBARATZA', '1901'),
+	('190152', 'GUADALUPE', '1901'),
+	('190153', 'IMBANA (LA VICTORIA DE IMBANA)', '1901'),
+	('190154', 'PAQUISHA', '1901'),
+	('190155', 'SABANILLA', '1901'),
+	('190156', 'TIMBARA', '1901'),
+	('190157', 'ZUMBI', '1901'),
+	('190158', 'SAN CARLOS DE LAS MINAS', '1901'),
+	('190250', 'ZUMBA', '1902'),
+	('190251', 'CHITO', '1902'),
+	('190252', 'EL CHORRO', '1902'),
+	('190253', 'EL PORVENIR DEL CARMEN', '1902'),
+	('190254', 'LA CHONTA', '1902'),
+	('190255', 'PALANDA', '1902'),
+	('190256', 'PUCAPAMBA', '1902'),
+	('190257', 'SAN FRANCISCO DEL VERGEL', '1902'),
+	('190258', 'VALLADOLID', '1902'),
+	('190259', 'SAN ANDRÉS', '1902'),
+	('190350', 'GUAYZIMI', '1903'),
+	('190351', 'ZURMI', '1903'),
+	('190352', 'NUEVO PARAÍSO', '1903'),
+	('190450', '28 DE MAYO (SAN JOSÉ DE YACUAMBI)', '1904'),
+	('190451', 'LA PAZ', '1904'),
+	('190452', 'TUTUPALI', '1904'),
+	('190550', 'YANTZAZA (YANZATZA)', '1905'),
+	('190551', 'CHICAÑA', '1905'),
+	('190552', 'EL PANGUI', '1905'),
+	('190553', 'LOS ENCUENTROS', '1905'),
+	('190650', 'EL PANGUI', '1906'),
+	('190651', 'EL GUISME', '1906'),
+	('190652', 'PACHICUTZA', '1906'),
+	('190653', 'TUNDAYME', '1906'),
+	('190750', 'ZUMBI', '1907'),
+	('190751', 'PAQUISHA', '1907'),
+	('190752', 'TRIUNFO-DORADO', '1907'),
+	('190753', 'PANGUINTZA', '1907'),
+	('190850', 'PALANDA', '1908'),
+	('190851', 'EL PORVENIR DEL CARMEN', '1908'),
+	('190852', 'SAN FRANCISCO DEL VERGEL', '1908'),
+	('190853', 'VALLADOLID', '1908'),
+	('190854', 'LA CANELA', '1908'),
+	('190950', 'PAQUISHA', '1909'),
+	('190951', 'BELLAVISTA', '1909'),
+	('190952', 'NUEVO QUITO', '1909'),
+	('200150', 'PUERTO BAQUERIZO MORENO Y CAPITAL PROVINCIAL', '2001'),
+	('200151', 'EL PROGRESO', '2001'),
+	('200152', 'ISLA SANTA MARÍA (FLOREANA)', '2001'),
+	('200250', 'PUERTO VILLAMIL', '2002'),
+	('200251', 'TOMÁS DE BERLANGA (SANTO TOMÁS)', '2002'),
+	('200350', 'PUERTO AYORA', '2003'),
+	('200351', 'BELLAVISTA', '2003'),
+	('200352', 'SANTA ROSA (INCLUYE LA ISLA BALTRA)', '2003'),
+	('210150', 'NUEVA LOJA Y CAPITAL PROVINCIAL', '2101'),
+	('210151', 'CUYABENO', '2101'),
+	('210152', 'DURENO', '2101'),
+	('210153', 'GENERAL FARFÁN', '2101'),
+	('210154', 'TARAPOA', '2101'),
+	('210155', 'EL ENO', '2101'),
+	('210156', 'PACAYACU', '2101'),
+	('210157', 'JAMBELÍ', '2101'),
+	('210158', 'SANTA CECILIA', '2101'),
+	('210159', 'AGUAS NEGRAS', '2101'),
+	('210160', '10 DE AGOSTO', '2101'),
+	('210250', 'LUMBAQUÍ', '2102'),
+	('210251', 'EL REVENTADOR', '2102'),
+	('210252', 'GONZALO PIZARRO', '2102'),
+	('210253', 'LUMBAQUÍ', '2102'),
+	('210254', 'PUERTO LIBRE', '2102'),
+	('210255', 'SANTA ROSA DE SUCUMBÍOS', '2102'),
+	('210350', 'PUERTO EL CARMEN DEL PUTUMAYO', '2103'),
+	('210351', 'PALMA ROJA', '2103'),
+	('210352', 'PUERTO BOLÍVAR (PUERTO MONTÚFAR)', '2103'),
+	('210353', 'PUERTO RODRÍGUEZ', '2103'),
+	('210354', 'SANTA ELENA', '2103'),
+	('210450', 'SHUSHUFINDI', '2104'),
+	('210451', 'LIMONCOCHA', '2104'),
+	('210452', 'PAÑACOCHA', '2104'),
+	('210453', 'SAN ROQUE (CAB. EN SAN VICENTE)', '2104'),
+	('210454', 'SAN PEDRO DE LOS COFANES', '2104'),
+	('210455', 'SIETE DE JULIO', '2104'),
+	('210550', 'LA BONITA', '2105'),
+	('210551', 'EL PLAYÓN DE SAN FRANCISCO', '2105'),
+	('210552', 'LA SOFÍA', '2105'),
+	('210553', 'ROSA FLORIDA', '2105'),
+	('210554', 'SANTA BÁRBARA', '2105'),
+	('210650', 'EL DORADO DE CASCALES', '2106'),
+	('210651', 'SANTA ROSA DE SUCUMBÍOS', '2106'),
+	('210652', 'SEVILLA', '2106'),
+	('210750', 'TARAPOA', '2107'),
+	('210751', 'CUYABENO', '2107'),
+	('210752', 'AGUAS NEGRAS', '2107'),
+	('220150', 'PUERTO FRANCISCO DE ORELLANA (EL COCA)', '2201'),
+	('220151', 'DAYUMA', '2201'),
+	('220152', 'TARACOA (NUEVA ESPERANZA: YUCA)', '2201'),
+	('220153', 'ALEJANDRO LABAKA', '2201'),
+	('220154', 'EL DORADO', '2201'),
+	('220155', 'EL EDÉN', '2201'),
+	('220156', 'GARCÍA MORENO', '2201'),
+	('220157', 'INÉS ARANGO (CAB. EN WESTERN)', '2201'),
+	('220158', 'LA BELLEZA', '2201'),
+	('220159', 'NUEVO PARAÍSO (CAB. EN UNIÓN CHIMBORAZO)', '2201'),
+	('220160', 'SAN JOSÉ DE GUAYUSA', '2201'),
+	('220161', 'SAN LUIS DE ARMENIA', '2201'),
+	('220201', 'TIPITINI', '2202'),
+	('220250', 'NUEVO ROCAFUERTE', '2202'),
+	('220251', 'CAPITÁN AUGUSTO RIVADENEYRA', '2202'),
+	('220252', 'CONONACO', '2202'),
+	('220253', 'SANTA MARÍA DE HUIRIRIMA', '2202'),
+	('220254', 'TIPUTINI', '2202'),
+	('220255', 'YASUNÍ', '2202'),
+	('220350', 'LA JOYA DE LOS SACHAS', '2203'),
+	('220351', 'ENOKANQUI', '2203'),
+	('220352', 'POMPEYA', '2203'),
+	('220353', 'SAN CARLOS', '2203'),
+	('220354', 'SAN SEBASTIÁN DEL COCA', '2203'),
+	('220355', 'LAGO SAN PEDRO', '2203'),
+	('220356', 'RUMIPAMBA', '2203'),
+	('220357', 'TRES DE NOVIEMBRE', '2203'),
+	('220358', 'UNIÓN MILAGREÑA', '2203'),
+	('220450', 'LORETO', '2204'),
+	('220451', 'AVILA (CAB. EN HUIRUNO)', '2204'),
+	('220452', 'PUERTO MURIALDO', '2204'),
+	('220453', 'SAN JOSÉ DE PAYAMINO', '2204'),
+	('220454', 'SAN JOSÉ DE DAHUANO', '2204'),
+	('220455', 'SAN VICENTE DE HUATICOCHA', '2204'),
+	('230101', 'ABRAHAM CALAZACÓN', '2301'),
+	('230102', 'BOMBOLÍ', '2301'),
+	('230103', 'CHIGUILPE', '2301'),
+	('230104', 'RÍO TOACHI', '2301'),
+	('230105', 'RÍO VERDE', '2301'),
+	('230106', 'SANTO DOMINGO DE LOS COLORADOS', '2301'),
+	('230107', 'ZARACAY', '2301'),
+	('230151', 'ALLURIQUÍN', '2301'),
+	('230152', 'PUERTO LIMÓN', '2301'),
+	('230153', 'LUZ DE AMÉRICA', '2301'),
+	('230154', 'SAN JACINTO DEL BÚA', '2301'),
+	('230155', 'VALLE HERMOSO', '2301'),
+	('230156', 'EL ESFUERZO', '2301'),
+	('230157', 'SANTA MARÍA DEL TOACHI', '2301'),
+	('240101', 'BALLENITA', '2401'),
+	('240102', 'SANTA ELENA', '2401'),
+	('240150', 'SANTA ELENA Y CAPITAL PROVINCIAL', '2401'),
+	('240151', 'ATAHUALPA', '2401'),
+	('240152', 'COLONCHE', '2401'),
+	('240153', 'CHANDUY', '2401'),
+	('240154', 'MANGLARALTO', '2401'),
+	('240155', 'SIMÓN BOLÍVAR (JULIO MORENO)', '2401'),
+	('240156', 'SAN JOSÉ DE ANCÓN', '2401'),
+	('240250', 'LA LIBERTAD', '2402'),
+	('240301', 'CARLOS ESPINOZA LARREA', '2403'),
+	('240302', 'GRAL. ALBERTO ENRÍQUEZ GALLO', '2403'),
+	('240303', 'VICENTE  ROCAFUERTE', '2403'),
+	('240304', 'SANTA ROSA', '2403'),
+	('240350', 'SALINAS', '2403'),
+	('240351', 'ANCONCITO', '2403'),
+	('240352', 'JOSÉ LUIS TAMAYO (MUEY)', '2403');
+/*!40000 ALTER TABLE `parroquias` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.password_resets
 CREATE TABLE IF NOT EXISTS `password_resets` (
@@ -473,12 +2146,14 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
 
 -- Volcando datos para la tabla pwa_ecommerce.password_resets: ~0 rows (aproximadamente)
 DELETE FROM `password_resets`;
+/*!40000 ALTER TABLE `password_resets` DISABLE KEYS */;
+/*!40000 ALTER TABLE `password_resets` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.personal_access_tokens
 CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tokenable_id` bigint unsigned NOT NULL,
+  `tokenable_id` bigint(20) unsigned NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
   `abilities` text COLLATE utf8mb4_unicode_ci,
@@ -492,12 +2167,14 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
 
 -- Volcando datos para la tabla pwa_ecommerce.personal_access_tokens: ~0 rows (aproximadamente)
 DELETE FROM `personal_access_tokens`;
+/*!40000 ALTER TABLE `personal_access_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `personal_access_tokens` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.productos
 CREATE TABLE IF NOT EXISTS `productos` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `categoria_id` int DEFAULT NULL,
-  `marca_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `categoria_id` int(11) DEFAULT NULL,
+  `marca_id` int(11) DEFAULT NULL,
   `nombre` varchar(100) NOT NULL,
   `descripcion` text,
   `precio` decimal(10,2) DEFAULT NULL,
@@ -509,89 +2186,136 @@ CREATE TABLE IF NOT EXISTS `productos` (
   KEY `marca_id` (`marca_id`),
   CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`),
   CONSTRAINT `productos_ibfk_2` FOREIGN KEY (`marca_id`) REFERENCES `marcas` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.productos: ~0 rows (aproximadamente)
 DELETE FROM `productos`;
+/*!40000 ALTER TABLE `productos` DISABLE KEYS */;
+INSERT INTO `productos` (`id`, `categoria_id`, `marca_id`, `nombre`, `descripcion`, `precio`, `estado`, `imagen`, `caracteristicas`) VALUES
+	(3, 8, 1, 'UNIFORME 1', 'DESCRIPCION', 4.90, '1', '/storage/productos/aul8ROAdDBJMuOY8s5Rn6UlnQAdTicWEhWQ9XGHx.jpg', 'CARACTERISTICAS');
+/*!40000 ALTER TABLE `productos` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.productosdeseados
 CREATE TABLE IF NOT EXISTS `productosdeseados` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `cliente_id` int DEFAULT NULL,
-  `producto_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cliente_id` int(11) DEFAULT NULL,
+  `producto_id` int(11) DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `cliente_id` (`cliente_id`),
   KEY `producto_id` (`producto_id`),
   CONSTRAINT `productosdeseados_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
   CONSTRAINT `productosdeseados_ibfk_2` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.productosdeseados: ~0 rows (aproximadamente)
 DELETE FROM `productosdeseados`;
+/*!40000 ALTER TABLE `productosdeseados` DISABLE KEYS */;
+/*!40000 ALTER TABLE `productosdeseados` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.provincias
 CREATE TABLE IF NOT EXISTS `provincias` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` varchar(50) NOT NULL,
   `provincia` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla pwa_ecommerce.provincias: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.provincias: ~24 rows (aproximadamente)
 DELETE FROM `provincias`;
+/*!40000 ALTER TABLE `provincias` DISABLE KEYS */;
+INSERT INTO `provincias` (`id`, `provincia`) VALUES
+	('01', 'AZUAY'),
+	('02', 'BOLÍVAR'),
+	('03', 'CAÑAR'),
+	('04', 'CARCHI'),
+	('05', 'COTOPAXI'),
+	('06', 'CHIMBORAZO'),
+	('07', 'EL ORO'),
+	('08', 'ESMERALDAS'),
+	('09', 'GUAYAS'),
+	('10', 'IMBABURA'),
+	('11', 'LOJA'),
+	('12', 'LOS RIOS'),
+	('13', 'MANABÍ'),
+	('14', 'MORONA SANTIAGO'),
+	('15', 'NAPO'),
+	('16', 'PASTAZA'),
+	('17', 'PICHINCHA'),
+	('18', 'TUNGURAHUA'),
+	('19', 'ZAMORA CHINCHIPE'),
+	('20', 'GALÁPAGOS'),
+	('21', 'SUCUMBIOS'),
+	('22', 'ORELLANA'),
+	('23', 'STO DOMINGO DE LOS TSÁCHILAS '),
+	('24', 'SANTA ELENA');
+/*!40000 ALTER TABLE `provincias` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.publicidad
 CREATE TABLE IF NOT EXISTS `publicidad` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `titulo` varchar(100) DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
   `enlace` varchar(255) DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.publicidad: ~0 rows (aproximadamente)
 DELETE FROM `publicidad`;
+/*!40000 ALTER TABLE `publicidad` DISABLE KEYS */;
+/*!40000 ALTER TABLE `publicidad` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.roles
 CREATE TABLE IF NOT EXISTS `roles` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.roles: ~0 rows (aproximadamente)
 DELETE FROM `roles`;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
 INSERT INTO `roles` (`id`, `nombre`) VALUES
-	(1, 'Admin');
+	(1, 'Admin'),
+	(2, 'Clientes');
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.sliders
 CREATE TABLE IF NOT EXISTS `sliders` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `titulo` varchar(100) DEFAULT NULL,
   `descripcion` text,
   `imagen` varchar(255) DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.sliders: ~0 rows (aproximadamente)
 DELETE FROM `sliders`;
+/*!40000 ALTER TABLE `sliders` DISABLE KEYS */;
+INSERT INTO `sliders` (`id`, `titulo`, `descripcion`, `imagen`, `estado`) VALUES
+	(1, 'SLIDER1', 'PROMO 2', '/storage/sliders/PDAvRD6ap9RqEjvbdAFhp0U5WnrhKWSm1TI4lw3K.jpg', '1');
+/*!40000 ALTER TABLE `sliders` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.tipo_documento
 CREATE TABLE IF NOT EXISTS `tipo_documento` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(45) DEFAULT NULL,
   `valor` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla pwa_ecommerce.tipo_documento: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.tipo_documento: ~2 rows (aproximadamente)
 DELETE FROM `tipo_documento`;
+/*!40000 ALTER TABLE `tipo_documento` DISABLE KEYS */;
+INSERT INTO `tipo_documento` (`id`, `nombre`, `valor`) VALUES
+	(1, 'Cedula', '04'),
+	(2, 'Ruc', '05');
+/*!40000 ALTER TABLE `tipo_documento` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.users
 CREATE TABLE IF NOT EXISTS `users` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
@@ -599,52 +2323,68 @@ CREATE TABLE IF NOT EXISTS `users` (
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `rol_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla pwa_ecommerce.users: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.users: ~3 rows (aproximadamente)
 DELETE FROM `users`;
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-	(3, 'Danny Garcia', 'dannyggg23@gmail.com', NULL, '$2y$10$cvsKaLYriD5QUhXB7eoDu.3KdC8fo0pd0bXM4ypJdZ2SB6HUfGqBq', NULL, '2023-09-05 20:09:14', '2023-09-05 20:09:14');
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `rol_id`) VALUES
+	(3, 'Danny Garcia', 'dannyggg23@gmail.com', NULL, '$2y$10$cvsKaLYriD5QUhXB7eoDu.3KdC8fo0pd0bXM4ypJdZ2SB6HUfGqBq', NULL, '2023-09-05 15:09:14', '2023-09-05 15:09:14', 1),
+	(4, 'Tania Guarucha', 'tania.pesantez@gmail.com', '2023-09-07 12:49:06', '$2y$10$cvsKaLYriD5QUhXB7eoDu.3KdC8fo0pd0bXM4ypJdZ2SB6HUfGqBq', NULL, '2023-09-07 12:49:11', '2023-09-07 12:49:12', 2),
+	(8, 'DANNY GARCIA', 'aadannyggg23@gmail.com', NULL, '$2y$10$dUdDAr28CtSqJeesELV1a.veLCFSoeg6XBIrQnyg8OmMJoNu3suEe', NULL, '2023-09-19 00:32:20', '2023-09-19 00:54:52', 2);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.usuarios
 CREATE TABLE IF NOT EXISTS `usuarios` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
   `correo_electronico` varchar(100) NOT NULL,
   `contrasena` varchar(100) NOT NULL,
-  `rol_id` int DEFAULT NULL,
+  `rol_id` int(11) DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `rol_id` (`rol_id`),
   CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla pwa_ecommerce.usuarios: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.usuarios: ~2 rows (aproximadamente)
 DELETE FROM `usuarios`;
+/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
 INSERT INTO `usuarios` (`id`, `nombre`, `correo_electronico`, `contrasena`, `rol_id`, `estado`, `imagen`) VALUES
 	(1, 'DANNY GARCIA', 'dannyggg23@gmail.com', '12345', 1, '1', NULL),
 	(2, 'Nombre del Usuario', 'correo@example.com', '$2y$10$JkDHiNez7zMhw72CAe11ZOgOLG9n.Kjw00SZJHb.qPqSjgA3wohoS', NULL, NULL, NULL);
+/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.variantes
 CREATE TABLE IF NOT EXISTS `variantes` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `producto_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `producto_id` int(11) DEFAULT NULL,
   `color` varchar(50) DEFAULT NULL,
   `talla` varchar(50) DEFAULT NULL,
-  `stock` int DEFAULT NULL,
+  `stock` int(11) DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
+  `codigo_color` varchar(50) DEFAULT NULL,
+  `precio` decimal(12,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `producto_id` (`producto_id`),
   CONSTRAINT `variantes_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla pwa_ecommerce.variantes: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.variantes: ~5 rows (aproximadamente)
 DELETE FROM `variantes`;
+/*!40000 ALTER TABLE `variantes` DISABLE KEYS */;
+INSERT INTO `variantes` (`id`, `producto_id`, `color`, `talla`, `stock`, `estado`, `codigo_color`, `precio`) VALUES
+	(1, 3, 'NEGRO', 'XXL', 56, '1', '#000000', 3.50),
+	(2, 3, 'ROJO', 'M', 10, '1', '#ff0000', 15.00),
+	(3, 3, 'NEGRO', 'L', 10, '1', '#000000', 10.00),
+	(4, 3, 'ROJO', 'M', 23, '1', '#f50000', 22.00),
+	(5, 3, 'NEGRO', 'X', 23, '1', '#000000', 20.00);
+/*!40000 ALTER TABLE `variantes` ENABLE KEYS */;
 
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
