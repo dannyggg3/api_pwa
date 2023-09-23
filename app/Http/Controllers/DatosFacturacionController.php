@@ -51,6 +51,7 @@ class DatosFacturacionController extends Controller
                 'direccion' => 'nullable|string|max:255',
                 'ciudad' => 'nullable|string|max:100',
                 'telefono' => 'nullable|string|max:20',
+                'estado' => 'nullable|string|max:20',
                 'tipo_documento_id' => 'required|integer'
             ]);
 
@@ -118,6 +119,7 @@ class DatosFacturacionController extends Controller
                 'direccion' => 'nullable|string|max:255',
                 'ciudad' => 'nullable|string|max:100',
                 'telefono' => 'nullable|string|max:20',
+                'estado' => 'nullable|string|max:20',
                 'tipo_documento_id' => 'required|integer'
             ]);
 

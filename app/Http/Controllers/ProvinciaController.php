@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Provincia;
+use App\Models\Ciudad;
+use App\Models\Parroquias;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
@@ -14,10 +16,18 @@ class ProvinciaController extends Controller
         try {
             // Obtener todas las provincias
             $provincias = Provincia::all();
+            $ciudades = Ciudad::all();
+            $parroquias = Parroquias::all();
+
+            $retorno = array(
+                'provincias' => $provincias,
+                'ciudades' => $ciudades,
+                'parroquias' => $parroquias
+            );
 
             return new JsonResponse([
                 'correctProcess' => true,
-                'data' => $provincias,
+                'data' => $retorno,
                 'message' => 'Provincias obtenidas correctamente'
             ]);
         } catch (\Exception $e) {

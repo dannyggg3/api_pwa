@@ -18,18 +18,15 @@ class DireccionesEntregaController extends Controller
    public function index()
     {
         try {
-            $direccionesEntrega = DireccionesEntrega::with('cliente')->get();
+            $direccionesEntrega = DireccionesEntrega::with('cliente','parroquia')->get();
 
             foreach ($direccionesEntrega as $direccionEntrega) {
-
                 //parroquia
                     $parroquia=Parroquias::where('id',$direccionEntrega->parroquia_id)->first();
                     $direccionEntrega->parroquia=$parroquia;
-
                 //ciudad
                     $ciudad=Ciudad::where('id',$parroquia->ciudad_id)->first();
                     $direccionEntrega->ciudad=$ciudad;
-
                 //provincia
                     $provincia=Provincia::where('id',$ciudad->provincias_id)->first();
                     $direccionEntrega->provincia=$provincia;

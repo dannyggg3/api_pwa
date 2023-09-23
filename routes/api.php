@@ -133,7 +133,7 @@ Route::prefix('datosfacturacion')->group(function () {
     Route::get('/', [DatosFacturacionController::class, 'index']);
     Route::post('/', [DatosFacturacionController::class, 'store']);
     Route::get('/{id}', [DatosFacturacionController::class, 'show']);
-    Route::put('/{id}', [DatosFacturacionController::class, 'update']);
+    Route::post('/{id}', [DatosFacturacionController::class, 'update']);
     Route::delete('/{id}', [DatosFacturacionController::class, 'destroy']);
 });
 
@@ -169,7 +169,7 @@ Route::prefix('empresa')->group(function () {
     Route::get('/', [EmpresaController::class, 'index']);
     Route::post('/', [EmpresaController::class, 'store']);
     Route::get('/{id}', [EmpresaController::class, 'show']);
-    Route::put('/{id}', [EmpresaController::class, 'update']);
+    Route::post('/{id}', [EmpresaController::class, 'update']);
     Route::delete('/{id}', [EmpresaController::class, 'destroy']);
 });
 

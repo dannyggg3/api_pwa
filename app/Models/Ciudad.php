@@ -13,6 +13,7 @@ class Ciudad extends Model
      protected $primaryKey = 'id';
     protected $fillable = ['ciudad', 'provincias_id'];
     public $timestamps = false;
+    protected $keyType = 'string';
 
     public function provincia()
     {

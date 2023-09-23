@@ -6,18 +6,19 @@ use App\Models\Empresa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 class EmpresaController extends Controller
 {
   public function index()
     {
         try {
-            $empresas = Empresa::all();
+            $empresas = Empresa::where('id',1)->first();
 
             return new JsonResponse([
                 'correctProcess' => true,
                 'data' => $empresas,
-                'message' => 'Empresas obtenidas correctamente'
+                'message' => 'Datos obtenidos correctamente'
             ]);
         } catch (\Exception $e) {
             return new JsonResponse([
@@ -101,10 +102,41 @@ class EmpresaController extends Controller
                 'establecimiento' => 'nullable|string|max:45',
                 'punto_emision' => 'nullable|string|max:45',
                 'secuencial' => 'nullable|string|max:45',
-                'archivop12' => 'nullable|string|max:50',
+                'archivop12' => 'nullable|string|max:200',
                 'usuario' => 'nullable|string|max:50',
                 'clave' => 'nullable|string|max:50',
             ]);
+
+             $empresa = Empresa::where('id',1)->first();
+
+
+
+             //guarda un archivo .p12 en el stoeage y obtiene la url
+
+
+                if ($request->hasFile('filep12')) {
+                    // Obtiene el archivo subido
+                    $archivo = $request->file('filep12');
+
+                    // Nombre de archivo deseado con extensión .p12
+                    $nombreArchivo = $empresa->ruc.'.p12';
+
+                    // Sube el archivo al servidor con el nombre deseado
+                    $archivoPath = $archivo->storeAs('firma', $nombreArchivo, 'public');
+
+                    // Genera la URL completa del archivo
+                    $fileUrl = Storage::url($archivoPath);
+                } else {
+                    // Si no se cargó una nueva imagen, conserva la imagen existente.
+                    $fileUrl = $empresa->archivop12;
+                }
+
+            $request->merge([
+                'archivop12' => $fileUrl
+            ]);
+
+
+
 
             if ($validator->fails()) {
                 return new JsonResponse([

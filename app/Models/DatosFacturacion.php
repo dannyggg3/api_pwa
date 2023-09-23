@@ -15,6 +15,7 @@ class DatosFacturacion extends Model
         'direccion',
         'ciudad',
         'telefono',
+        'estado',
         'tipo_documento_id',
     ];
 

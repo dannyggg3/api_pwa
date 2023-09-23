@@ -10,9 +10,10 @@ class Parroquias extends Model
     use HasFactory;
 
     protected $table = 'parroquias';
-     protected $primaryKey = 'id';
+    protected $primaryKey = 'id';
     protected $fillable = ['parroquia', 'ciudad_id'];
     public $timestamps = false;
+    protected $keyType = 'string';
 
 
     public function ciudad()

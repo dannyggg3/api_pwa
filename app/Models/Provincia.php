@@ -12,6 +12,7 @@ class Provincia extends Model
     protected $table = 'provincias';
     protected $primaryKey = 'id';
     public $timestamps = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'provincia',
