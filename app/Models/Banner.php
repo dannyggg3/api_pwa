@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Banner extends Model
 {
     protected $table = 'banners';
-    protected $fillable = ['titulo', 'imagen', 'estado'];
+    protected $fillable = ['titulo', 'imagen', 'estado','oferta','descripcion','link'];
     public $timestamps = false;
 
 }

@@ -40,6 +40,9 @@ class BannerController extends Controller
             $validator = Validator::make($request->all(), [
                 'titulo' => 'required|string|max:100',
                 'estado' => 'required|string|max:20',
+                'oferta' => 'required|string|max:200',
+                'descripcion' => 'required|string|max:200',
+                'link' => 'required|string|max:200',
                 'imagen' => 'required|image|max:2048', // Asegúrate de que 'imagen' sea un archivo de imagen válido y no supere 2MB.
             ]);
 
@@ -65,6 +68,9 @@ class BannerController extends Controller
             $banner = Banner::create([
                 'titulo' => $request->input('titulo'),
                 'estado' => $request->input('estado'),
+                'oferta' => $request->input('oferta'),
+                'descripcion' => $request->input('descripcion'),
+                'link' => $request->input('link'),
                 'imagen' => $imagenUrl, // Almacena la URL de la imagen en la base de datos.
             ]);
 
@@ -110,6 +116,9 @@ class BannerController extends Controller
             $validator = Validator::make($request->all(), [
                 'titulo' => 'required|string|max:100',
                 'estado' => 'nullable|string|max:20',
+                'oferta' => 'required|string|max:200',
+                'descripcion' => 'required|string|max:200',
+                'link' => 'required|string|max:200',
                 'imagen' => 'nullable|image|max:2048', // Asegúrate de que 'imagen' sea un archivo de imagen válido y no supere 2MB.
             ]);
 
@@ -144,6 +153,9 @@ class BannerController extends Controller
             $banner->update([
                 'titulo' => $request->input('titulo'),
                 'estado' => $request->input('estado'),
+                'oferta' => $request->input('oferta'),
+                'descripcion' => $request->input('descripcion'),
+                'link' => $request->input('link'),
                 'imagen' => $imagenUrl, // Actualiza la URL de la imagen en la base de datos.
             ]);
 

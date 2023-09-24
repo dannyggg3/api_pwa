@@ -14,6 +14,17 @@ class CategoriaController extends Controller
     {
         try {
             $categorias = Categoria::with('productos')->get();
+
+            foreach ($categorias as $categoria) {
+
+                if($categoria->padre && $categoria->padre >0){
+
+                    $categoriaPadre = Categoria::where('id',$categoria->padre)->first();
+                    $categoria->padre = $categoriaPadre;
+                }
+            }
+
+
             $response = response()->json([
                 'correctProcess' => true,
                 'data' => $categorias,
@@ -37,6 +48,7 @@ class CategoriaController extends Controller
             $validator = Validator::make($request->all(), [
                 'nombre' => 'required|string|max:100',
                 'estado' => 'required|string|max:20',
+                'padre' => 'required|string|max:20',
                 'imagen' => 'required|image|max:2048', // Asegúrate de que 'imagen' sea un archivo de imagen válido y no supere 2MB.
             ]);
 
@@ -61,6 +73,7 @@ class CategoriaController extends Controller
             // Crea la categoría con la URL de la imagen.
             $categoria = Categoria::create([
                 'nombre' => $request->input('nombre'),
+                'padre' => $request->input('padre'),
                 'estado' => $request->input('estado'),
                 'imagen' => $imagenUrl, // Almacena la URL de la imagen en la base de datos.
             ]);
@@ -104,6 +117,7 @@ class CategoriaController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'nombre' => 'required|string|max:100',
+                'padre' => 'required|string|max:100',
                 'estado' => 'nullable|string|max:20',
                 'imagen' => 'nullable|image|max:2048', // Asegúrate de que 'imagen' sea un archivo de imagen válido y no supere 2MB.
             ]);
@@ -138,6 +152,7 @@ class CategoriaController extends Controller
             // Actualiza la categoría con la nueva información, incluida la URL de la imagen.
             $categoria->update([
                 'nombre' => $request->input('nombre'),
+                'padre' => $request->input('padre'),
                 'estado' => $request->input('estado'),
                 'imagen' => $imagenUrl, // Actualiza la URL de la imagen en la base de datos.
             ]);
