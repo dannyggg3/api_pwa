@@ -19,9 +19,9 @@ class Variante extends Model
         'talla',
         'stock',
         'estado',
-        'estado',
         'codigo_color',
-        'precio'
+        'precio',
+        'imagen'
     ];
 
     public function producto()

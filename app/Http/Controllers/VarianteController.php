@@ -6,6 +6,7 @@ use App\Models\Variante;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 class VarianteController extends Controller
 {
@@ -40,6 +41,7 @@ class VarianteController extends Controller
                 'estado' => 'nullable|string|max:20',
                 'codigo_color' => 'required|string|max:20',
                 'precio' => 'nullable|numeric',
+                'imagen' => 'nullable|image|max:2048',
             ]);
 
             // Si la validación falla, retornar un error de validación
@@ -49,6 +51,17 @@ class VarianteController extends Controller
                     'message' => 'Error de validación',
                     'errors' => $validator->errors()
                 ], 200);
+            }
+
+
+            // Sube la imagen al servidor y obtén la URL.
+            if ($request->hasFile('imagen')) {
+                $imagenPath = $request->file('imagen')->store('variantes', 'public'); // 'public' es el disco configurado en filesystems.php
+
+                // Genera la URL completa de la imagen.
+                $imagenUrl = Storage::url($imagenPath);
+            } else {
+                $imagenUrl = null;
             }
 
 
@@ -66,8 +79,17 @@ class VarianteController extends Controller
             }
 
 
-            // Crear una nueva variante
-            $variante = Variante::create($request->all());
+            $variante=Variante::create([
+                'producto_id' => $request->producto_id,
+                'color' => $request->color,
+                'talla' => $request->talla,
+                'stock' => $request->stock,
+                'estado' => $request->estado,
+                'codigo_color' => $request->codigo_color,
+                'precio' => $request->precio,
+                'imagen' => $imagenUrl,
+            ]);
+
 
             return new JsonResponse([
                 'correctProcess' => true,
