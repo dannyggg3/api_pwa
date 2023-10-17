@@ -12,7 +12,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register']]);
+        $this->middleware('auth:api', ['except' => ['login','register','loginP']]);
     }
 
     public function login(Request $request)
@@ -21,9 +21,34 @@ class AuthController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
+        $credentials = $request->only('email', 'password');
 
+        $token = Auth::attempt($credentials);
+        if (!$token) {
+            return response()->json([
+                'correctProcess' => false,
+                'message' => 'Credenciales incorrectas',
+            ], 200);
+        }
 
+        $user = Auth::user();
+        return response()->json([
+                'correctProcess' => true,
+                'data' => $user,
+                'authorisation' => [
+                    'token' => $token,
+                    'type' => 'bearer',
+                ]
+            ]);
 
+    }
+
+     public function loginP(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
 
 
 
@@ -38,6 +63,14 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
+
+        if($user->rol_id != 2){
+            return response()->json([
+                'correctProcess' => false,
+                'message' => 'No tiene permisos para acceder a esta ruta',
+            ], 200);
+        }
+
         return response()->json([
                 'correctProcess' => true,
                 'data' => $user,
