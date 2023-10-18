@@ -188,13 +188,13 @@ class VarianteController extends Controller
     {
         try {
             // Eliminar una variante por ID
-            $variante = Variante::findOrFail($id);
+            $variante = Variante::where('id', $id)->firstOrFail();
             $variante->delete();
 
             return new JsonResponse([
                 'correctProcess' => true,
                 'message' => 'Variante eliminada correctamente'
-            ], 204);
+            ], 200);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'correctProcess' => false,
