@@ -61,11 +61,11 @@ CREATE TABLE IF NOT EXISTS `categorias` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla pwa_ecommerce.categorias: ~8 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.categorias: ~10 rows (aproximadamente)
 DELETE FROM `categorias`;
 /*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
 INSERT INTO `categorias` (`id`, `nombre`, `padre`, `estado`, `imagen`) VALUES
-	(8, 'JEANS', 0, '1', '/storage/categorias/FaWMVQs45AK9P0WS5m1bedSwN2PcUx8h1oDBSuUe.svg'),
+	(8, 'PANTALONES', 0, '1', '/storage/categorias/FaWMVQs45AK9P0WS5m1bedSwN2PcUx8h1oDBSuUe.svg'),
 	(9, 'CHAQUETAS', 8, '1', '/storage/categorias/sQLspQ8lwMrenOnOyHpGZCQt1TSVHU8oI6H6jOgD.svg'),
 	(10, 'VESTIDOS', 0, '1', '/storage/categorias/q4vqzx9ezUHqGY6qc7TZBo2UBHw3IipzSwOB4w0Q.svg'),
 	(11, 'GOWN', 0, '1', '/storage/categorias/zVrcp10C8q4scMB081sqhhIgLc2a9AxNNfow0Svi.svg'),
@@ -438,7 +438,7 @@ CREATE TABLE IF NOT EXISTS `direccionesentrega` (
   CONSTRAINT `direccionesentrega_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla pwa_ecommerce.direccionesentrega: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.direccionesentrega: ~2 rows (aproximadamente)
 DELETE FROM `direccionesentrega`;
 /*!40000 ALTER TABLE `direccionesentrega` DISABLE KEYS */;
 INSERT INTO `direccionesentrega` (`id`, `cliente_id`, `cedula`, `direccion`, `estado`, `parroquia_id`, `comentarios`) VALUES
@@ -465,7 +465,7 @@ CREATE TABLE IF NOT EXISTS `empresa` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla pwa_ecommerce.empresa: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.empresa: ~1 rows (aproximadamente)
 DELETE FROM `empresa`;
 /*!40000 ALTER TABLE `empresa` DISABLE KEYS */;
 INSERT INTO `empresa` (`id`, `ruc`, `razon_social`, `direccion`, `obligado_contabilidad`, `regimen`, `logo`, `ambiente`, `establecimiento`, `punto_emision`, `secuencial`, `archivop12`, `usuario`, `clave`) VALUES
@@ -559,7 +559,7 @@ CREATE TABLE IF NOT EXISTS `marcas` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla pwa_ecommerce.marcas: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.marcas: ~1 rows (aproximadamente)
 DELETE FROM `marcas`;
 /*!40000 ALTER TABLE `marcas` DISABLE KEYS */;
 INSERT INTO `marcas` (`id`, `nombre`, `estado`, `imagen`) VALUES
@@ -677,7 +677,7 @@ CREATE TABLE IF NOT EXISTS `oauth_personal_access_clients` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla pwa_ecommerce.oauth_personal_access_clients: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.oauth_personal_access_clients: ~1 rows (aproximadamente)
 DELETE FROM `oauth_personal_access_clients`;
 /*!40000 ALTER TABLE `oauth_personal_access_clients` DISABLE KEYS */;
 INSERT INTO `oauth_personal_access_clients` (`id`, `client_id`, `created_at`, `updated_at`) VALUES
@@ -2194,23 +2194,25 @@ CREATE TABLE IF NOT EXISTS `productos` (
   `categoria_id` int(11) DEFAULT NULL,
   `marca_id` int(11) DEFAULT NULL,
   `nombre` varchar(100) NOT NULL,
-  `descripcion` text,
+  `descripcion` longtext,
   `precio` decimal(10,2) DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
-  `caracteristicas` varchar(255) DEFAULT NULL,
+  `caracteristicas` longtext,
   PRIMARY KEY (`id`),
   KEY `categoria_id` (`categoria_id`),
   KEY `marca_id` (`marca_id`),
   CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`),
   CONSTRAINT `productos_ibfk_2` FOREIGN KEY (`marca_id`) REFERENCES `marcas` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla pwa_ecommerce.productos: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.productos: ~3 rows (aproximadamente)
 DELETE FROM `productos`;
 /*!40000 ALTER TABLE `productos` DISABLE KEYS */;
 INSERT INTO `productos` (`id`, `categoria_id`, `marca_id`, `nombre`, `descripcion`, `precio`, `estado`, `imagen`, `caracteristicas`) VALUES
-	(3, 8, 1, 'UNIFORME 1', 'DESCRIPCION', 4.90, '1', '/storage/productos/aul8ROAdDBJMuOY8s5Rn6UlnQAdTicWEhWQ9XGHx.jpg', 'CARACTERISTICAS');
+	(3, 10, 1, 'UNIFORME', '<ul><li>DESCRIPCION RWEREW ERWER </li></ul><p>ERWEREWR <strong>RRRR</strong></p>', 4.90, '1', '/storage/productos/OHUbne6Eb4Kg2V7DAgFHptqODn5JceIkxyC8D1Wm.jpg', '<ol><li>CARACTERISTICAS</li><li>RR</li></ol>'),
+	(4, 10, 1, 'FALDA UNIFORME', '<p><strong>FALDA DE UNIFORME</strong></p>', 15.00, '1', '/storage/productos/XxwlKj4kkBsNI3orCBT5OMC2Zzck3PKIJn8W2mGB.jpg', '<ol><li>CARACTERISTICA 1</li><li>CARACTERISTICA 2</li></ol>'),
+	(5, 8, 1, 'PANTALON UNIFORME', '<p>PANTALON DE UNIFORME</p>', 14.00, '1', '/storage/productos/EIYOL4Hn9YfN7HWu9FC5IIaim1rhEKTgilt6Wzwo.jpg', '<ul><li>CARAC1</li><li>CARAC2</li><li>CARAC3</li></ul>');
 /*!40000 ALTER TABLE `productos` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.productosdeseados
@@ -2290,7 +2292,7 @@ CREATE TABLE IF NOT EXISTS `roles` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla pwa_ecommerce.roles: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.roles: ~2 rows (aproximadamente)
 DELETE FROM `roles`;
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
 INSERT INTO `roles` (`id`, `nombre`) VALUES
@@ -2308,7 +2310,7 @@ CREATE TABLE IF NOT EXISTS `sliders` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
--- Volcando datos para la tabla pwa_ecommerce.sliders: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.sliders: ~1 rows (aproximadamente)
 DELETE FROM `sliders`;
 /*!40000 ALTER TABLE `sliders` DISABLE KEYS */;
 INSERT INTO `sliders` (`id`, `titulo`, `descripcion`, `imagen`, `estado`) VALUES
@@ -2346,7 +2348,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla pwa_ecommerce.users: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.users: ~3 rows (aproximadamente)
 DELETE FROM `users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `rol_id`) VALUES
@@ -2387,20 +2389,21 @@ CREATE TABLE IF NOT EXISTS `variantes` (
   `estado` varchar(20) DEFAULT NULL,
   `codigo_color` varchar(50) DEFAULT NULL,
   `precio` decimal(12,2) DEFAULT NULL,
+  `imagen` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `producto_id` (`producto_id`),
   CONSTRAINT `variantes_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
 
 -- Volcando datos para la tabla pwa_ecommerce.variantes: ~5 rows (aproximadamente)
 DELETE FROM `variantes`;
 /*!40000 ALTER TABLE `variantes` DISABLE KEYS */;
-INSERT INTO `variantes` (`id`, `producto_id`, `color`, `talla`, `stock`, `estado`, `codigo_color`, `precio`) VALUES
-	(1, 3, 'NEGRO', 'XXL', 56, '1', '#000000', 3.50),
-	(2, 3, 'ROJO', 'M', 10, '1', '#ff0000', 15.00),
-	(3, 3, 'NEGRO', 'L', 10, '1', '#000000', 10.00),
-	(4, 3, 'ROJO', 'M', 23, '1', '#f50000', 22.00),
-	(5, 3, 'NEGRO', 'X', 23, '1', '#000000', 20.00);
+INSERT INTO `variantes` (`id`, `producto_id`, `color`, `talla`, `stock`, `estado`, `codigo_color`, `precio`, `imagen`) VALUES
+	(7, 3, 'CAFE', 'S', 10, '1', '#b78d52', 34.00, '/storage/variantes/SQhlsrgaDyEAhIv2ShJ0XUyQX7Bb1A11nbLmxAgi.jpg'),
+	(8, 4, 'CAFE', 'M', 10, '1', '#a27639', 15.00, '/storage/variantes/L1KtAmi1a1kCz3kTFWyFGpzxy5cVou4yAUjOObZH.jpg'),
+	(9, 4, 'AZUL', 'M', 10, '1', '#325286', 15.00, '/storage/variantes/AILmHlgJF5Z3JYfUV8V7TsNtIa35oo3IsJxvC5r9.jpg'),
+	(10, 5, 'NEGRO', 'M', 10, '1', '#000000', 15.00, '/storage/variantes/rsod5JvNB0VrCfrCWb2ylQROB2ze8rzSX5wpn98h.jpg'),
+	(11, 5, 'PLOMO', 'M', 10, '1', '#989090', 15.00, '/storage/variantes/EKGMRgm8FvB7hbEbpiwyOJfsmmhy37mimaf07msS.jpg');
 /*!40000 ALTER TABLE `variantes` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
