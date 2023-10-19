@@ -1,25 +1,27 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Versión del servidor:         5.7.33 - MySQL Community Server (GPL)
+-- Versión del servidor:         8.0.30 - MySQL Community Server - GPL
 -- SO del servidor:              Win64
--- HeidiSQL Versión:             11.2.0.6213
+-- HeidiSQL Versión:             12.1.0.6537
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
 -- Volcando estructura de base de datos para pwa_ecommerce
-CREATE DATABASE IF NOT EXISTS `pwa_ecommerce` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE DATABASE IF NOT EXISTS `pwa_ecommerce` /*!40100 DEFAULT CHARACTER SET latin1 */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `pwa_ecommerce`;
 
 -- Volcando estructura para tabla pwa_ecommerce.banners
 CREATE TABLE IF NOT EXISTS `banners` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `titulo` varchar(100) DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
@@ -27,43 +29,38 @@ CREATE TABLE IF NOT EXISTS `banners` (
   `descripcion` varchar(200) DEFAULT NULL,
   `link` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla pwa_ecommerce.banners: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.banners: ~0 rows (aproximadamente)
 DELETE FROM `banners`;
-/*!40000 ALTER TABLE `banners` DISABLE KEYS */;
 INSERT INTO `banners` (`id`, `titulo`, `imagen`, `estado`, `oferta`, `descripcion`, `link`) VALUES
 	(1, 'DECUENTOS EN UNIFORMES', '/storage/banners/K4hXyUzwoc5aBBoRr1jWGiY8sTeqg55krFF9wN6r.jpg', '1', 'OFERTA DE LA SEMANA', 'Aprovecha nuestras ofertas', '/shop');
-/*!40000 ALTER TABLE `banners` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.carritocompras
 CREATE TABLE IF NOT EXISTS `carritocompras` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `cliente_id` int(11) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cliente_id` int DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `cliente_id` (`cliente_id`),
   CONSTRAINT `carritocompras_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.carritocompras: ~0 rows (aproximadamente)
 DELETE FROM `carritocompras`;
-/*!40000 ALTER TABLE `carritocompras` DISABLE KEYS */;
-/*!40000 ALTER TABLE `carritocompras` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.categorias
 CREATE TABLE IF NOT EXISTS `categorias` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
-  `padre` int(11) NOT NULL DEFAULT '0',
+  `padre` int NOT NULL DEFAULT '0',
   `estado` varchar(20) DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.categorias: ~10 rows (aproximadamente)
 DELETE FROM `categorias`;
-/*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
 INSERT INTO `categorias` (`id`, `nombre`, `padre`, `estado`, `imagen`) VALUES
 	(8, 'PANTALONES', 0, '1', '/storage/categorias/FaWMVQs45AK9P0WS5m1bedSwN2PcUx8h1oDBSuUe.svg'),
 	(9, 'CHAQUETAS', 8, '1', '/storage/categorias/sQLspQ8lwMrenOnOyHpGZCQt1TSVHU8oI6H6jOgD.svg'),
@@ -75,7 +72,6 @@ INSERT INTO `categorias` (`id`, `nombre`, `padre`, `estado`, `imagen`) VALUES
 	(15, 'DORMIR', 0, '1', '/storage/categorias/i4BR3FMESer5YCDGmvmENGLGQqZYxpqjqRXvC3CH.svg'),
 	(16, 'TRAJE DE BAÑO', 0, '1', '/storage/categorias/kpkENYmGRcnJ9B08b86uq0puFqgFBIsogMRp6Yw9.svg'),
 	(17, 'CAMISETAS', 0, '1', '/storage/categorias/8OcFwupm1PxkBuLDETLATAQvfj4DziT2MRwUsG9d.svg');
-/*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.ciudades
 CREATE TABLE IF NOT EXISTS `ciudades` (
@@ -83,11 +79,10 @@ CREATE TABLE IF NOT EXISTS `ciudades` (
   `ciudad` varchar(100) DEFAULT NULL,
   `provincias_id` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.ciudades: ~227 rows (aproximadamente)
 DELETE FROM `ciudades`;
-/*!40000 ALTER TABLE `ciudades` DISABLE KEYS */;
 INSERT INTO `ciudades` (`id`, `ciudad`, `provincias_id`) VALUES
 	('0101', 'CUENCA', '01'),
 	('0102', 'GIRÓN', '01'),
@@ -316,118 +311,107 @@ INSERT INTO `ciudades` (`id`, `ciudad`, `provincias_id`) VALUES
 	('2401', 'SANTA ELENA', '24'),
 	('2402', 'LA LIBERTAD', '24'),
 	('2403', 'SALINAS', '24');
-/*!40000 ALTER TABLE `ciudades` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.clientes
 CREATE TABLE IF NOT EXISTS `clientes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `usuario_id` bigint(20) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `usuario_id` bigint DEFAULT NULL,
   `documento` varchar(45) DEFAULT NULL,
   `nombre` varchar(100) NOT NULL,
   `direccion` varchar(255) DEFAULT NULL,
   `telefono` varchar(20) DEFAULT NULL,
   `estado` varchar(50) DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
-  `tipo_documento_id` int(11) NOT NULL,
+  `tipo_documento_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_clientes_tipo_documento1_idx` (`tipo_documento_id`),
   CONSTRAINT `fk_clientes_tipo_documento1` FOREIGN KEY (`tipo_documento_id`) REFERENCES `tipo_documento` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.clientes: ~2 rows (aproximadamente)
 DELETE FROM `clientes`;
-/*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
 INSERT INTO `clientes` (`id`, `usuario_id`, `documento`, `nombre`, `direccion`, `telefono`, `estado`, `imagen`, `tipo_documento_id`) VALUES
 	(1, 4, '0503341810', 'TANIA PESANTEZ', 'LATACUNGA', '0996269763', '1', NULL, 2),
 	(2, 8, '0504353211', 'DANNY GARCIA', 'Latacunga', '0996269763', '1', NULL, 1);
-/*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.comentariosreseñas
 CREATE TABLE IF NOT EXISTS `comentariosreseñas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `cliente_id` int(11) DEFAULT NULL,
-  `producto_id` int(11) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cliente_id` int DEFAULT NULL,
+  `producto_id` int DEFAULT NULL,
   `comentario` text,
-  `puntuacion` int(11) DEFAULT NULL,
+  `puntuacion` int DEFAULT NULL,
   `fecha_comentario` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `cliente_id` (`cliente_id`),
   KEY `producto_id` (`producto_id`),
   CONSTRAINT `comentariosreseñas_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
   CONSTRAINT `comentariosreseñas_ibfk_2` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.comentariosreseñas: ~0 rows (aproximadamente)
 DELETE FROM `comentariosreseñas`;
-/*!40000 ALTER TABLE `comentariosreseñas` DISABLE KEYS */;
-/*!40000 ALTER TABLE `comentariosreseñas` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.datosfacturacion
 CREATE TABLE IF NOT EXISTS `datosfacturacion` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `cliente_id` int(11) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cliente_id` int DEFAULT NULL,
   `nombre` varchar(100) DEFAULT NULL,
   `ruc_cedula` varchar(20) DEFAULT NULL,
   `direccion` varchar(255) DEFAULT NULL,
   `ciudad` varchar(100) DEFAULT NULL,
   `telefono` varchar(20) DEFAULT NULL,
-  `tipo_documento_id` int(11) NOT NULL,
+  `tipo_documento_id` int NOT NULL,
   `estado` varchar(50) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `cliente_id` (`cliente_id`),
   KEY `fk_datosfacturacion_tipo_documento1_idx` (`tipo_documento_id`),
   CONSTRAINT `datosfacturacion_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
   CONSTRAINT `fk_datosfacturacion_tipo_documento1` FOREIGN KEY (`tipo_documento_id`) REFERENCES `tipo_documento` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla pwa_ecommerce.datosfacturacion: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.datosfacturacion: ~0 rows (aproximadamente)
 DELETE FROM `datosfacturacion`;
-/*!40000 ALTER TABLE `datosfacturacion` DISABLE KEYS */;
 INSERT INTO `datosfacturacion` (`id`, `cliente_id`, `nombre`, `ruc_cedula`, `direccion`, `ciudad`, `telefono`, `tipo_documento_id`, `estado`) VALUES
 	(4, 2, 'DANNY GARCIA', '0504353210', 'LATACUNGA, SAN FELIPE ECOPHARMACY', 'LATACUNGA', '0996269763', 1, '1');
-/*!40000 ALTER TABLE `datosfacturacion` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.detallescarrito
 CREATE TABLE IF NOT EXISTS `detallescarrito` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `carrito_id` int(11) DEFAULT NULL,
-  `variante_id` int(11) DEFAULT NULL,
-  `cantidad` int(11) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `carrito_id` int DEFAULT NULL,
+  `variante_id` int DEFAULT NULL,
+  `cantidad` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `carrito_id` (`carrito_id`),
   KEY `variante_id` (`variante_id`),
   CONSTRAINT `detallescarrito_ibfk_1` FOREIGN KEY (`carrito_id`) REFERENCES `carritocompras` (`id`),
   CONSTRAINT `detallescarrito_ibfk_2` FOREIGN KEY (`variante_id`) REFERENCES `variantes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.detallescarrito: ~0 rows (aproximadamente)
 DELETE FROM `detallescarrito`;
-/*!40000 ALTER TABLE `detallescarrito` DISABLE KEYS */;
-/*!40000 ALTER TABLE `detallescarrito` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.detallesorden
 CREATE TABLE IF NOT EXISTS `detallesorden` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `orden_id` int(11) DEFAULT NULL,
-  `variante_id` int(11) DEFAULT NULL,
-  `cantidad` int(11) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `orden_id` int DEFAULT NULL,
+  `variante_id` int DEFAULT NULL,
+  `cantidad` int DEFAULT NULL,
   `subtotal` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `orden_id` (`orden_id`),
   KEY `variante_id` (`variante_id`),
   CONSTRAINT `detallesorden_ibfk_1` FOREIGN KEY (`orden_id`) REFERENCES `ordenes` (`id`),
   CONSTRAINT `detallesorden_ibfk_2` FOREIGN KEY (`variante_id`) REFERENCES `variantes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.detallesorden: ~0 rows (aproximadamente)
 DELETE FROM `detallesorden`;
-/*!40000 ALTER TABLE `detallesorden` DISABLE KEYS */;
-/*!40000 ALTER TABLE `detallesorden` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.direccionesentrega
 CREATE TABLE IF NOT EXISTS `direccionesentrega` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `cliente_id` int(11) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cliente_id` int DEFAULT NULL,
   `cedula` varchar(45) DEFAULT NULL,
   `direccion` varchar(255) DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
@@ -436,19 +420,17 @@ CREATE TABLE IF NOT EXISTS `direccionesentrega` (
   PRIMARY KEY (`id`),
   KEY `cliente_id` (`cliente_id`),
   CONSTRAINT `direccionesentrega_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.direccionesentrega: ~2 rows (aproximadamente)
 DELETE FROM `direccionesentrega`;
-/*!40000 ALTER TABLE `direccionesentrega` DISABLE KEYS */;
 INSERT INTO `direccionesentrega` (`id`, `cliente_id`, `cedula`, `direccion`, `estado`, `parroquia_id`, `comentarios`) VALUES
 	(1, 1, '0503341810001', 'Latacunga', '1', '010101', 'comen'),
 	(2, 2, '0504353210', 'LATACUNGA AA', '1', '050104', 'COMENTARIO');
-/*!40000 ALTER TABLE `direccionesentrega` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.empresa
 CREATE TABLE IF NOT EXISTS `empresa` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `ruc` varchar(45) DEFAULT NULL,
   `razon_social` varchar(255) DEFAULT NULL,
   `direccion` varchar(255) DEFAULT NULL,
@@ -463,55 +445,49 @@ CREATE TABLE IF NOT EXISTS `empresa` (
   `usuario` varchar(50) DEFAULT NULL,
   `clave` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla pwa_ecommerce.empresa: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.empresa: ~0 rows (aproximadamente)
 DELETE FROM `empresa`;
-/*!40000 ALTER TABLE `empresa` DISABLE KEYS */;
 INSERT INTO `empresa` (`id`, `ruc`, `razon_social`, `direccion`, `obligado_contabilidad`, `regimen`, `logo`, `ambiente`, `establecimiento`, `punto_emision`, `secuencial`, `archivop12`, `usuario`, `clave`) VALUES
 	(1, '0503341810001', 'NOMBRE EMPRESA', 'DIRECCION', 1, 'General', 'null', '2', '001', '002', '1', '/storage/firma/0503341810001.p12', '1500521560', 'Prueba123$');
-/*!40000 ALTER TABLE `empresa` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.estado_orden
 CREATE TABLE IF NOT EXISTS `estado_orden` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `estado` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.estado_orden: ~0 rows (aproximadamente)
 DELETE FROM `estado_orden`;
-/*!40000 ALTER TABLE `estado_orden` DISABLE KEYS */;
-/*!40000 ALTER TABLE `estado_orden` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.facturas_electronicas
 CREATE TABLE IF NOT EXISTS `facturas_electronicas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `factura` varchar(45) DEFAULT NULL,
   `estado` varchar(45) DEFAULT NULL,
   `numero_autorizacion` varchar(100) DEFAULT NULL,
   `clave_acceso` varchar(100) DEFAULT NULL,
   `fecha` varchar(45) DEFAULT NULL,
   `descargada` varchar(45) DEFAULT NULL,
-  `ordenes_id` int(11) NOT NULL,
+  `ordenes_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_facturas_ordenes1_idx` (`ordenes_id`),
   CONSTRAINT `fk_facturas_ordenes1` FOREIGN KEY (`ordenes_id`) REFERENCES `ordenes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.facturas_electronicas: ~0 rows (aproximadamente)
 DELETE FROM `facturas_electronicas`;
-/*!40000 ALTER TABLE `facturas_electronicas` DISABLE KEYS */;
-/*!40000 ALTER TABLE `facturas_electronicas` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.failed_jobs
 CREATE TABLE IF NOT EXISTS `failed_jobs` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
@@ -519,64 +495,55 @@ CREATE TABLE IF NOT EXISTS `failed_jobs` (
 
 -- Volcando datos para la tabla pwa_ecommerce.failed_jobs: ~0 rows (aproximadamente)
 DELETE FROM `failed_jobs`;
-/*!40000 ALTER TABLE `failed_jobs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `failed_jobs` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.formas_pago
 CREATE TABLE IF NOT EXISTS `formas_pago` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `pago` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.formas_pago: ~0 rows (aproximadamente)
 DELETE FROM `formas_pago`;
-/*!40000 ALTER TABLE `formas_pago` DISABLE KEYS */;
-/*!40000 ALTER TABLE `formas_pago` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.info_adicional
 CREATE TABLE IF NOT EXISTS `info_adicional` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(45) DEFAULT NULL,
   `descripcion` varchar(255) DEFAULT NULL,
-  `ordenes_id` int(11) NOT NULL,
+  `ordenes_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_info_adicional_ordenes1_idx` (`ordenes_id`),
   CONSTRAINT `fk_info_adicional_ordenes1` FOREIGN KEY (`ordenes_id`) REFERENCES `ordenes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.info_adicional: ~0 rows (aproximadamente)
 DELETE FROM `info_adicional`;
-/*!40000 ALTER TABLE `info_adicional` DISABLE KEYS */;
-/*!40000 ALTER TABLE `info_adicional` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.marcas
 CREATE TABLE IF NOT EXISTS `marcas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
   `estado` varchar(20) DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla pwa_ecommerce.marcas: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.marcas: ~0 rows (aproximadamente)
 DELETE FROM `marcas`;
-/*!40000 ALTER TABLE `marcas` DISABLE KEYS */;
 INSERT INTO `marcas` (`id`, `nombre`, `estado`, `imagen`) VALUES
 	(1, 'ROMAYA', '1', NULL);
-/*!40000 ALTER TABLE `marcas` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.migrations
 CREATE TABLE IF NOT EXISTS `migrations` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `batch` int(11) NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.migrations: ~9 rows (aproximadamente)
 DELETE FROM `migrations`;
-/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(1, '2014_10_12_000000_create_users_table', 1),
 	(2, '2014_10_12_100000_create_password_resets_table', 1),
@@ -587,32 +554,43 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(7, '2016_06_01_000003_create_oauth_refresh_tokens_table', 2),
 	(8, '2016_06_01_000004_create_oauth_clients_table', 2),
 	(9, '2016_06_01_000005_create_oauth_personal_access_clients_table', 2);
-/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+
+-- Volcando estructura para tabla pwa_ecommerce.nosotros
+CREATE TABLE IF NOT EXISTS `nosotros` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `mision` text NOT NULL,
+  `vision` text NOT NULL,
+  `historia` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+-- Volcando datos para la tabla pwa_ecommerce.nosotros: ~1 rows (aproximadamente)
+DELETE FROM `nosotros`;
+INSERT INTO `nosotros` (`id`, `mision`, `vision`, `historia`) VALUES
+	(1, '<p class="ql-align-justify">"En Confecciones ROCIO, nuestra misión es vestir a nuestros clientes con prendas de alta calidad y diseño excepcional. Con más de dos décadas de experiencia en la industria de la confección, nos enorgullece ofrecer una amplia gama de faldas, pantalones, blusas y faldas de uniforme que se adaptan a las necesidades y preferencias de cada individuo. Nos esforzamos por ser líderes en la moda, brindando a nuestros clientes la confianza y comodidad que merecen a través de prendas confeccionadas con pasión y dedicación. Además, nos comprometemos a mantener un estándar ético y sostenible en cada paso de nuestro proceso de producción para contribuir a un mundo mejor."</p>', '<p class="ql-align-justify">Ser reconocidos como el proveedor preferido de faldas, pantalones, blusas y faldas de uniforme, tanto en el mercado nacional como internacional. Nos esforzamos por mantenernos a la vanguardia de las tendencias de la moda, la innovación en diseño y la calidad de nuestros productos. Nuestro objetivo es seguir creciendo y expandiendo nuestro negocio, manteniendo siempre nuestro compromiso con la excelencia y la satisfacción del cliente.</p>', '<p class="ql-align-justify">La historia de CONFECCIONES ROCIO, que eventualmente se especializó en faldas de uniformes para colegialas y pantalones casuales para damas, es un testimonio del espíritu emprendedor y la adaptabilidad empresarial. Su viaje comenzó en octubre de 1985 y ha sido un viaje fascinante a lo largo de los años.</p><p class="ql-align-justify"><br></p><p class="ql-align-justify">Fundación (1985-1990): La empresa fue fundada en octubre de 1985 por GRACIELA YANCHAPANTA GOMEZ. En sus primeros años, se centró en la confección de faldas casuales para mujeres de todas las edades. El enfoque principal era ofrecer prendas de calidad que fueran cómodas y elegantes para las mujeres que buscaban una alternativa a los pantalones en su vida diaria.</p><p class="ql-align-justify"><br></p><p class="ql-align-justify">Crecimiento y Diversificación (1990-2000): Durante la década de 1990, la empresa experimentó un crecimiento constante a medida que ganó una reputación por sus faldas de alta calidad. La demanda aumentó y la empresa comenzó a diversificar su línea de productos. Fue entonces cuando decidió expandirse hacia la confección de faldas de uniformes para colegialas. Esta decisión resultó ser un éxito, ya que las faldas uniformes de la empresa se convirtieron en una opción popular para muchas instituciones educativas.</p><p class="ql-align-justify"><br></p><p class="ql-align-justify">Éxito en el Segmento de Uniformes Escolares (2000-2010): La empresa continuó enfocándose en la confección de faldas de uniformes escolares durante la década de 2000. La calidad y la variedad de diseños se convirtieron en su sello distintivo. Establecieron relaciones sólidas con distribuidores locales y regionales, convirtiéndose en el proveedor preferido de faldas de uniformes escolares. Este período de éxito consolidó su posición en el mercado.</p><p class="ql-align-justify"><br></p><p class="ql-align-justify">Expansión a Pantalones Casuales (2010-Presente): A medida que la moda y las preferencias de las mujeres evolucionaron, la empresa decidió diversificar aún más su línea de productos en la década de 2010. Se aventuraron en la confección de pantalones casuales para damas, manteniendo los mismos estándares de calidad que habían hecho famosas sus faldas. Los pantalones casuales se convirtieron en un complemento perfecto para su línea de faldas, ofreciendo a las clientas una gama más completa de opciones de vestimenta.</p><p class="ql-align-justify"><br></p><p class="ql-align-justify">Innovación y Sostenibilidad (Presente): A medida que avanzamos en el siglo XXI, la empresa ha mantenido su compromiso con la innovación y la sostenibilidad. Han incorporado materiales ecológicos en su producción y han adoptado prácticas más sostenibles en toda la cadena de suministro. Además, han aprovechado la tecnología moderna para personalizar sus productos y brindar una experiencia de compra en línea más conveniente para sus clientes.</p><p class="ql-align-justify"><br></p><p class="ql-align-justify">En resumen, esta empresa de confección de faldas casuales para damas, que comenzó en octubre de 1985, ha recorrido un largo camino desde sus modestos comienzos. Su adaptabilidad, calidad y enfoque en las necesidades cambiantes de las mujeres a lo largo de los años la han convertido en un actor destacado en la industria de la moda. Desde sus faldas casuales originales hasta sus exitosas faldas de uniformes escolares y pantalones casuales, han demostrado que la perseverancia y la innovación son clave para el éxito empresarial a largo plazo.</p>');
 
 -- Volcando estructura para tabla pwa_ecommerce.notificaciones
 CREATE TABLE IF NOT EXISTS `notificaciones` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `usuario_id` int(11) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `usuario_id` int DEFAULT NULL,
   `mensaje` text,
   `leida` tinyint(1) DEFAULT NULL,
   `fecha_envio` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `usuario_id` (`usuario_id`),
   CONSTRAINT `notificaciones_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.notificaciones: ~0 rows (aproximadamente)
 DELETE FROM `notificaciones`;
-/*!40000 ALTER TABLE `notificaciones` DISABLE KEYS */;
-/*!40000 ALTER TABLE `notificaciones` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.oauth_access_tokens
 CREATE TABLE IF NOT EXISTS `oauth_access_tokens` (
-  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` bigint(20) unsigned DEFAULT NULL,
-  `client_id` bigint(20) unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `scopes` text COLLATE utf8mb4_unicode_ci,
+  `id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint unsigned DEFAULT NULL,
+  `client_id` bigint unsigned NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `scopes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `revoked` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -623,15 +601,13 @@ CREATE TABLE IF NOT EXISTS `oauth_access_tokens` (
 
 -- Volcando datos para la tabla pwa_ecommerce.oauth_access_tokens: ~0 rows (aproximadamente)
 DELETE FROM `oauth_access_tokens`;
-/*!40000 ALTER TABLE `oauth_access_tokens` DISABLE KEYS */;
-/*!40000 ALTER TABLE `oauth_access_tokens` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.oauth_auth_codes
 CREATE TABLE IF NOT EXISTS `oauth_auth_codes` (
-  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` bigint(20) unsigned NOT NULL,
-  `client_id` bigint(20) unsigned NOT NULL,
-  `scopes` text COLLATE utf8mb4_unicode_ci,
+  `id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint unsigned NOT NULL,
+  `client_id` bigint unsigned NOT NULL,
+  `scopes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `revoked` tinyint(1) NOT NULL,
   `expires_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -640,17 +616,15 @@ CREATE TABLE IF NOT EXISTS `oauth_auth_codes` (
 
 -- Volcando datos para la tabla pwa_ecommerce.oauth_auth_codes: ~0 rows (aproximadamente)
 DELETE FROM `oauth_auth_codes`;
-/*!40000 ALTER TABLE `oauth_auth_codes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `oauth_auth_codes` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.oauth_clients
 CREATE TABLE IF NOT EXISTS `oauth_clients` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) unsigned DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `secret` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `provider` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `redirect` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint unsigned DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `secret` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `provider` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `redirect` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `personal_access_client` tinyint(1) NOT NULL,
   `password_client` tinyint(1) NOT NULL,
   `revoked` tinyint(1) NOT NULL,
@@ -662,32 +636,28 @@ CREATE TABLE IF NOT EXISTS `oauth_clients` (
 
 -- Volcando datos para la tabla pwa_ecommerce.oauth_clients: ~2 rows (aproximadamente)
 DELETE FROM `oauth_clients`;
-/*!40000 ALTER TABLE `oauth_clients` DISABLE KEYS */;
 INSERT INTO `oauth_clients` (`id`, `user_id`, `name`, `secret`, `provider`, `redirect`, `personal_access_client`, `password_client`, `revoked`, `created_at`, `updated_at`) VALUES
-	(1, NULL, 'Laravel Personal Access Client', 'R2u2AOaRPhI5l2Y8EI9WVKrnBoTtVEkOwekHlsMM', NULL, 'http://localhost', 1, 0, 0, '2023-09-05 01:10:56', '2023-09-05 01:10:56'),
-	(2, NULL, 'Laravel Password Grant Client', 'qkBQg29FBIXDSKcIV0v30G4sg1LpUA7WK1xqPQBe', 'users', 'http://localhost', 0, 1, 0, '2023-09-05 01:10:56', '2023-09-05 01:10:56');
-/*!40000 ALTER TABLE `oauth_clients` ENABLE KEYS */;
+	(1, NULL, 'Laravel Personal Access Client', 'R2u2AOaRPhI5l2Y8EI9WVKrnBoTtVEkOwekHlsMM', NULL, 'http://localhost', 1, 0, 0, '2023-09-05 06:10:56', '2023-09-05 06:10:56'),
+	(2, NULL, 'Laravel Password Grant Client', 'qkBQg29FBIXDSKcIV0v30G4sg1LpUA7WK1xqPQBe', 'users', 'http://localhost', 0, 1, 0, '2023-09-05 06:10:56', '2023-09-05 06:10:56');
 
 -- Volcando estructura para tabla pwa_ecommerce.oauth_personal_access_clients
 CREATE TABLE IF NOT EXISTS `oauth_personal_access_clients` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `client_id` bigint(20) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `client_id` bigint unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla pwa_ecommerce.oauth_personal_access_clients: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.oauth_personal_access_clients: ~0 rows (aproximadamente)
 DELETE FROM `oauth_personal_access_clients`;
-/*!40000 ALTER TABLE `oauth_personal_access_clients` DISABLE KEYS */;
 INSERT INTO `oauth_personal_access_clients` (`id`, `client_id`, `created_at`, `updated_at`) VALUES
-	(1, 1, '2023-09-05 01:10:56', '2023-09-05 01:10:56');
-/*!40000 ALTER TABLE `oauth_personal_access_clients` ENABLE KEYS */;
+	(1, 1, '2023-09-05 06:10:56', '2023-09-05 06:10:56');
 
 -- Volcando estructura para tabla pwa_ecommerce.oauth_refresh_tokens
 CREATE TABLE IF NOT EXISTS `oauth_refresh_tokens` (
-  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `access_token_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `access_token_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `revoked` tinyint(1) NOT NULL,
   `expires_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -696,36 +666,32 @@ CREATE TABLE IF NOT EXISTS `oauth_refresh_tokens` (
 
 -- Volcando datos para la tabla pwa_ecommerce.oauth_refresh_tokens: ~0 rows (aproximadamente)
 DELETE FROM `oauth_refresh_tokens`;
-/*!40000 ALTER TABLE `oauth_refresh_tokens` DISABLE KEYS */;
-/*!40000 ALTER TABLE `oauth_refresh_tokens` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.ofertasespeciales
 CREATE TABLE IF NOT EXISTS `ofertasespeciales` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `producto_id` int(11) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `producto_id` int DEFAULT NULL,
   `descuento` decimal(5,2) DEFAULT NULL,
   `fecha_inicio` date DEFAULT NULL,
   `fecha_fin` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `producto_id` (`producto_id`),
   CONSTRAINT `ofertasespeciales_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.ofertasespeciales: ~0 rows (aproximadamente)
 DELETE FROM `ofertasespeciales`;
-/*!40000 ALTER TABLE `ofertasespeciales` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ofertasespeciales` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.ordenes
 CREATE TABLE IF NOT EXISTS `ordenes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `cliente_id` int(11) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cliente_id` int DEFAULT NULL,
   `fecha` date DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   `total` decimal(10,2) DEFAULT NULL,
-  `estado_orden_id` int(11) NOT NULL,
-  `datosfacturacion_id` int(11) NOT NULL,
-  `direccionesentrega_id` int(11) NOT NULL,
+  `estado_orden_id` int NOT NULL,
+  `datosfacturacion_id` int NOT NULL,
+  `direccionesentrega_id` int NOT NULL,
   `subtotal12` decimal(12,2) DEFAULT NULL,
   `subtotaliva0` decimal(12,2) DEFAULT NULL,
   `subtotal_sin_impuestos` decimal(12,2) DEFAULT NULL,
@@ -740,32 +706,28 @@ CREATE TABLE IF NOT EXISTS `ordenes` (
   CONSTRAINT `fk_ordenes_direccionesentrega1` FOREIGN KEY (`direccionesentrega_id`) REFERENCES `direccionesentrega` (`id`),
   CONSTRAINT `fk_ordenes_estado_orden1` FOREIGN KEY (`estado_orden_id`) REFERENCES `estado_orden` (`id`),
   CONSTRAINT `ordenes_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.ordenes: ~0 rows (aproximadamente)
 DELETE FROM `ordenes`;
-/*!40000 ALTER TABLE `ordenes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ordenes` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.pagos_orden
 CREATE TABLE IF NOT EXISTS `pagos_orden` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `total` decimal(12,2) DEFAULT NULL,
   `plazo` varchar(45) DEFAULT NULL,
   `tiempo` varchar(45) DEFAULT NULL,
-  `formas_pago_id` int(11) NOT NULL,
-  `ordenes_id` int(11) NOT NULL,
+  `formas_pago_id` int NOT NULL,
+  `ordenes_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_pagos_orden_formas_pago1_idx` (`formas_pago_id`),
   KEY `fk_pagos_orden_ordenes1_idx` (`ordenes_id`),
   CONSTRAINT `fk_pagos_orden_formas_pago1` FOREIGN KEY (`formas_pago_id`) REFERENCES `formas_pago` (`id`),
   CONSTRAINT `fk_pagos_orden_ordenes1` FOREIGN KEY (`ordenes_id`) REFERENCES `ordenes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.pagos_orden: ~0 rows (aproximadamente)
 DELETE FROM `pagos_orden`;
-/*!40000 ALTER TABLE `pagos_orden` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pagos_orden` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.parroquias
 CREATE TABLE IF NOT EXISTS `parroquias` (
@@ -777,7 +739,6 @@ CREATE TABLE IF NOT EXISTS `parroquias` (
 
 -- Volcando datos para la tabla pwa_ecommerce.parroquias: ~1.373 rows (aproximadamente)
 DELETE FROM `parroquias`;
-/*!40000 ALTER TABLE `parroquias` DISABLE KEYS */;
 INSERT INTO `parroquias` (`id`, `parroquia`, `ciudad_id`) VALUES
 	('010101', 'BELLAVISTA', '0101'),
 	('010102', 'CAÑARIBAMBA', '0101'),
@@ -2152,29 +2113,26 @@ INSERT INTO `parroquias` (`id`, `parroquia`, `ciudad_id`) VALUES
 	('240350', 'SALINAS', '2403'),
 	('240351', 'ANCONCITO', '2403'),
 	('240352', 'JOSÉ LUIS TAMAYO (MUEY)', '2403');
-/*!40000 ALTER TABLE `parroquias` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.password_resets
 CREATE TABLE IF NOT EXISTS `password_resets` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   KEY `password_resets_email_index` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.password_resets: ~0 rows (aproximadamente)
 DELETE FROM `password_resets`;
-/*!40000 ALTER TABLE `password_resets` DISABLE KEYS */;
-/*!40000 ALTER TABLE `password_resets` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.personal_access_tokens
 CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tokenable_id` bigint(20) unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text COLLATE utf8mb4_unicode_ci,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `tokenable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_id` bigint unsigned NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -2185,14 +2143,12 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
 
 -- Volcando datos para la tabla pwa_ecommerce.personal_access_tokens: ~0 rows (aproximadamente)
 DELETE FROM `personal_access_tokens`;
-/*!40000 ALTER TABLE `personal_access_tokens` DISABLE KEYS */;
-/*!40000 ALTER TABLE `personal_access_tokens` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.productos
 CREATE TABLE IF NOT EXISTS `productos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `categoria_id` int(11) DEFAULT NULL,
-  `marca_id` int(11) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `categoria_id` int DEFAULT NULL,
+  `marca_id` int DEFAULT NULL,
   `nombre` varchar(100) NOT NULL,
   `descripcion` longtext,
   `precio` decimal(10,2) DEFAULT NULL,
@@ -2204,45 +2160,40 @@ CREATE TABLE IF NOT EXISTS `productos` (
   KEY `marca_id` (`marca_id`),
   CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`),
   CONSTRAINT `productos_ibfk_2` FOREIGN KEY (`marca_id`) REFERENCES `marcas` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.productos: ~3 rows (aproximadamente)
 DELETE FROM `productos`;
-/*!40000 ALTER TABLE `productos` DISABLE KEYS */;
 INSERT INTO `productos` (`id`, `categoria_id`, `marca_id`, `nombre`, `descripcion`, `precio`, `estado`, `imagen`, `caracteristicas`) VALUES
 	(3, 10, 1, 'UNIFORME', '<ul><li>DESCRIPCION RWEREW ERWER </li></ul><p>ERWEREWR <strong>RRRR</strong></p>', 4.90, '1', '/storage/productos/OHUbne6Eb4Kg2V7DAgFHptqODn5JceIkxyC8D1Wm.jpg', '<ol><li>CARACTERISTICAS</li><li>RR</li></ol>'),
 	(4, 10, 1, 'FALDA UNIFORME', '<p><strong>FALDA DE UNIFORME</strong></p>', 15.00, '1', '/storage/productos/XxwlKj4kkBsNI3orCBT5OMC2Zzck3PKIJn8W2mGB.jpg', '<ol><li>CARACTERISTICA 1</li><li>CARACTERISTICA 2</li></ol>'),
 	(5, 8, 1, 'PANTALON UNIFORME', '<p>PANTALON DE UNIFORME</p>', 14.00, '1', '/storage/productos/EIYOL4Hn9YfN7HWu9FC5IIaim1rhEKTgilt6Wzwo.jpg', '<ul><li>CARAC1</li><li>CARAC2</li><li>CARAC3</li></ul>');
-/*!40000 ALTER TABLE `productos` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.productosdeseados
 CREATE TABLE IF NOT EXISTS `productosdeseados` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `cliente_id` int(11) DEFAULT NULL,
-  `producto_id` int(11) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cliente_id` int DEFAULT NULL,
+  `producto_id` int DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `cliente_id` (`cliente_id`),
   KEY `producto_id` (`producto_id`),
   CONSTRAINT `productosdeseados_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
   CONSTRAINT `productosdeseados_ibfk_2` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.productosdeseados: ~0 rows (aproximadamente)
 DELETE FROM `productosdeseados`;
-/*!40000 ALTER TABLE `productosdeseados` DISABLE KEYS */;
-/*!40000 ALTER TABLE `productosdeseados` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.provincias
 CREATE TABLE IF NOT EXISTS `provincias` (
   `id` varchar(50) NOT NULL,
   `provincia` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.provincias: ~24 rows (aproximadamente)
 DELETE FROM `provincias`;
-/*!40000 ALTER TABLE `provincias` DISABLE KEYS */;
 INSERT INTO `provincias` (`id`, `provincia`) VALUES
 	('01', 'AZUAY'),
 	('02', 'BOLÍVAR'),
@@ -2268,124 +2219,111 @@ INSERT INTO `provincias` (`id`, `provincia`) VALUES
 	('22', 'ORELLANA'),
 	('23', 'STO DOMINGO DE LOS TSÁCHILAS '),
 	('24', 'SANTA ELENA');
-/*!40000 ALTER TABLE `provincias` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.publicidad
 CREATE TABLE IF NOT EXISTS `publicidad` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `titulo` varchar(100) DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
   `enlace` varchar(255) DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.publicidad: ~0 rows (aproximadamente)
 DELETE FROM `publicidad`;
-/*!40000 ALTER TABLE `publicidad` DISABLE KEYS */;
-/*!40000 ALTER TABLE `publicidad` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.roles
 CREATE TABLE IF NOT EXISTS `roles` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla pwa_ecommerce.roles: ~2 rows (aproximadamente)
 DELETE FROM `roles`;
-/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
 INSERT INTO `roles` (`id`, `nombre`) VALUES
 	(1, 'Admin'),
 	(2, 'Clientes');
-/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.sliders
 CREATE TABLE IF NOT EXISTS `sliders` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `titulo` varchar(100) DEFAULT NULL,
   `descripcion` text,
   `imagen` varchar(255) DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla pwa_ecommerce.sliders: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.sliders: ~0 rows (aproximadamente)
 DELETE FROM `sliders`;
-/*!40000 ALTER TABLE `sliders` DISABLE KEYS */;
 INSERT INTO `sliders` (`id`, `titulo`, `descripcion`, `imagen`, `estado`) VALUES
 	(1, 'SLIDER1', 'PROMO 2', '/storage/sliders/PDAvRD6ap9RqEjvbdAFhp0U5WnrhKWSm1TI4lw3K.jpg', '1');
-/*!40000 ALTER TABLE `sliders` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.tipo_documento
 CREATE TABLE IF NOT EXISTS `tipo_documento` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(45) DEFAULT NULL,
   `valor` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla pwa_ecommerce.tipo_documento: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.tipo_documento: ~0 rows (aproximadamente)
 DELETE FROM `tipo_documento`;
-/*!40000 ALTER TABLE `tipo_documento` DISABLE KEYS */;
 INSERT INTO `tipo_documento` (`id`, `nombre`, `valor`) VALUES
 	(1, 'Cedula', '04'),
 	(2, 'Ruc', '05');
-/*!40000 ALTER TABLE `tipo_documento` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.users
 CREATE TABLE IF NOT EXISTS `users` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `rol_id` int(11) DEFAULT NULL,
+  `rol_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla pwa_ecommerce.users: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.users: ~0 rows (aproximadamente)
 DELETE FROM `users`;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `rol_id`) VALUES
-	(3, 'Danny Garcia', 'dannyggg23@gmail.com', NULL, '$2y$10$cvsKaLYriD5QUhXB7eoDu.3KdC8fo0pd0bXM4ypJdZ2SB6HUfGqBq', NULL, '2023-09-05 15:09:14', '2023-09-05 15:09:14', 1),
-	(4, 'Tania Guarucha', 'tania.pesantez@gmail.com', '2023-09-07 12:49:06', '$2y$10$cvsKaLYriD5QUhXB7eoDu.3KdC8fo0pd0bXM4ypJdZ2SB6HUfGqBq', NULL, '2023-09-07 12:49:11', '2023-09-07 12:49:12', 2),
-	(8, 'DANNY GARCIA', 'aadannyggg23@gmail.com', NULL, '$2y$10$dUdDAr28CtSqJeesELV1a.veLCFSoeg6XBIrQnyg8OmMJoNu3suEe', NULL, '2023-09-19 00:32:20', '2023-09-19 00:54:52', 2);
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+	(3, 'Danny Garcia', 'dannyggg23@gmail.com', NULL, '$2y$10$cvsKaLYriD5QUhXB7eoDu.3KdC8fo0pd0bXM4ypJdZ2SB6HUfGqBq', NULL, '2023-09-05 20:09:14', '2023-09-05 20:09:14', 1),
+	(4, 'Tania Guarucha', 'tania.pesantez@gmail.com', '2023-09-07 17:49:06', '$2y$10$cvsKaLYriD5QUhXB7eoDu.3KdC8fo0pd0bXM4ypJdZ2SB6HUfGqBq', NULL, '2023-09-07 17:49:11', '2023-09-07 17:49:12', 2),
+	(8, 'DANNY GARCIA', 'aadannyggg23@gmail.com', NULL, '$2y$10$dUdDAr28CtSqJeesELV1a.veLCFSoeg6XBIrQnyg8OmMJoNu3suEe', NULL, '2023-09-19 05:32:20', '2023-09-19 05:54:52', 2);
 
 -- Volcando estructura para tabla pwa_ecommerce.usuarios
 CREATE TABLE IF NOT EXISTS `usuarios` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
   `correo_electronico` varchar(100) NOT NULL,
   `contrasena` varchar(100) NOT NULL,
-  `rol_id` int(11) DEFAULT NULL,
+  `rol_id` int DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `rol_id` (`rol_id`),
   CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla pwa_ecommerce.usuarios: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.usuarios: ~0 rows (aproximadamente)
 DELETE FROM `usuarios`;
-/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
 INSERT INTO `usuarios` (`id`, `nombre`, `correo_electronico`, `contrasena`, `rol_id`, `estado`, `imagen`) VALUES
 	(1, 'DANNY GARCIA', 'dannyggg23@gmail.com', '12345', 1, '1', NULL),
 	(2, 'Nombre del Usuario', 'correo@example.com', '$2y$10$JkDHiNez7zMhw72CAe11ZOgOLG9n.Kjw00SZJHb.qPqSjgA3wohoS', NULL, NULL, NULL);
-/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 
 -- Volcando estructura para tabla pwa_ecommerce.variantes
 CREATE TABLE IF NOT EXISTS `variantes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `producto_id` int(11) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `producto_id` int DEFAULT NULL,
   `color` varchar(50) DEFAULT NULL,
   `talla` varchar(50) DEFAULT NULL,
-  `stock` int(11) DEFAULT NULL,
+  `stock` int DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   `codigo_color` varchar(50) DEFAULT NULL,
   `precio` decimal(12,2) DEFAULT NULL,
@@ -2393,19 +2331,18 @@ CREATE TABLE IF NOT EXISTS `variantes` (
   PRIMARY KEY (`id`),
   KEY `producto_id` (`producto_id`),
   CONSTRAINT `variantes_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla pwa_ecommerce.variantes: ~5 rows (aproximadamente)
+-- Volcando datos para la tabla pwa_ecommerce.variantes: ~0 rows (aproximadamente)
 DELETE FROM `variantes`;
-/*!40000 ALTER TABLE `variantes` DISABLE KEYS */;
 INSERT INTO `variantes` (`id`, `producto_id`, `color`, `talla`, `stock`, `estado`, `codigo_color`, `precio`, `imagen`) VALUES
 	(7, 3, 'CAFE', 'S', 10, '1', '#b78d52', 34.00, '/storage/variantes/SQhlsrgaDyEAhIv2ShJ0XUyQX7Bb1A11nbLmxAgi.jpg'),
 	(8, 4, 'CAFE', 'M', 10, '1', '#a27639', 15.00, '/storage/variantes/L1KtAmi1a1kCz3kTFWyFGpzxy5cVou4yAUjOObZH.jpg'),
 	(9, 4, 'AZUL', 'M', 10, '1', '#325286', 15.00, '/storage/variantes/AILmHlgJF5Z3JYfUV8V7TsNtIa35oo3IsJxvC5r9.jpg'),
 	(10, 5, 'NEGRO', 'M', 10, '1', '#000000', 15.00, '/storage/variantes/rsod5JvNB0VrCfrCWb2ylQROB2ze8rzSX5wpn98h.jpg'),
 	(11, 5, 'PLOMO', 'M', 10, '1', '#989090', 15.00, '/storage/variantes/EKGMRgm8FvB7hbEbpiwyOJfsmmhy37mimaf07msS.jpg');
-/*!40000 ALTER TABLE `variantes` ENABLE KEYS */;
 
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
