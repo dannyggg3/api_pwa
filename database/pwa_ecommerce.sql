@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `banners` (
   `descripcion` varchar(200) DEFAULT NULL,
   `link` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.banners: ~0 rows (aproximadamente)
 DELETE FROM `banners`;
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `carritocompras` (
   PRIMARY KEY (`id`),
   KEY `cliente_id` (`cliente_id`),
   CONSTRAINT `carritocompras_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.carritocompras: ~0 rows (aproximadamente)
 DELETE FROM `carritocompras`;
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `categorias` (
   `estado` varchar(20) DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.categorias: ~10 rows (aproximadamente)
 DELETE FROM `categorias`;
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `ciudades` (
   `ciudad` varchar(100) DEFAULT NULL,
   `provincias_id` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.ciudades: ~227 rows (aproximadamente)
 DELETE FROM `ciudades`;
@@ -326,7 +326,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   PRIMARY KEY (`id`),
   KEY `fk_clientes_tipo_documento1_idx` (`tipo_documento_id`),
   CONSTRAINT `fk_clientes_tipo_documento1` FOREIGN KEY (`tipo_documento_id`) REFERENCES `tipo_documento` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.clientes: ~2 rows (aproximadamente)
 DELETE FROM `clientes`;
@@ -347,7 +347,7 @@ CREATE TABLE IF NOT EXISTS `comentariosreseñas` (
   KEY `producto_id` (`producto_id`),
   CONSTRAINT `comentariosreseñas_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
   CONSTRAINT `comentariosreseñas_ibfk_2` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.comentariosreseñas: ~0 rows (aproximadamente)
 DELETE FROM `comentariosreseñas`;
@@ -368,7 +368,7 @@ CREATE TABLE IF NOT EXISTS `datosfacturacion` (
   KEY `fk_datosfacturacion_tipo_documento1_idx` (`tipo_documento_id`),
   CONSTRAINT `datosfacturacion_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
   CONSTRAINT `fk_datosfacturacion_tipo_documento1` FOREIGN KEY (`tipo_documento_id`) REFERENCES `tipo_documento` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.datosfacturacion: ~0 rows (aproximadamente)
 DELETE FROM `datosfacturacion`;
@@ -386,7 +386,7 @@ CREATE TABLE IF NOT EXISTS `detallescarrito` (
   KEY `variante_id` (`variante_id`),
   CONSTRAINT `detallescarrito_ibfk_1` FOREIGN KEY (`carrito_id`) REFERENCES `carritocompras` (`id`),
   CONSTRAINT `detallescarrito_ibfk_2` FOREIGN KEY (`variante_id`) REFERENCES `variantes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.detallescarrito: ~0 rows (aproximadamente)
 DELETE FROM `detallescarrito`;
@@ -403,7 +403,7 @@ CREATE TABLE IF NOT EXISTS `detallesorden` (
   KEY `variante_id` (`variante_id`),
   CONSTRAINT `detallesorden_ibfk_1` FOREIGN KEY (`orden_id`) REFERENCES `ordenes` (`id`),
   CONSTRAINT `detallesorden_ibfk_2` FOREIGN KEY (`variante_id`) REFERENCES `variantes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.detallesorden: ~0 rows (aproximadamente)
 DELETE FROM `detallesorden`;
@@ -420,7 +420,7 @@ CREATE TABLE IF NOT EXISTS `direccionesentrega` (
   PRIMARY KEY (`id`),
   KEY `cliente_id` (`cliente_id`),
   CONSTRAINT `direccionesentrega_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.direccionesentrega: ~2 rows (aproximadamente)
 DELETE FROM `direccionesentrega`;
@@ -445,7 +445,7 @@ CREATE TABLE IF NOT EXISTS `empresa` (
   `usuario` varchar(50) DEFAULT NULL,
   `clave` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.empresa: ~0 rows (aproximadamente)
 DELETE FROM `empresa`;
@@ -457,7 +457,7 @@ CREATE TABLE IF NOT EXISTS `estado_orden` (
   `id` int NOT NULL AUTO_INCREMENT,
   `estado` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.estado_orden: ~0 rows (aproximadamente)
 DELETE FROM `estado_orden`;
@@ -475,7 +475,7 @@ CREATE TABLE IF NOT EXISTS `facturas_electronicas` (
   PRIMARY KEY (`id`),
   KEY `fk_facturas_ordenes1_idx` (`ordenes_id`),
   CONSTRAINT `fk_facturas_ordenes1` FOREIGN KEY (`ordenes_id`) REFERENCES `ordenes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.facturas_electronicas: ~0 rows (aproximadamente)
 DELETE FROM `facturas_electronicas`;
@@ -501,7 +501,7 @@ CREATE TABLE IF NOT EXISTS `formas_pago` (
   `id` int NOT NULL,
   `pago` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.formas_pago: ~0 rows (aproximadamente)
 DELETE FROM `formas_pago`;
@@ -515,7 +515,7 @@ CREATE TABLE IF NOT EXISTS `info_adicional` (
   PRIMARY KEY (`id`),
   KEY `fk_info_adicional_ordenes1_idx` (`ordenes_id`),
   CONSTRAINT `fk_info_adicional_ordenes1` FOREIGN KEY (`ordenes_id`) REFERENCES `ordenes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.info_adicional: ~0 rows (aproximadamente)
 DELETE FROM `info_adicional`;
@@ -527,7 +527,7 @@ CREATE TABLE IF NOT EXISTS `marcas` (
   `estado` varchar(20) DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.marcas: ~0 rows (aproximadamente)
 DELETE FROM `marcas`;
@@ -579,7 +579,7 @@ CREATE TABLE IF NOT EXISTS `notificaciones` (
   PRIMARY KEY (`id`),
   KEY `usuario_id` (`usuario_id`),
   CONSTRAINT `notificaciones_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.notificaciones: ~0 rows (aproximadamente)
 DELETE FROM `notificaciones`;
@@ -677,7 +677,7 @@ CREATE TABLE IF NOT EXISTS `ofertasespeciales` (
   PRIMARY KEY (`id`),
   KEY `producto_id` (`producto_id`),
   CONSTRAINT `ofertasespeciales_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.ofertasespeciales: ~0 rows (aproximadamente)
 DELETE FROM `ofertasespeciales`;
@@ -706,7 +706,7 @@ CREATE TABLE IF NOT EXISTS `ordenes` (
   CONSTRAINT `fk_ordenes_direccionesentrega1` FOREIGN KEY (`direccionesentrega_id`) REFERENCES `direccionesentrega` (`id`),
   CONSTRAINT `fk_ordenes_estado_orden1` FOREIGN KEY (`estado_orden_id`) REFERENCES `estado_orden` (`id`),
   CONSTRAINT `ordenes_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.ordenes: ~0 rows (aproximadamente)
 DELETE FROM `ordenes`;
@@ -724,7 +724,7 @@ CREATE TABLE IF NOT EXISTS `pagos_orden` (
   KEY `fk_pagos_orden_ordenes1_idx` (`ordenes_id`),
   CONSTRAINT `fk_pagos_orden_formas_pago1` FOREIGN KEY (`formas_pago_id`) REFERENCES `formas_pago` (`id`),
   CONSTRAINT `fk_pagos_orden_ordenes1` FOREIGN KEY (`ordenes_id`) REFERENCES `ordenes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.pagos_orden: ~0 rows (aproximadamente)
 DELETE FROM `pagos_orden`;
@@ -2160,7 +2160,7 @@ CREATE TABLE IF NOT EXISTS `productos` (
   KEY `marca_id` (`marca_id`),
   CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`),
   CONSTRAINT `productos_ibfk_2` FOREIGN KEY (`marca_id`) REFERENCES `marcas` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.productos: ~3 rows (aproximadamente)
 DELETE FROM `productos`;
@@ -2180,7 +2180,7 @@ CREATE TABLE IF NOT EXISTS `productosdeseados` (
   KEY `producto_id` (`producto_id`),
   CONSTRAINT `productosdeseados_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
   CONSTRAINT `productosdeseados_ibfk_2` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.productosdeseados: ~0 rows (aproximadamente)
 DELETE FROM `productosdeseados`;
@@ -2190,7 +2190,7 @@ CREATE TABLE IF NOT EXISTS `provincias` (
   `id` varchar(50) NOT NULL,
   `provincia` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.provincias: ~24 rows (aproximadamente)
 DELETE FROM `provincias`;
@@ -2228,7 +2228,7 @@ CREATE TABLE IF NOT EXISTS `publicidad` (
   `enlace` varchar(255) DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.publicidad: ~0 rows (aproximadamente)
 DELETE FROM `publicidad`;
@@ -2238,7 +2238,7 @@ CREATE TABLE IF NOT EXISTS `roles` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.roles: ~2 rows (aproximadamente)
 DELETE FROM `roles`;
@@ -2254,7 +2254,7 @@ CREATE TABLE IF NOT EXISTS `sliders` (
   `imagen` varchar(255) DEFAULT NULL,
   `estado` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.sliders: ~0 rows (aproximadamente)
 DELETE FROM `sliders`;
@@ -2267,7 +2267,7 @@ CREATE TABLE IF NOT EXISTS `tipo_documento` (
   `nombre` varchar(45) DEFAULT NULL,
   `valor` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.tipo_documento: ~0 rows (aproximadamente)
 DELETE FROM `tipo_documento`;
@@ -2309,7 +2309,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   PRIMARY KEY (`id`),
   KEY `rol_id` (`rol_id`),
   CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.usuarios: ~0 rows (aproximadamente)
 DELETE FROM `usuarios`;
@@ -2331,7 +2331,7 @@ CREATE TABLE IF NOT EXISTS `variantes` (
   PRIMARY KEY (`id`),
   KEY `producto_id` (`producto_id`),
   CONSTRAINT `variantes_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 ;
 
 -- Volcando datos para la tabla pwa_ecommerce.variantes: ~0 rows (aproximadamente)
 DELETE FROM `variantes`;

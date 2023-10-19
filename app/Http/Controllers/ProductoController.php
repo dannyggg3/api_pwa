@@ -102,7 +102,7 @@ class ProductoController extends Controller
     {
         try {
             // Obtener un producto por ID con su categoría y marca relacionadas
-            $producto = Producto::with('categoria', 'marca')->findOrFail($id);
+            $producto = Producto::with('categoria', 'marca','variantes')->findOrFail($id);
 
             return new JsonResponse([
                 'correctProcess' => true,
