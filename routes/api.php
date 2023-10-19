@@ -32,6 +32,7 @@ use App\Http\Controllers\TipoDocumentoController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\VarianteController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NosotrosController;
 
 
 
@@ -86,6 +87,13 @@ Route::prefix('carritocompras')->group(function () {
     Route::get('/{id}', [CarritoCompraController::class, 'show']);
     Route::put('/{id}', [CarritoCompraController::class, 'update']);
     Route::delete('/{id}', [CarritoCompraController::class, 'destroy']);
+});
+
+
+//CRUD Tabla Nosotros
+Route::prefix('nosotros')->group(function () {
+    Route::get('/', [NosotrosController::class, 'index']);
+    Route::post('/{id}', [NosotrosController::class, 'update']);
 });
 
 
