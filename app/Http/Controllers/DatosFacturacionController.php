@@ -162,12 +162,12 @@ class DatosFacturacionController extends Controller
             return new JsonResponse([
                 'correctProcess' => true,
                 'message' => 'Dato de facturación eliminado correctamente'
-            ], 204);
+            ], 200);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 }

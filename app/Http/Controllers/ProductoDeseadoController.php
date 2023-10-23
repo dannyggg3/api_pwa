@@ -24,7 +24,7 @@ class ProductoDeseadoController extends Controller
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -44,7 +44,17 @@ class ProductoDeseadoController extends Controller
                     'correctProcess' => false,
                     'message' => 'Error de validación',
                     'errors' => $validator->errors()
-                ], 422);
+                ], 200);
+            }
+
+            //valida si el cliente ya tiene el producto agregado
+            $productoDeseado = ProductoDeseado::where('cliente_id', $request->cliente_id)->where('producto_id', $request->producto_id)->first();
+            //retirna error
+            if ($productoDeseado) {
+                return new JsonResponse([
+                    'correctProcess' => false,
+                    'message' => 'El producto ya se encuentra en la lista de deseos'
+                ], 200);
             }
 
             // Crear un nuevo producto deseado
@@ -54,12 +64,12 @@ class ProductoDeseadoController extends Controller
                 'correctProcess' => true,
                 'data' => $productoDeseado,
                 'message' => 'Producto deseado creado correctamente'
-            ], 201);
+            ], 200);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -67,7 +77,7 @@ class ProductoDeseadoController extends Controller
     {
         try {
             // Obtener un producto deseado por ID con información del cliente y producto relacionados
-            $productoDeseado = ProductoDeseado::with('cliente', 'producto')->findOrFail($id);
+            $productoDeseado = ProductoDeseado::with('cliente', 'producto')->where('cliente_id', $id)->get();
 
             return new JsonResponse([
                 'correctProcess' => true,
@@ -78,7 +88,7 @@ class ProductoDeseadoController extends Controller
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -98,7 +108,7 @@ class ProductoDeseadoController extends Controller
                     'correctProcess' => false,
                     'message' => 'Error de validación',
                     'errors' => $validator->errors()
-                ], 422);
+                ], 200);
             }
 
             // Actualizar un producto deseado por ID
@@ -114,7 +124,7 @@ class ProductoDeseadoController extends Controller
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -128,12 +138,12 @@ class ProductoDeseadoController extends Controller
             return new JsonResponse([
                 'correctProcess' => true,
                 'message' => 'Producto deseado eliminado correctamente'
-            ], 204);
+            ], 200);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 }
