@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Cliente;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -50,8 +51,6 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-
-
         $credentials = $request->only('email', 'password');
 
         $token = Auth::attempt($credentials);
@@ -63,6 +62,9 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
+
+        $cliente = Cliente::with('detallesCarrito')->where('usuario_id', $user->id)->first();
+        $user->cliente=$cliente;
 
         if($user->rol_id != 2){
             return response()->json([

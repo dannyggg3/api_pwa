@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\DetallesCarrito;
+use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
@@ -27,7 +28,7 @@ class DetallesCarritoController extends Controller
             return response()->json([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -35,18 +36,35 @@ class DetallesCarritoController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'carrito_id' => 'required|integer',
+                'cliente_id' => 'required|integer',
                 'variante_id' => 'required|integer',
                 'cantidad' => 'nullable|integer'
             ]);
+
 
             if ($validator->fails()) {
                 return new JsonResponse([
                     'correctProcess' => false,
                     'message' => 'Error de validación',
                     'errors' => $validator->errors()
-                ], 422);
+                ], 200);
             }
+
+            //si ya existe el usuario y la variante en el carrito, se actualiza la cantidad
+            $detalleCarrito = DetallesCarrito::where('cliente_id', $request->cliente_id)
+                ->where('variante_id', $request->variante_id)->first();
+
+            if ($detalleCarrito) {
+                $detalleCarrito->cantidad = $detalleCarrito->cantidad + $request->cantidad;
+                $detalleCarrito->save();
+
+                return new JsonResponse([
+                    'correctProcess' => true,
+                    'data' => $detalleCarrito,
+                    'message' => 'Detalle del carrito actualizado correctamente'
+                ], 200);
+            }
+
 
             $detalleCarrito = DetallesCarrito::create($request->all());
 
@@ -54,19 +72,28 @@ class DetallesCarritoController extends Controller
                 'correctProcess' => true,
                 'data' => $detalleCarrito,
                 'message' => 'Detalle del carrito creado correctamente'
-            ], 201);
+            ], 200);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
     public function show($id)
     {
         try {
-            $detalleCarrito = DetallesCarrito::findOrFail($id);
+            $detalleCarrito = DetallesCarrito::where('cliente_id', $id)->with('variante')->get();
+
+            //agregar el producto a la variante
+            foreach ($detalleCarrito as $detalle) {
+
+
+                $producto=Producto::where('id', $detalle->variante->producto_id)->with('marca', 'categoria')->first();
+                $detalle->variante->producto=$producto;
+
+            }
 
             return new JsonResponse([
                 'correctProcess' => true,
@@ -77,7 +104,7 @@ class DetallesCarritoController extends Controller
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -85,7 +112,7 @@ class DetallesCarritoController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'carrito_id' => 'required|integer',
+                'cliente_id' => 'required|integer',
                 'variante_id' => 'required|integer',
                 'cantidad' => 'nullable|integer'
             ]);
@@ -95,7 +122,7 @@ class DetallesCarritoController extends Controller
                     'correctProcess' => false,
                     'message' => 'Error de validación',
                     'errors' => $validator->errors()
-                ], 422);
+                ], 200);
             }
 
             $detalleCarrito = DetallesCarrito::findOrFail($id);
@@ -110,7 +137,7 @@ class DetallesCarritoController extends Controller
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -123,12 +150,12 @@ class DetallesCarritoController extends Controller
             return new JsonResponse([
                 'correctProcess' => true,
                 'message' => 'Detalle del carrito eliminado correctamente'
-            ], 204);
+            ], 200);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 }

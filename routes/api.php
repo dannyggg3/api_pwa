@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BannerController;
-use App\Http\Controllers\CarritoCompraController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\CiudadController;
 use App\Http\Controllers\ClienteController;
@@ -80,14 +79,7 @@ Route::prefix('banners')->group(function () {
     Route::delete('/{id}', [BannerController::class, 'destroy']);
 });
 
-//CRUD Tabla CarritoCompra
-Route::prefix('carritocompras')->group(function () {
-    Route::get('/', [CarritoCompraController::class, 'index']);
-    Route::post('/', [CarritoCompraController::class, 'store']);
-    Route::get('/{id}', [CarritoCompraController::class, 'show']);
-    Route::put('/{id}', [CarritoCompraController::class, 'update']);
-    Route::delete('/{id}', [CarritoCompraController::class, 'destroy']);
-});
+
 
 
 //CRUD Tabla Nosotros
@@ -151,7 +143,7 @@ Route::prefix('detallescarrito')->group(function () {
     Route::get('/', [DetallesCarritoController::class, 'index']);
     Route::post('/', [DetallesCarritoController::class, 'store']);
     Route::get('/{id}', [DetallesCarritoController::class, 'show']);
-    Route::put('/{id}', [DetallesCarritoController::class, 'update']);
+    Route::post('/{id}', [DetallesCarritoController::class, 'update']);
     Route::delete('/{id}', [DetallesCarritoController::class, 'destroy']);
 });
 

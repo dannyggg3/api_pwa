@@ -12,15 +12,11 @@ class DetallesCarrito extends Model
 
 
     protected $fillable = [
-        'carrito_id',
+        'cliente_id',
         'variante_id',
         'cantidad'
     ];
 
-    public function carrito()
-    {
-        return $this->belongsTo(CarritoCompras::class, 'carrito_id');
-    }
 
     public function variante()
     {

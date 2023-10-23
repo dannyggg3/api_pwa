@@ -17,6 +17,10 @@ class Cliente extends Model
         return $this->belongsTo(User::class, 'usuario_id');
     }
 
+    public function detallesCarrito(){
+        return $this->hasMany(DetallesCarrito::class, 'cliente_id');
+    }
+
     public function tipoDocumento()
     {
         return $this->belongsTo(TipoDocumento::class, 'tipo_documento_id');
