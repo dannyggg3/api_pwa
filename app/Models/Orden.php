@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Orden extends Model
 {
-      protected $table = 'ordenes';
-     public $timestamps = false;
+    protected $table = 'ordenes';
+    public $timestamps = false;
     protected $fillable = [
         'cliente_id',
         'fecha',
@@ -21,7 +21,8 @@ class Orden extends Model
         'subtotaliva0',
         'subtotal_sin_impuestos',
         'descuento',
-        'iva'
+        'iva',
+        'envio'
     ];
 
     public function cliente()

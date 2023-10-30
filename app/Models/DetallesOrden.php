@@ -15,6 +15,7 @@ class DetallesOrden extends Model
         'variante_id',
         'cantidad',
         'subtotal',
+        'iva'
     ];
 
     public function orden()

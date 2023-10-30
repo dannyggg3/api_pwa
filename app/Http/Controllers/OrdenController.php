@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Orden;
+use App\Models\DetallesOrden;
+use App\Models\DetallesCarrito;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
@@ -16,15 +18,15 @@ class OrdenController extends Controller
             $ordenes = Orden::with('cliente', 'estadoOrden', 'datosFacturacion', 'direccionEntrega', 'detallesOrden')->get();
 
             return response()->json([
-                'success' => true,
+                'correctProcess' => true,
                 'data' => $ordenes,
                 'message' => 'Órdenes obtenidas correctamente'
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'success' => false,
+                'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -44,28 +46,50 @@ class OrdenController extends Controller
                 'subtotal_sin_impuestos' => 'required|numeric',
                 'descuento' => 'required|numeric',
                 'iva' => 'required|numeric',
+                'envio'=> 'required|numeric'
             ]);
 
             if ($validator->fails()) {
                 return new JsonResponse([
-                    'success' => false,
+                    'correctProcess' => false,
                     'message' => 'Error de validación',
                     'errors' => $validator->errors()
-                ], 422);
+                ], 200);
             }
 
             $orden = Orden::create($request->all());
 
+
+            $carrito= DetallesCarrito::with('variante')->where('cliente_id', $request->cliente_id)->get();
+
+            foreach ($carrito as $item) {
+
+                $prodSinIva= ($item->variante->precio) - ($item->variante->precio * 0.12);
+                $iva = $item->variante->precio * 0.12;
+
+                $detalles = DetallesOrden::create([
+                    'orden_id' => $orden->id,
+                    'variante_id' => $item->variante_id,
+                    'cantidad' => $item->cantidad,
+                    'subtotal' => $item->cantidad * $prodSinIva,
+                    'iva'   => $item->cantidad * $iva,
+                ]);
+            }
+
+            $carrito= DetallesCarrito::where('cliente_id', $request->cliente_id)->delete();
+
+
+
             return new JsonResponse([
-                'success' => true,
+                'correctProcess' => true,
                 'data' => $orden,
                 'message' => 'Orden creada correctamente'
-            ], 201);
+            ], 200);
         } catch (\Exception $e) {
             return new JsonResponse([
-                'success' => false,
+                'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -76,21 +100,21 @@ class OrdenController extends Controller
 
             if (!$orden) {
                 return new JsonResponse([
-                    'success' => false,
+                    'correctProcess' => false,
                     'message' => 'Orden no encontrada'
-                ], 404);
+                ], 200);
             }
 
             return response()->json([
-                'success' => true,
+                'correctProcess' => true,
                 'data' => $orden,
                 'message' => 'Orden obtenida correctamente'
             ]);
         } catch (\Exception $e) {
             return new JsonResponse([
-                'success' => false,
+                'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -101,9 +125,9 @@ class OrdenController extends Controller
 
             if (!$orden) {
                 return new JsonResponse([
-                    'success' => false,
+                    'correctProcess' => false,
                     'message' => 'Orden no encontrada'
-                ], 404);
+                ], 200);
             }
 
            $validator = Validator::make($request->all(), [
@@ -123,24 +147,24 @@ class OrdenController extends Controller
 
             if ($validator->fails()) {
                 return new JsonResponse([
-                    'success' => false,
+                    'correctProcess' => false,
                     'message' => 'Error de validación',
                     'errors' => $validator->errors()
-                ], 422);
+                ], 200);
             }
 
             $orden->update($request->all());
 
             return new JsonResponse([
-                'success' => true,
+                'correctProcess' => true,
                 'data' => $orden,
                 'message' => 'Orden actualizada correctamente'
             ]);
         } catch (\Exception $e) {
             return new JsonResponse([
-                'success' => false,
+                'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 
@@ -151,22 +175,22 @@ class OrdenController extends Controller
 
             if (!$orden) {
                 return new JsonResponse([
-                    'success' => false,
+                    'correctProcess' => false,
                     'message' => 'Orden no encontrada'
-                ], 404);
+                ], 200);
             }
 
             $orden->delete();
 
             return new JsonResponse([
-                'success' => true,
+                'correctProcess' => true,
                 'message' => 'Orden eliminada correctamente'
             ], 204);
         } catch (\Exception $e) {
             return new JsonResponse([
-                'success' => false,
+                'correctProcess' => false,
                 'message' => $e->getMessage()
-            ], 500);
+            ], 200);
         }
     }
 }
