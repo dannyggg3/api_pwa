@@ -111,10 +111,12 @@ Route::prefix('ciudades')->group(function () {
 //CRUD Tabla Cliente
 Route::prefix('clientes')->group(function () {
     Route::get('/', [ClienteController::class, 'index']);
+    Route::get('/tablero/{id}', [ClienteController::class, 'tablero']);
     Route::post('/', [ClienteController::class, 'store']);
     Route::get('/{id}', [ClienteController::class, 'show']);
     Route::post('/{id}', [ClienteController::class, 'update']);
     Route::delete('/{id}', [ClienteController::class, 'destroy']);
+
 });
 
 
@@ -241,6 +243,7 @@ Route::prefix('orden')->group(function () {
     Route::get('/', [OrdenController::class, 'index']);
     Route::post('/', [OrdenController::class, 'store']);
     Route::get('/{id}', [OrdenController::class, 'show']);
+    Route::get('/cliente/{id}', [OrdenController::class, 'showCliente']);
     Route::put('/{id}', [OrdenController::class, 'update']);
     Route::delete('/{id}', [OrdenController::class, 'destroy']);
 });

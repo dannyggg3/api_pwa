@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Orden;
+use App\Models\Producto;
 use App\Models\DetallesOrden;
 use App\Models\DetallesCarrito;
 use Illuminate\Http\Request;
@@ -116,6 +117,41 @@ class OrdenController extends Controller
                 'message' => $e->getMessage()
             ], 200);
         }
+    }
+
+    public function showCliente($id){
+
+         try {
+            $orden = Orden::with('cliente', 'estadoOrden', 'datosFacturacion', 'direccionEntrega', 'detallesOrden')->where('cliente_id', $id)->get();
+
+
+            //foreach de ordenes para agregar variantes
+            foreach ($orden as $item) {
+                $detalles = DetallesOrden::with('variante')->where('orden_id', $item->id)->get();
+
+                foreach ($detalles as $item2) {
+
+                    $producto= Producto::where('id', $item2->variante->producto_id)->first();
+
+                    $item2->variante->producto = $producto;
+                }
+
+
+                $item->detallesOrden = $detalles;
+            }
+
+            return response()->json([
+                'correctProcess' => true,
+                'data' => $orden,
+                'message' => 'Ordenes obtenida correctamente'
+            ]);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'correctProcess' => false,
+                'message' => $e->getMessage()
+            ], 200);
+        }
+
     }
 
     public function update(Request $request, $id)

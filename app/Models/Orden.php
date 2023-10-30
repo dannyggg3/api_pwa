@@ -42,11 +42,11 @@ class Orden extends Model
 
     public function direccionEntrega()
     {
-        return $this->belongsTo(DireccionEntrega::class, 'direccionesentrega_id');
+        return $this->belongsTo(DireccionesEntrega::class, 'direccionesentrega_id');
     }
 
     public function detallesOrden()
     {
-        return $this->hasMany(DetalleOrden::class, 'orden_id');
+        return $this->hasMany(DetallesOrden::class, 'orden_id');
     }
 }

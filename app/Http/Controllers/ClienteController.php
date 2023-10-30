@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\Orden;
+use App\Models\ProductoDeseado;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -30,6 +32,49 @@ class ClienteController extends Controller
                 'message' => $e->getMessage()
             ], 200);
         }
+    }
+
+
+    public function tablero($id){
+        try {
+            $cliente = Cliente::where('id', $id)->first();
+
+            if(!$cliente){
+                return new JsonResponse([
+                    'correctProcess' => false,
+                    'message' => 'Cliente no encontrado'
+                ], 200);
+            }
+
+            //contar cuantas ordenes tiene
+            $ordenes = Orden::where('cliente_id', $id)->count();
+            $productosDeseados = ProductoDeseado::where('cliente_id', $id)->count();
+            //ordenes pendiente cuando sea diferente a 3 o 5
+            $ordenesPendientes = Orden::where('cliente_id', $id)->where('estado_orden_id', '!=', 3)->where('estado_orden_id', '!=', 5)->count();
+
+            $data=array(
+                'ordenes'=>$ordenes,
+                'productosDeseados'=>$productosDeseados,
+                'ordenesPendientes'=>$ordenesPendientes
+            );
+
+
+            $response = response()->json([
+                'correctProcess' => true,
+                'data' => $data,
+                'message' => 'Cliente obtenido correctamente'
+            ]);
+
+            $response->setEncodingOptions($response->getEncodingOptions() | JSON_UNESCAPED_UNICODE);
+
+            return $response;
+        } catch (\Exception $e) {
+            return response()->json([
+                'correctProcess' => false,
+                'message' => $e->getMessage()
+            ], 200);
+        }
+
     }
 
     public function store(Request $request)
