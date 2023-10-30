@@ -187,6 +187,7 @@ Route::prefix('estadoorden')->group(function () {
 //CRUD Tabla FacturaElectronica
 Route::prefix('facturaelectronica')->group(function () {
     Route::get('/', [FacturaElectronicaController::class, 'index']);
+    Route::get('/generadoc/{id}', [FacturaElectronicaController::class, 'generadoc']);
     Route::post('/', [FacturaElectronicaController::class, 'store']);
     Route::get('/{id}', [FacturaElectronicaController::class, 'show']);
     Route::put('/{id}', [FacturaElectronicaController::class, 'update']);
