@@ -45,14 +45,7 @@ class FacturaElectronicaController extends Controller
     public function generadoc($idOrden){
 
         try {
-                $empresa = Empresa::where('id', 1)->first();
-
-             $path = Storage::path( 'xml/'.$empresa->ruc.'/3010202301180197196900110010020000000040000000411.xml');
-
-             $ruta = Storage::path( 'xml/'.$empresa->ruc.'/3010202301180197196900110010020000000040000000411.pdf');
-              $xml = \simplexml_load_file($path);
-
-              $this->generaPDF($xml,'3010202301180197196900110010020000000040000000411',$ruta);
+            $empresa = Empresa::where('id', 1)->first();
 
             $orden = Orden::where('id', $idOrden)->first();
 
@@ -94,7 +87,10 @@ class FacturaElectronicaController extends Controller
                         'secuencial'=>$newsecuencial
                     ));
 
-            FacturaElectronica::create([
+            //valida si existe para crear
+            $facturaElectronica = FacturaElectronica::where('factura', $factura)->first();
+            if(!$facturaElectronica){
+               FacturaElectronica::create([
                 'factura' => $factura,
                 'estado' => 'CREADA',
                 'numero_autorizacion' => '',
@@ -103,6 +99,9 @@ class FacturaElectronicaController extends Controller
                 'descargada' => '0',
                 'ordenes_id' => $orden->id,
             ]);
+            }
+
+
 
             $this->generaXML($idOrden,$factura,$claveacceso);
 
@@ -382,13 +381,14 @@ class FacturaElectronicaController extends Controller
                    $resSD= $this->subirDocumento($general_settins->ambiente,$numdocumento,$general_settins->ruc,$claveacceso,'FAC');
                    if($resSD){
                         $this->bajarDocumento($general_settins->ambiente,$claveacceso,$general_settins->ruc,$numdocumento,'FAC');
+
+                         $path = Storage::path( 'xml/'.$general_settins->ruc.'/'.$claveacceso.'.xml');
+
+                        $ruta = Storage::path( 'xml/'.$general_settins->ruc.'/'.$claveacceso.'.pdf');
+                        $xml = \simplexml_load_file($path);
+                        $this->generaPDF($xml,$claveacceso,$ruta);
                    }
              }
-
-
-
-
-
         }
 
 
@@ -455,7 +455,7 @@ class FacturaElectronicaController extends Controller
                 $codigo_control= '';
                 $informacionAdicional = '';
                 $mensajeDevuelto = '';
-                print_r($resultado_metodo);
+                // print_r($resultado_metodo);
                 if (isset($resultado_metodo->RespuestaRecepcionComprobante->estado))
                     $estado_control=$resultado_metodo->RespuestaRecepcionComprobante->estado;
                 if (isset($resultado_metodo->RespuestaRecepcionComprobante->comprobantes->comprobante->mensajes->mensaje->identificador)) {
@@ -521,7 +521,7 @@ class FacturaElectronicaController extends Controller
         $resultado_metodo = $clienteSOAP->autorizacionComprobante(array('claveAccesoComprobante'=>$claveAcceso));
         $resultado_metodo_txt= print_r($resultado_metodo,true);
         $resultado_metodo_txt= addslashes($resultado_metodo_txt);
-        print_r($resultado_metodo);
+        // print_r($resultado_metodo);
         $estado = '';
         $comprobante = '';
         $xmlOriginal = '';
@@ -612,10 +612,29 @@ class FacturaElectronicaController extends Controller
         }
     }
 
+     public function array_to_xml($array, &$xml_user_info) {
+        foreach($array as $key => $value) {
+            if(is_array($value)) {
+                if(!is_numeric($key)){
+                    $subnode = $xml_user_info->addChild("$key");
+                    $this->array_to_xml($value, $subnode);
+                }else{
+                    $subnode = $xml_user_info->addChild("item$key");
+                    $this->array_to_xml($value, $subnode);
+                }
+            }else {
+                if ($key == 'comprobante')
+                    $xml_user_info->addChild("$key","<![CDATA[$value]]>");
+                else
+                    $xml_user_info->addChild("$key","$value");
+            }
+        }
+    }
+
     public function generaPdf($document, $claveAcceso, $ruta){
 
 
-
+        $empresa = Empresa::where('id', 1)->first();
         $pdf = new \PDF_MC_Table();
         $pdf->SetAutoPageBreak(false);
         $pdf->AddPage();
@@ -941,8 +960,8 @@ $pdf->SetDrawColor(0, 0, 0); // RGB: Negro
         $pdf->Output($ruta, 'F');
 		$pos=strrpos($ruta,"/");
 		$ruta=substr($ruta,0,$pos+1);
-		$pdf->Output($ruta.$claveAcceso.'.pdf', 'D');
-        echo 'ingresa mail';
+		// $pdf->Output($ruta.$claveAcceso.'.pdf', 'D');
+        // echo 'ingresa mail';
     }
 
 
