@@ -89,6 +89,7 @@ class FacturaElectronicaController extends Controller
 
             //valida si existe para crear
             $facturaElectronica = FacturaElectronica::where('factura', $factura)->first();
+
             if(!$facturaElectronica){
                FacturaElectronica::create([
                 'factura' => $factura,
@@ -99,14 +100,29 @@ class FacturaElectronicaController extends Controller
                 'descargada' => '0',
                 'ordenes_id' => $orden->id,
             ]);
+
+            $empresa->secuencial=$empresa->secuencial+1;
+            $empresa->save();
             }
 
 
 
             $this->generaXML($idOrden,$factura,$claveacceso);
 
+            $fac=FacturaElectronica::where('factura',$factura)->first();
 
 
+            $pdf=asset('storage/public/xml/'.$empresa->ruc.'/'.$claveacceso.'.pdf');
+
+           // $pdf=Storage::url('public/xml/'.$empresa->ruc.'/'.$claveacceso.'.pdf');
+            $fac->pdf=$pdf;
+
+
+            return new JsonResponse([
+                'correctProcess' => true,
+                'message' => 'Factura electrónica generada correctamente',
+                'data' => $fac
+            ], 200);
 
 
 
@@ -359,7 +375,7 @@ class FacturaElectronicaController extends Controller
 
             $factura = $numdocumento."_FAC.xml";
 
-            $path = Storage::path( 'xml/'.$general_settins->ruc.'/');
+            $path = Storage::path( 'public/xml/'.$general_settins->ruc.'/');
 
             if (!file_exists($path)) {
                 mkdir($path, 0777, true);
@@ -382,9 +398,9 @@ class FacturaElectronicaController extends Controller
                    if($resSD){
                         $this->bajarDocumento($general_settins->ambiente,$claveacceso,$general_settins->ruc,$numdocumento,'FAC');
 
-                         $path = Storage::path( 'xml/'.$general_settins->ruc.'/'.$claveacceso.'.xml');
+                         $path = Storage::path( 'public/xml/'.$general_settins->ruc.'/'.$claveacceso.'.xml');
 
-                        $ruta = Storage::path( 'xml/'.$general_settins->ruc.'/'.$claveacceso.'.pdf');
+                        $ruta = Storage::path( 'public/xml/'.$general_settins->ruc.'/'.$claveacceso.'.pdf');
                         $xml = \simplexml_load_file($path);
                         $this->generaPDF($xml,$claveacceso,$ruta);
                    }
@@ -397,14 +413,14 @@ class FacturaElectronicaController extends Controller
 
              $general_settins = Empresa::where('id',1)->first();
 
-            //dd('xml/'.$general_settins->ruc.'/'.$docEntrada.'_FAC.xml');
+            //dd('public/xml/'.$general_settins->ruc.'/'.$docEntrada.'_FAC.xml');
 
-            if(Storage::exists('xml/'.$general_settins->ruc.'/'.$docEntrada.'_FAC.xml')){
+            if(Storage::exists('public/xml/'.$general_settins->ruc.'/'.$docEntrada.'_FAC.xml')){
 
-                 $xml = simplexml_load_file(storage_path('app/xml/'.$general_settins->ruc.'/'.$docEntrada.'_FAC.xml'));
+                 $xml = simplexml_load_file(storage_path('app/public/xml/'.$general_settins->ruc.'/'.$docEntrada.'_FAC.xml'));
                  $ns = $xml->getNamespaces(true);
-                 $rutaArchivo=storage_path('app/xml/'.$general_settins->ruc.'/'.$docEntrada.'_FAC.xml');
-                 $rutaSalida=storage_path('app/xml/'.$general_settins->ruc.'/');
+                 $rutaArchivo=storage_path('app/public/xml/'.$general_settins->ruc.'/'.$docEntrada.'_FAC.xml');
+                 $rutaSalida=storage_path('app/public/xml/'.$general_settins->ruc.'/');
 
 
             if (isset($ns['ds'])) {
@@ -414,7 +430,7 @@ class FacturaElectronicaController extends Controller
                 {
                     switch ($ambiente) {
                         case 1:
-                            $resultado = var_dump(exec("java -jar ".public_path()."/sri/sri.jar ".public_path()."/firmas/".$general_settins->ruc.'.p12'." ".$clave." ".$rutaArchivo." ".$rutaSalida." ".$docSalida.".xml"));
+                            $resultado = exec("java -jar ".public_path()."/sri/sri.jar ".public_path()."/firmas/".$general_settins->ruc.'.p12'." ".$clave." ".$rutaArchivo." ".$rutaSalida." ".$docSalida.".xml");
                              exec('chmod 777 -R '.$rutaSalida);
                             //dd("java -jar ".public_path()."/sri/sri.jar ".public_path()."/firmas/".$firma." ".$clave." ".$rutaArchivo." ".$rutaSalida." ".$docSalida.".xml",$resultado);
                             break;
@@ -436,7 +452,7 @@ class FacturaElectronicaController extends Controller
     {
 
         try {
-                 $txt_factura_xml=file_get_contents(Storage::path('xml/'.$bdcliente.'/'.$documento.'.xml'));
+                 $txt_factura_xml=file_get_contents(Storage::path('public/xml/'.$bdcliente.'/'.$documento.'.xml'));
                 if ($ambiente == 1) {
                     $clienteSOAP = new \SoapClient('https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl');
                 }
@@ -585,10 +601,10 @@ class FacturaElectronicaController extends Controller
 
             $general_settins = Empresa::where('id',1)->first();
 
-             $path = Storage::path( 'xml/'.$general_settins->ruc.'/');
+             $path = Storage::path( 'public/xml/'.$general_settins->ruc.'/');
              $fac=$claveAcceso.".xml";
 
-            if (Storage::exists('xml/'.$general_settins->ruc.'/'.$claveAcceso.'.xml'))
+            if (Storage::exists('public/xml/'.$general_settins->ruc.'/'.$claveAcceso.'.xml'))
             {
                 unlink($path.$fac);
             }
