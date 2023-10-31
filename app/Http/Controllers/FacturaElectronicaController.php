@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
+require_once app_path('Libraries/fpdf/mc_table.php');
+use Fpdf\Fpdf;
 
 class FacturaElectronicaController extends Controller
 {
@@ -43,6 +45,14 @@ class FacturaElectronicaController extends Controller
     public function generadoc($idOrden){
 
         try {
+                $empresa = Empresa::where('id', 1)->first();
+
+             $path = Storage::path( 'xml/'.$empresa->ruc.'/3010202301180197196900110010020000000040000000411.xml');
+
+             $ruta = Storage::path( 'xml/'.$empresa->ruc.'/3010202301180197196900110010020000000040000000411.pdf');
+              $xml = \simplexml_load_file($path);
+
+              $this->generaPDF($xml,'3010202301180197196900110010020000000040000000411',$ruta);
 
             $orden = Orden::where('id', $idOrden)->first();
 
@@ -54,7 +64,7 @@ class FacturaElectronicaController extends Controller
             }
             //dd($orden);
 
-            $empresa = Empresa::where('id', 1)->first();
+
 
             $fechaEmision=$orden->fecha;
 
@@ -84,11 +94,7 @@ class FacturaElectronicaController extends Controller
                         'secuencial'=>$newsecuencial
                     ));
 
-            $this->generaXML($idOrden,$factura,$claveacceso);
-
-
-
-           FacturaElectronica::create([
+            FacturaElectronica::create([
                 'factura' => $factura,
                 'estado' => 'CREADA',
                 'numero_autorizacion' => '',
@@ -97,6 +103,12 @@ class FacturaElectronicaController extends Controller
                 'descargada' => '0',
                 'ordenes_id' => $orden->id,
             ]);
+
+            $this->generaXML($idOrden,$factura,$claveacceso);
+
+
+
+
 
 
         } catch (\Exception $e) {
@@ -159,7 +171,7 @@ class FacturaElectronicaController extends Controller
             $xmlFactura .= '<dirEstablecimiento>'.$general_settins->direccion.'</dirEstablecimiento>    ';
             $obligaContabilidad = (int)$general_settins->obligado_contabilidad===1?'SI':'NO';
             $xmlFactura .= '<obligadoContabilidad>'.$obligaContabilidad.'</obligadoContabilidad>    ';
-            $xmlFactura .= '<tipoIdentificacionComprador>'.(int)$customers->tipo_documento_id==1?'04':'05'.'</tipoIdentificacionComprador>    ';
+            $xmlFactura .= '<tipoIdentificacionComprador>'.((int)$customers->tipo_documento_id==1?'05':'04').'</tipoIdentificacionComprador>    ';
             $xmlFactura .= '<razonSocialComprador>'.$customers->nombre.'</razonSocialComprador>    ';
             $xmlFactura .= '<identificacionComprador>'.$customers->ruc_cedula.'</identificacionComprador>    ';
             $xmlFactura .= '<direccionComprador>'.$customers->direccion.'</direccionComprador>    ';
@@ -248,12 +260,11 @@ class FacturaElectronicaController extends Controller
                     $base=(float)$precioUnitario * $product_sale->cantidad;
 
 
-
                     $xmlFactura .= '<detalle>      ';
                     $xmlFactura .= '<codigoPrincipal>'.$products->id.'</codigoPrincipal>      ';
                     $xmlFactura .= '<descripcion>'.preg_replace("[\n|\r|\n\r]", "", $products->producto->nombre) .'</descripcion>      ';
                     $xmlFactura .= '<cantidad>'.$product_sale->cantidad.'</cantidad>      ';
-                    $xmlFactura .= '<precioUnitario>'.((float)$precioUnitario).'</precioUnitario>      ';
+                    $xmlFactura .= '<precioUnitario>'.number_format((float)$precioUnitario,2,'.','').'</precioUnitario>      ';
                     $xmlFactura .= '<descuento>0.00</descuento>      ';
                     $xmlFactura .= '<precioTotalSinImpuesto>'.number_format((float)($base), 2, '.', '').'</precioTotalSinImpuesto>      ';
                     $xmlFactura .= '<impuestos>        ';
@@ -269,6 +280,8 @@ class FacturaElectronicaController extends Controller
                         $xmlFactura .= '</impuesto>      ';
 
                     $xmlFactura .= '</impuestos>    ';
+
+                    $xmlFactura .= '</detalle>  ';
 
                 }
 
@@ -303,10 +316,11 @@ class FacturaElectronicaController extends Controller
                         $xmlFactura .= '</impuesto>      ';
 
                     $xmlFactura .= '</impuestos>    ';
+                    $xmlFactura .= '</detalle>  ';
                 }
 
 
-                 $xmlFactura .= '</detalle>  ';
+
 
 
             $xmlFactura .= '</detalles>  ';
@@ -362,8 +376,575 @@ class FacturaElectronicaController extends Controller
             fputs($file,$xmlFactura);
             fclose($file);
 
+             $res= $this->firmaDocumentos($general_settins->ambiente,$general_settins->firma_electronica,$general_settins->clave, $numdocumento,$claveacceso);
+
+             if($res=='OK'){
+                   $resSD= $this->subirDocumento($general_settins->ambiente,$numdocumento,$general_settins->ruc,$claveacceso,'FAC');
+                   if($resSD){
+                        $this->bajarDocumento($general_settins->ambiente,$claveacceso,$general_settins->ruc,$numdocumento,'FAC');
+                   }
+             }
+
+
+
+
 
         }
+
+
+
+           public function firmaDocumentos($ambiente=1,$firma,$clave,$docEntrada,$docSalida){
+
+             $general_settins = Empresa::where('id',1)->first();
+
+            //dd('xml/'.$general_settins->ruc.'/'.$docEntrada.'_FAC.xml');
+
+            if(Storage::exists('xml/'.$general_settins->ruc.'/'.$docEntrada.'_FAC.xml')){
+
+                 $xml = simplexml_load_file(storage_path('app/xml/'.$general_settins->ruc.'/'.$docEntrada.'_FAC.xml'));
+                 $ns = $xml->getNamespaces(true);
+                 $rutaArchivo=storage_path('app/xml/'.$general_settins->ruc.'/'.$docEntrada.'_FAC.xml');
+                 $rutaSalida=storage_path('app/xml/'.$general_settins->ruc.'/');
+
+
+            if (isset($ns['ds'])) {
+                return 'OK';
+            } else {
+                 if (function_exists("exec"))
+                {
+                    switch ($ambiente) {
+                        case 1:
+                            $resultado = var_dump(exec("java -jar ".public_path()."/sri/sri.jar ".public_path()."/firmas/".$general_settins->ruc.'.p12'." ".$clave." ".$rutaArchivo." ".$rutaSalida." ".$docSalida.".xml"));
+                             exec('chmod 777 -R '.$rutaSalida);
+                            //dd("java -jar ".public_path()."/sri/sri.jar ".public_path()."/firmas/".$firma." ".$clave." ".$rutaArchivo." ".$rutaSalida." ".$docSalida.".xml",$resultado);
+                            break;
+                    }
+                    return 'OK';
+                }
+                else
+                {
+                    return 'No Esta instalado el exec';
+                }
+            }
+
+            }else {
+            return 'No existe el XML';
+        }
+    }
+
+     public function subirDocumento($ambiente,$xml,$bdcliente,$documento,$tipo)
+    {
+
+        try {
+                 $txt_factura_xml=file_get_contents(Storage::path('xml/'.$bdcliente.'/'.$documento.'.xml'));
+                if ($ambiente == 1) {
+                    $clienteSOAP = new \SoapClient('https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl');
+                }
+                elseif ($ambiente == 2)
+                {
+                    $clienteSOAP = new \SoapClient('https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl');
+                }
+                else {
+                    die('no soportado para esta empresa');
+                }
+                $resultado_metodo = $clienteSOAP->validarComprobante(array('xml'=>$txt_factura_xml));
+                $resultado_metodo_txt= print_r($resultado_metodo,true);
+                $resultado_metodo_txt= addslashes($resultado_metodo_txt);
+                ##tomo variables de respuesta
+                $estado_control= '';
+                $codigo_control= '';
+                $informacionAdicional = '';
+                $mensajeDevuelto = '';
+                print_r($resultado_metodo);
+                if (isset($resultado_metodo->RespuestaRecepcionComprobante->estado))
+                    $estado_control=$resultado_metodo->RespuestaRecepcionComprobante->estado;
+                if (isset($resultado_metodo->RespuestaRecepcionComprobante->comprobantes->comprobante->mensajes->mensaje->identificador)) {
+                    $codigo_control=$resultado_metodo->RespuestaRecepcionComprobante->comprobantes->comprobante->mensajes->mensaje->identificador;
+                }
+                if (isset($resultado_metodo->RespuestaRecepcionComprobante->comprobantes->comprobante->mensajes->mensaje->informacionAdicional)) {
+                    $informacionAdicional=$resultado_metodo->RespuestaRecepcionComprobante->comprobantes->comprobante->mensajes->mensaje->informacionAdicional;
+                }
+                if (isset($resultado_metodo->RespuestaRecepcionComprobante->comprobantes->comprobante->mensajes->mensaje->mensaje)) {
+                    $mensajeDevuelto=$resultado_metodo->RespuestaRecepcionComprobante->comprobantes->comprobante->mensajes->mensaje->mensaje;
+                }
+                if ($mensajeDevuelto == 'CLAVE ACCESO REGISTRADA') {
+                    $estado_control = 'RECIBIDA';
+                }
+                $doc = explode('_', $xml);
+
+                $documento_update = FacturaElectronica::where('factura', $xml)->first();
+
+                switch ($estado_control) {
+                    case 'DEVUELTA':
+                        //Guardamos el error
+                        $documento_update->estado = 'DEVUELTA';
+                        $documento_update->numero_autorizacion = str_replace("'"," ",$informacionAdicional);
+                        $documento_update->save();
+                        return false;
+                        break;
+                    case 'RECIBIDA':
+                        //Preguntamos
+                        $documento_update->estado = 'RECIBIDA';
+                        $documento_update->numero_autorizacion='';
+                        $documento_update->save();
+                        return true;
+                        break;
+                    default:
+                        //Preguntamos
+                        $documento_update->estado = 'ERROR';
+                        $documento_update->numero_autorizacion=str_replace("'"," ",$informacionAdicional);
+                        $documento_update->save();
+                        return false;
+                        break;
+                }
+        } catch (\Exception $e) {
+
+
+            return false;
+        }
+
+
+    }
+
+
+      public function bajarDocumento($ambiente,$claveAcceso,$bdcliente,$documento,$tipo)
+    {
+        if ($ambiente == 1) {
+            $clienteSOAP = new \SoapClient('https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl');
+        }
+        elseif ($ambiente == 2)
+        {
+            $clienteSOAP = new \SoapClient('https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl');
+        } else {
+            die('no soportado para esta empresa');
+        }
+        $resultado_metodo = $clienteSOAP->autorizacionComprobante(array('claveAccesoComprobante'=>$claveAcceso));
+        $resultado_metodo_txt= print_r($resultado_metodo,true);
+        $resultado_metodo_txt= addslashes($resultado_metodo_txt);
+        print_r($resultado_metodo);
+        $estado = '';
+        $comprobante = '';
+        $xmlOriginal = '';
+        $mensajeDevuelto = '';
+        $informacionAdicional = '';
+        if (isset($resultado_metodo->RespuestaAutorizacionComprobante->numeroComprobantes)) {
+            if ($resultado_metodo->RespuestaAutorizacionComprobante->numeroComprobantes == 0) {
+                $estado = 'NO EXISTE DOCUMENTO';
+            }
+        }
+        if (isset($resultado_metodo->RespuestaAutorizacionComprobante->autorizaciones->autorizacion->estado)) {
+            $estado = $resultado_metodo->RespuestaAutorizacionComprobante->autorizaciones->autorizacion->estado;
+        }
+        if (isset($resultado_metodo->RespuestaAutorizacionComprobante->autorizaciones->autorizacion)) {
+            $xmlOriginal = $resultado_metodo->RespuestaAutorizacionComprobante->autorizaciones->autorizacion;
+        }
+        if (isset($resultado_metodo->RespuestaAutorizacionComprobante->autorizaciones->autorizacion->comprobante)) {
+            $comprobante = $resultado_metodo->RespuestaAutorizacionComprobante->autorizaciones->autorizacion->comprobante;
+        }
+        if (isset($resultado_metodo->RespuestaAutorizacionComprobante->autorizaciones->autorizacion->mensajes->mensaje->informacionAdicional)) {
+            $informacionAdicional = $resultado_metodo->RespuestaAutorizacionComprobante->autorizaciones->autorizacion->mensajes->mensaje->informacionAdicional;
+        }
+        if (isset($resultado_metodo->RespuestaAutorizacionComprobante->autorizaciones->autorizacion->mensajes->mensaje)) {
+            $mensajeDevuelto = $resultado_metodo->RespuestaAutorizacionComprobante->autorizaciones->autorizacion->mensajes->mensaje->mensaje;
+        }
+
+         $documento_update = FacturaElectronica::where('factura', $documento)->first();
+         $doc = explode('_', $documento);
+
+        if ($estado == 'NO AUTORIZADO') {
+
+            $documento_update->estado='NO AUTORIZADO';
+             $documento_update->numero_autorizacion = str_replace("'"," ",$informacionAdicional);
+            $documento_update->save();
+
+        }
+        else if (strlen($claveAcceso) == 0) {
+
+            $documento_update->estado='NO AUTORIZADO';
+            $documento_update->numero_autorizacion = str_replace("'"," ",$mensajeDevuelto);
+            $documento_update->save();
+
+        }
+        else if ($estado == 'NO EXISTE DOCUMENTO') {
+
+            $documento_update->estado='NO AUTORIZADO';
+            $documento_update->numero_autorizacion = 'No Existe el numero de autorizacion en el SRI';
+            $documento_update->save();
+        }
+        else if ($estado == 'RECHAZADA') {
+            $documento_update->estado='RECHAZADA';
+            $documento_update->numero_autorizacion = 'DOCUMENTO RECHAZADO';
+            $documento_update->save();
+        }
+        else {
+
+            $documento_update->estado='AUTORIZADO';
+            $documento_update->numero_autorizacion = $claveAcceso;
+            $documento_update->descargada=1;
+            $documento_update->save();
+
+            $general_settins = Empresa::where('id',1)->first();
+
+             $path = Storage::path( 'xml/'.$general_settins->ruc.'/');
+             $fac=$claveAcceso.".xml";
+
+            if (Storage::exists('xml/'.$general_settins->ruc.'/'.$claveAcceso.'.xml'))
+            {
+                unlink($path.$fac);
+            }
+
+            //XML SRI FACDATA
+            $file=fopen($path.$fac,"a") or die("Problemas");
+            fputs($file,$comprobante);
+            fclose($file);
+
+            //XML SRI ORIGINAL
+            $xmlOriginalLimpio = new \SimpleXMLElement('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><autorizacion></autorizacion>');
+            $xmlOriginal = json_decode(json_encode($xmlOriginal), true);
+            $this->array_to_xml($xmlOriginal,$xmlOriginalLimpio);
+            $xmlOriginalLimpio->asXML($path.$claveAcceso."_AUT.xml");
+
+
+            //ya esta autorizado y valido q tenga info el xml descargado
+
+            // $this->getpdfall(array('param1'=>$bdcliente));
+
+        }
+    }
+
+    public function generaPdf($document, $claveAcceso, $ruta){
+
+
+
+        $pdf = new \PDF_MC_Table();
+        $pdf->SetAutoPageBreak(false);
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', 'B', 8);
+
+        if ($document->infoFactura->obligadoContabilidad == 'SI') {
+
+            $contabilidad = "SI";
+        } else {
+            $contabilidad = "NO";
+        }
+
+        $pdf->SetXY(20, 0+10);
+        //$pdf->image('uploads/Logo.jpg', null, null, 80, 30);
+
+        //public path
+        $path = public_path('logo/logo_header.jpeg');
+
+        $pdf->image($path, null, null, 60, 15);
+
+        $pdf->SetXY(110+2, 10+10);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->SetFillColor(255, 255, 255);
+        $pdf->MultiCell(100, 10, "RUC: " . $document->infoTributaria->ruc, 0, 'J', true);
+        $pdf->SetXY(110+2, 15+10);
+        $pdf->MultiCell(100, 10, "Factura Nro: " . $document->infoTributaria->estab . $document->infoTributaria->ptoEmi . $document->infoTributaria->secuencial, 0);
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->SetXY(110+2, 20+10);
+        $pdf->MultiCell(100, 10, 'Nro Autorizacion: ', 0);
+        $pdf->SetXY(110+2, 25+10);
+        $pdf->MultiCell(100, 10, $claveAcceso, 0);
+        $pdf->SetXY(110+2, 30+10);
+        if ($document->infoTributaria->ambiente == 2) {
+            $ambiente = 'PRODUCCION';
+        } else {
+            $ambiente = 'PRUEBAS';
+        }
+        $pdf->MultiCell(100, 10, 'Ambiente: ' . $ambiente, 0);
+        $pdf->SetXY(110+2, 35+10);
+        if ($document->infoTributaria->tipoEmision == 1) {
+            $emision = 'NORMAL';
+        } else {
+            $emision = 'NORMAL';
+        }
+        $pdf->MultiCell(100, 10, 'Emision: ' . $emision, 0);
+
+        $pdf->Rect(10,20+10,100,17);
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetXY(10, 20+10);
+        $pdf->MultiCell(100, 5, $document->infoTributaria->razonSocial, 0,0,'C');
+        $pdf->SetXY(10, 25+10);
+        $pdf->MultiCell(20, 3,"Dir. Matriz:", 0);
+        $pdf->SetXY(10, 30+10);
+        $pdf->MultiCell(60, 3, "OBLIGADO A LLEVAR CONTABILIDAD: ", 0);
+
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetXY(30, 25+10);
+        $pdf->MultiCell(80, 3, $document->infoTributaria->dirMatriz, 0);
+        $pdf->SetXY(70, 30+10);
+        $pdf->MultiCell(20, 3, $contabilidad, 0);
+
+        //Codigo de barras
+        $pdf->SetXY(112, 45+10);
+        //$this->generarCodigoBarras($claveAcceso);
+
+        $path = public_path('logo/codigo_mod.png');
+        $pdf->image($path, null, null, 90, 20);
+        $pdf->SetXY(110, 60+10);
+        $pdf->SetFillColor(255, 255, 255);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->Cell(100, 10, $claveAcceso, 0, 0, "C", true);
+
+        //informacion del cliente
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->SetFillColor(255, 255, 255);
+
+        $pdf->Rect(10,38+10,100,36);
+        $pdf->SetXY(10, 38+10);
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->MultiCell(100, 5, "INFORMACION DEL CLIENTE", 0,'C');
+
+
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetXY(10, 45+10);
+        $pdf->Cell(30, 5, "RUC/CI:", 0,'L');
+        $pdf->SetXY(10, 50+10);
+        $pdf->MultiCell(30, 5,"Razon S./Nombre:", 0,'L');
+        $pdf->SetXY(10, 60+10);
+        $pdf->MultiCell(30, 5, "Direccion:", 0);
+        $pdf->SetXY(10, 70+10);
+        $pdf->MultiCell(30, 5, "Fecha Emision:", 0);
+
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->SetXY(40, 45+10);
+        $pdf->MultiCell(70, 5, $document->infoFactura->identificacionComprador, 0, 'L');
+        $pdf->SetXY(40, 50+10);
+        $pdf->MultiCell(70, 5,$document->infoFactura->razonSocialComprador, 0,'L');
+        $pdf->SetXY(40, 60+10);
+        $pdf->MultiCell(70, 5, $document->infoFactura->direccionComprador, 0,'L');
+        $pdf->SetXY(40, 70+10);
+        $pdf->MultiCell(70, 5, $document->infoFactura->fechaEmision, 0,'L');
+
+        $ejeX = 65;
+        $Y=$ejeX+10;
+        //detalle de la factura
+        $pdf->SetXY(10, $Y+10);
+
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->Cell(30, 10, "Codigo", 1, 0, "C", true);
+        $pdf->Cell(85, 10, "Descripcion", 1, 0, "C", true);
+        $pdf->Cell(15, 10, "Cantidad", 1, 0, "C", true);
+        $pdf->Cell(20, 10, "Precio", 1, 0, "C", true);
+        $pdf->Cell(20, 10, "% Desc", 1, 0, "C", true);
+        $pdf->Cell(20, 10, "Total", 1, 0, "C", true);
+
+        $Y=$Y+10;
+        $pdf->SetWidths(array(30,85,15,20,20,20));
+        $pdf->SetXY(10, $Y+10);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->SetFillColor(255, 255, 255);
+        foreach ($document->detalles->detalle as $a => $b) {
+            $pdf->Row(array($b->codigoPrincipal,$b->descripcion,$b->cantidad, number_format(floatval($b->precioUnitario), 2),$b->descuento,$b->precioTotalSinImpuesto));
+        }
+
+        //Total de la factura
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->SetFillColor(255, 255, 255);
+        $iva = 0;
+        $ice = 0;
+        $IRBPNR = 0;
+        $subtotal12 = 0;
+        $subtotal0 = 0;
+        $subtotal_no_impuesto = 0;
+        $subtotal_no_iva = 0;
+
+        foreach ($document->infoFactura->totalConImpuestos->totalImpuesto as $a => $b) {
+            if ($b->codigo == 2) {
+                $iva = $b->valor;
+                if ($b->codigoPorcentaje == 0) {
+                    $subtotal0 = $b->baseImponible;
+                }
+                if ($b->codigoPorcentaje == 2) {
+                    $subtotal12 = $b->baseImponible;
+                    //    $iva = $b->valor;
+                }
+                if ($b->codigoPorcentaje == 6) {
+                    $subtotal_no_impuesto = $b->baseImponible;
+                }
+                if ($b->codigoPorcentaje == 7) {
+                    $subtotal_no_iva = $b->baseImponible;
+                }
+            }
+            if ($b->codigo == 3) {
+                $ice = $b->valor;
+            }
+            if ($b->codigo == 5) {
+                $IRBPNR = $b->valor;
+            }
+        }
+
+        $Y2=$pdf->GetY()+5;
+        $Y=$pdf->GetY()+5;
+
+
+$pdf->SetDrawColor(0, 0, 0); // RGB: Negro
+        $pdf->SetXY(150, $Y);
+        $pdf->Cell(25, 5, "Subtotal 12%: ", 1, 0, "L", true);
+        $pdf->SetXY(175, $Y);
+        $pdf->Cell(25, 5,$subtotal12, 0, 0, "R", true);
+        $Y=$Y+5;
+        $pdf->SetXY(150, $Y);
+        $pdf->Cell(25, 5, "SubTotal 0%: ", 0, 0, "L", true);
+        $pdf->SetXY(175, $Y);
+        $pdf->Cell(25, 5, $subtotal0, 0, 0, "R", true);
+        $Y=$Y+5;
+        $pdf->SetXY(150, $Y);
+        $pdf->Cell(25, 5, "SubTotal no sujeto de IVA: ", 0, 0, "L", true);
+        $pdf->SetXY(175, $Y);
+        $pdf->Cell(25, 5, $subtotal_no_impuesto, 0, 0, "R", true);
+        $Y=$Y+5;
+        $pdf->SetXY(150, $Y);
+        $pdf->Cell(25, 5, "SubTotal exento de IVA: ", 0, 0, "L", true);
+        $pdf->SetXY(175, $Y);
+        $pdf->Cell(25, 5, $subtotal_no_iva, 0, 0, "R", true);
+        $Y=$Y+5;
+        $pdf->SetXY(150, $Y);
+        $pdf->Cell(25, 5, "SubTotal sin Impuestos: ", 0, 0, "L", true);
+        $pdf->SetXY(175, $Y);
+        $pdf->Cell(25, 5, $document->infoFactura->totalDescuento, 0, 0, "R", true);
+        $Y=$Y+5;
+        $pdf->SetXY(150, $Y);
+        $pdf->Cell(25, 5, "Descuento: ", 0, 0, "L", true);
+        $pdf->SetXY(175, $Y);
+        $pdf->Cell(25, 5, $document->infoFactura->totalDescuento, 0, 0, "R", true);
+        $Y=$Y+5;
+        $pdf->SetXY(150, $Y);
+        $pdf->Cell(25, 5, "IVA 12%: ", 0, 0, "L");
+        $pdf->SetXY(175, $Y);
+        $pdf->Cell(25, 5, $iva, 0, 0, "R");
+        $Y=$Y+5;
+        $pdf->SetXY(150, $Y);
+        $pdf->Cell(25, 5, "ICE: ", 0, 0, "L");
+        $pdf->SetXY(175, $Y);
+        $pdf->Cell(25, 5, $ice, 0, 0, "R");
+        $Y=$Y+5;
+        $pdf->SetXY(150, $Y);
+        $pdf->Cell(25,5, "IRBPNR: ", 0, 0, "L");
+        $pdf->SetXY(175, $Y);
+        $pdf->Cell(25, 5, $IRBPNR, 0, 0, "R");
+        $Y=$Y+5;
+        $pdf->SetXY(150, $Y);
+        $pdf->Cell(25, 5, "Valor Total: ", 0, 0, "L");
+        $pdf->SetXY(175, $Y);
+        $pdf->Cell(25, 5, $document->infoFactura->importeTotal, 0, 0, "R");
+
+
+
+
+
+        $infoAdicional = "";
+        $correo = "";
+
+        foreach ($document->infoAdicional->campoAdicional as $a) {
+            foreach ($a->attributes() as $b) {
+                if ($b == 'Email' || $b == 'email' || $b == '=correo' || $b == 'Correo') {
+                    $correo = $a;
+                    $infoAdicional .= $b . ': ' . $a . "\n";
+                } else {
+                    $infoAdicional .= $b . ': ' . $a . "\n";
+                }
+            }
+        }
+
+        $pdf->SetXY(10, $Y2+10);
+        $pdf->SetFont('Arial', 'B', 7);
+        $pdf->MultiCell(105, 5, "Informacion Adicional", 0);
+        $Y2=$Y2+5;
+        $pdf->SetXY(10, $Y2+10);
+        $pdf->SetFont('Arial', '', 7);
+        $pdf->MultiCell(105, 5, "" . $infoAdicional . "", 1);
+
+        $pdf->SetFont('Arial', 'B', 8);
+        $Y2=$pdf->GetY()+5;
+        $pdf->SetXY(10, $Y2+10);
+        $pdf->SetFillColor(215, 215, 215);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->Cell(60,4,"Forma de Pago",1,0,'C',true);
+        $pdf->Cell(20,4,"Valor",1,0,'C',1);
+        $pdf->Cell(10,4,"Plazo",1,0,'C',1);
+        $pdf->Cell(15,4,"Tiempo",1,0,'C',1);
+        $Y2=$Y2+4;
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->SetFillColor(255, 255, 255);
+
+
+        foreach ($document->infoFactura->pagos->pago as $e => $f) {
+            if ($f->formaPago == '01') {
+                $pdf->SetXY(10, $Y2+10);
+                $pdf->Cell(60, 4, 'Sin utilizacion del sistema financiero', 1, 0, "C", true);
+                $pdf->Cell(20, 4, $f->total, 1, 0, "C", true);
+                $pdf->Cell(10, 4, $f->plazo, 1, 0, "C", true);
+                $pdf->Cell(15, 4, $f->unidadTiempo, 1, 0, "C", true);
+                $Y2=$Y2+4;
+            }
+            if ($f->formaPago == '15') {
+                $pdf->SetXY(10, $Y2+10);
+                $pdf->Cell(60, 54, 'Compensacion de deudas', 1, 0, "L", true);
+                $pdf->Cell(20, 4, $f->total, 1, 0, "C", true);
+                $pdf->Cell(10, 4, $f->plazo, 1, 0, "C", true);
+                $pdf->Cell(15, 4, $f->unidadTiempo, 1, 0, "C", true);
+                $Y2=$Y2+4;
+            }
+            if ($f->formaPago == '16') {
+                $pdf->SetXY(10, $Y2+10);
+                $pdf->Cell(60, 4, 'Tarjeta debito', 1, 0, "L", true);
+                $pdf->Cell(20, 4, $f->total, 1, 0, "C", true);
+                $pdf->Cell(10, 4, $f->plazo, 1, 0, "C", true);
+                $pdf->Cell(15, 4, $f->unidadTiempo, 1, 0, "C", true);
+                $Y2=$Y2+4;
+            }
+            if ($f->formaPago == '17') {
+                $pdf->SetXY(10, $Y2+10);
+                $pdf->Cell(60, 4, 'Dinero Electronico', 1, 0, "L", true);
+                $pdf->Cell(20, 4, $f->total, 1, 0, "C", true);
+                $pdf->Cell(10, 4, $f->plazo, 1, 0, "C", true);
+                $pdf->Cell(15, 4, $f->unidadTiempo, 1, 0, "C", true);
+                $Y2=$Y2+4;
+            }
+            if ($f->formaPago == '18') {
+                $pdf->SetXY(10, $Y2+10);
+                $pdf->Cell(60, 4, 'Tarjeta Prepago', 1, 0, "L", true);
+                $pdf->Cell(20, 4, $f->total, 1, 0, "C", true);
+                $pdf->Cell(10, 4, $f->plazo, 1, 0, "C", true);
+                $pdf->Cell(15, 4,  $f->unidadTiempo, 1, 0, "C", true);
+                $Y2=$Y2+4;
+            }
+            if ($f->formaPago == '19') {
+                $pdf->SetXY(10, $Y2+10);
+                $pdf->Cell(60, 4, 'Tarjeta de credito', 1, 0, "L", true);
+                $pdf->Cell(20, 4, 'Total: ' . $f->total, 1, 0, "C", true);
+                $pdf->Cell(10, 4, 'Plazo: ' . $f->plazo, 1, 0, "C", true);
+                $pdf->Cell(15, 4, 'Unidad de tiempo: ' . $f->unidadTiempo, 1, 0, "C", true);
+                $Y2=$Y2+4;
+            }
+            if ($f->formaPago == '20') {
+                $pdf->SetXY(10, $Y2+10);
+                $pdf->Cell(60, 4, 'Otros con utilizacion del sistema financiero', 1, 0, "L", true);
+                $pdf->Cell(20, 4, $f->total, 1, 0, "C", true);
+                $pdf->Cell(10, 4, $f->plazo, 1, 0, "C", true);
+                $pdf->Cell(15, 4, $f->unidadTiempo, 1, 0, "C", true);
+                $Y2=$Y2+4;
+            }
+            if ($f->formaPago == '21') {
+                $pdf->SetXY(10, $Y2+10);
+                $pdf->Cell(60, 4, 'Endoso de titulos', 1, 0, "L", true);
+                $pdf->Cell(20, 4, $f->total, 1, 0, "C", true);
+                $pdf->Cell(10, 4, $f->plazo, 1, 0, "C", true);
+                $pdf->Cell(15, 4, $f->unidadTiempo, 1, 0, "C", true);
+                $Y2=$Y2+4;
+            }
+        }
+
+        $pdf->Output($ruta, 'F');
+		$pos=strrpos($ruta,"/");
+		$ruta=substr($ruta,0,$pos+1);
+		$pdf->Output($ruta.$claveAcceso.'.pdf', 'D');
+        echo 'ingresa mail';
+    }
+
 
 
 
