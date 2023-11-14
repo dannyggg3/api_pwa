@@ -88,7 +88,13 @@ class FacturaElectronicaController extends Controller
                     ));
 
             //valida si existe para crear
-            $facturaElectronica = FacturaElectronica::where('factura', $factura)->first();
+            $facturaElectronica = FacturaElectronica::where('ordenes_id', $idOrden)->first();
+
+            if($facturaElectronica){
+                $claveacceso=$facturaElectronica->clave_acceso;
+                $factura=$facturaElectronica->factura;
+            }
+
 
             if(!$facturaElectronica){
                FacturaElectronica::create([

@@ -9,6 +9,7 @@ use App\Models\DetallesCarrito;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
+use App\Models\FacturaElectronica;
 
 
 class OrdenController extends Controller
@@ -17,6 +18,18 @@ class OrdenController extends Controller
     {
         try {
             $ordenes = Orden::with('cliente', 'estadoOrden', 'datosFacturacion', 'direccionEntrega', 'detallesOrden')->get();
+
+            //recorre ordenes para ver FacturaElectronica
+            foreach ($ordenes as $item) {
+                $factura = FacturaElectronica::where('ordenes_id', $item->id)->first();
+
+                if($factura){
+                    $item->factura = $factura;
+                }else{
+                    $item->factura = null;
+                }
+            }
+
 
             return response()->json([
                 'correctProcess' => true,
