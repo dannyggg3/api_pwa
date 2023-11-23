@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 
 class DatosFacturacionController extends Controller
 {
-      /**
+    /**
      * Obtener todos los datos de facturación.
      *
      * @return JsonResponse
@@ -35,6 +35,28 @@ class DatosFacturacionController extends Controller
         }
     }
 
+    public function cliente($id)
+    {
+        try {
+            $datosFacturacion = DatosFacturacion::with('cliente', 'tipoDocumento')->where('cliente_id', $id)->get();
+            $response = response()->json([
+                'correctProcess' => true,
+                'data' => $datosFacturacion,
+                'message' => 'Datos de facturación obtenidos correctamente'
+            ]);
+
+            $response->setEncodingOptions($response->getEncodingOptions() | JSON_UNESCAPED_UNICODE);
+
+            return $response;
+        } catch (\Exception $e) {
+            return response()->json([
+                'correctProcess' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
     /**
      * Almacenar un nuevo dato de facturación.
      *
@@ -44,7 +66,7 @@ class DatosFacturacionController extends Controller
     public function store(Request $request)
     {
         try {
-           $validator = Validator::make($request->all(), [
+            $validator = Validator::make($request->all(), [
                 'cliente_id' => 'required|integer',
                 'nombre' => 'nullable|string|max:100',
                 'ruc_cedula' => 'nullable|string|max:20',
@@ -112,7 +134,7 @@ class DatosFacturacionController extends Controller
     public function update(Request $request, $id)
     {
         try {
-             $validator = Validator::make($request->all(), [
+            $validator = Validator::make($request->all(), [
                 'cliente_id' => 'required|integer',
                 'nombre' => 'nullable|string|max:100',
                 'ruc_cedula' => 'nullable|string|max:20',

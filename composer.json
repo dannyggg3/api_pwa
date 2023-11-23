@@ -6,13 +6,16 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "barryvdh/laravel-dompdf": "^2.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "intervention/image": "^2.7",
         "laravel/framework": "^8.75",
         "laravel/passport": "^10.4",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "php-open-source-saver/jwt-auth": "^2.1",
+        "picqer/php-barcode-generator": "^2.4",
         "setasign/fpdf": "^1.8"
     },
     "require-dev": {

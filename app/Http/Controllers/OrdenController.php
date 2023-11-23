@@ -14,7 +14,7 @@ use App\Models\FacturaElectronica;
 
 class OrdenController extends Controller
 {
-   public function index()
+    public function index()
     {
         try {
             $ordenes = Orden::with('cliente', 'estadoOrden', 'datosFacturacion', 'direccionEntrega', 'detallesOrden')->get();
@@ -23,9 +23,9 @@ class OrdenController extends Controller
             foreach ($ordenes as $item) {
                 $factura = FacturaElectronica::where('ordenes_id', $item->id)->first();
 
-                if($factura){
+                if ($factura) {
                     $item->factura = $factura;
-                }else{
+                } else {
                     $item->factura = null;
                 }
             }
@@ -60,7 +60,7 @@ class OrdenController extends Controller
                 'subtotal_sin_impuestos' => 'required|numeric',
                 'descuento' => 'required|numeric',
                 'iva' => 'required|numeric',
-                'envio'=> 'required|numeric'
+                'envio' => 'required|numeric'
             ]);
 
             if ($validator->fails()) {
@@ -71,14 +71,23 @@ class OrdenController extends Controller
                 ], 200);
             }
 
+            //fecha now
+            $fecha = date('Y-m-d H:i:s');
+            //reemplaza a la fecha que viene del front por merge
+
+            $request->merge([
+                'fecha' => $fecha
+            ]);
+
+
             $orden = Orden::create($request->all());
 
 
-            $carrito= DetallesCarrito::with('variante')->where('cliente_id', $request->cliente_id)->get();
+            $carrito = DetallesCarrito::with('variante')->where('cliente_id', $request->cliente_id)->get();
 
             foreach ($carrito as $item) {
 
-                $prodSinIva= ($item->variante->precio) - ($item->variante->precio * 0.12);
+                $prodSinIva = ($item->variante->precio) - ($item->variante->precio * 0.12);
                 $iva = $item->variante->precio * 0.12;
 
                 $detalles = DetallesOrden::create([
@@ -90,7 +99,7 @@ class OrdenController extends Controller
                 ]);
             }
 
-            $carrito= DetallesCarrito::where('cliente_id', $request->cliente_id)->delete();
+            $carrito = DetallesCarrito::where('cliente_id', $request->cliente_id)->delete();
 
 
 
@@ -106,6 +115,67 @@ class OrdenController extends Controller
             ], 200);
         }
     }
+
+
+    public function reportes()
+    {
+
+        try {
+
+            //total ventas del dia
+            $totalVentasDia = Orden::where('estado_orden_id', 5)->whereDate('fecha', date('Y-m-d'))->sum('total');
+
+            //total de ventas canceladas del dia
+            $totalVentasCanceladas = Orden::where('estado_orden_id', 6)->whereDate('fecha', date('Y-m-d'))->sum('total');
+
+            //total de pedidos del dia
+            $totalPedidosDia = Orden::whereDate('fecha', date('Y-m-d'))->count();
+
+            //total ventas de cada mes del año
+            $totalVentasEnero = Orden::where('estado_orden_id', 5)->whereMonth('fecha', 1)->sum('total');
+            $totalVentasFebrero = Orden::where('estado_orden_id', 5)->whereMonth('fecha', 2)->sum('total');
+            $totalVentasMarzo = Orden::where('estado_orden_id', 5)->whereMonth('fecha', 3)->sum('total');
+            $totalVentasAbril = Orden::where('estado_orden_id', 5)->whereMonth('fecha', 4)->sum('total');
+            $totalVentasMayo = Orden::where('estado_orden_id', 5)->whereMonth('fecha', 5)->sum('total');
+            $totalVentasJunio = Orden::where('estado_orden_id', 5)->whereMonth('fecha', 6)->sum('total');
+            $totalVentasJulio = Orden::where('estado_orden_id', 5)->whereMonth('fecha', 7)->sum('total');
+            $totalVentasAgosto = Orden::where('estado_orden_id', 5)->whereMonth('fecha', 8)->sum('total');
+            $totalVentasSeptiembre = Orden::where('estado_orden_id', 5)->whereMonth('fecha', 9)->sum('total');
+            $totalVentasOctubre = Orden::where('estado_orden_id', 5)->whereMonth('fecha', 10)->sum('total');
+            $totalVentasNoviembre = Orden::where('estado_orden_id', 5)->whereMonth('fecha', 11)->sum('total');
+            $totalVentasDiciembre = Orden::where('estado_orden_id', 5)->whereMonth('fecha', 12)->sum('total');
+
+            $data = [
+                'totalVentasDia' => $totalVentasDia,
+                'totalVentasCanceladas' => $totalVentasCanceladas,
+                'totalPedidosDia' => $totalPedidosDia,
+                'totalVentasEnero' => $totalVentasEnero,
+                'totalVentasFebrero' => $totalVentasFebrero,
+                'totalVentasMarzo' => $totalVentasMarzo,
+                'totalVentasAbril' => $totalVentasAbril,
+                'totalVentasMayo' => $totalVentasMayo,
+                'totalVentasJunio' => $totalVentasJunio,
+                'totalVentasJulio' => $totalVentasJulio,
+                'totalVentasAgosto' => $totalVentasAgosto,
+                'totalVentasSeptiembre' => $totalVentasSeptiembre,
+                'totalVentasOctubre' => $totalVentasOctubre,
+                'totalVentasNoviembre' => $totalVentasNoviembre,
+                'totalVentasDiciembre' => $totalVentasDiciembre,
+            ];
+
+            return new JsonResponse([
+                'correctProcess' => true,
+                'data' => $data,
+                'message' => 'Reportes obtenidos correctamente'
+            ], 200);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'correctProcess' => false,
+                'message' => $e->getMessage()
+            ], 200);
+        }
+    }
+
 
     public function show($id)
     {
@@ -132,9 +202,10 @@ class OrdenController extends Controller
         }
     }
 
-    public function showCliente($id){
+    public function showCliente($id)
+    {
 
-         try {
+        try {
             $orden = Orden::with('cliente', 'estadoOrden', 'datosFacturacion', 'direccionEntrega', 'detallesOrden')->where('cliente_id', $id)->get();
 
 
@@ -144,7 +215,7 @@ class OrdenController extends Controller
 
                 foreach ($detalles as $item2) {
 
-                    $producto= Producto::where('id', $item2->variante->producto_id)->first();
+                    $producto = Producto::where('id', $item2->variante->producto_id)->first();
 
                     $item2->variante->producto = $producto;
                 }
@@ -164,7 +235,6 @@ class OrdenController extends Controller
                 'message' => $e->getMessage()
             ], 200);
         }
-
     }
 
     public function update(Request $request, $id)
@@ -179,7 +249,7 @@ class OrdenController extends Controller
                 ], 200);
             }
 
-           $validator = Validator::make($request->all(), [
+            $validator = Validator::make($request->all(), [
                 'cliente_id' => 'required|integer',
                 'fecha' => 'required|date',
                 'estado' => 'required|string|max:20',

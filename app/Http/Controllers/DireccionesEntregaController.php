@@ -45,6 +45,38 @@ class DireccionesEntregaController extends Controller
         }
     }
 
+
+    public function cliente($id)
+    {
+        try {
+            $direccionesEntrega = DireccionesEntrega::where('cliente_id',$id)->get();
+
+            foreach ($direccionesEntrega as $direccionEntrega) {
+                //parroquia
+                    $parroquia=Parroquias::where('id',$direccionEntrega->parroquia_id)->first();
+                    $direccionEntrega->parroquia=$parroquia;
+                //ciudad
+                    $ciudad=Ciudad::where('id',$parroquia->ciudad_id)->first();
+                    $direccionEntrega->ciudad=$ciudad;
+                //provincia
+                    $provincia=Provincia::where('id',$ciudad->provincias_id)->first();
+                    $direccionEntrega->provincia=$provincia;
+            }
+
+            return new JsonResponse([
+                'correctProcess' => true,
+                'data' => $direccionesEntrega,
+                'message' => 'Direcciones de entrega obtenidas correctamente'
+            ]);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'correctProcess' => false,
+                'message' => $e->getMessage()
+            ], 200);
+        }
+    }
+
+
     public function store(Request $request)
     {
         try {

@@ -64,8 +64,8 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 
-Route::middleware('auth:api')->group(function() {
-    Route::get('usuariosClientes',[AuthController::class,'clientes']);
+Route::middleware('auth:api')->group(function () {
+    Route::get('usuariosClientes', [AuthController::class, 'clientes']);
 });
 
 
@@ -116,7 +116,6 @@ Route::prefix('clientes')->group(function () {
     Route::get('/{id}', [ClienteController::class, 'show']);
     Route::post('/{id}', [ClienteController::class, 'update']);
     Route::delete('/{id}', [ClienteController::class, 'destroy']);
-
 });
 
 
@@ -133,6 +132,7 @@ Route::prefix('comentarioresena')->group(function () {
 //CRUD Tabla DatosFacturacion
 Route::prefix('datosfacturacion')->group(function () {
     Route::get('/', [DatosFacturacionController::class, 'index']);
+    Route::get('/cliente/{id}', [DatosFacturacionController::class, 'cliente']);
     Route::post('/', [DatosFacturacionController::class, 'store']);
     Route::get('/{id}', [DatosFacturacionController::class, 'show']);
     Route::post('/{id}', [DatosFacturacionController::class, 'update']);
@@ -160,6 +160,7 @@ Route::prefix('detallesorden')->group(function () {
 //CRUD Tabla DireccionesEntrega
 Route::prefix('direccionesentrega')->group(function () {
     Route::get('/', [DireccionesEntregaController::class, 'index']);
+    Route::get('/cliente/{id}', [DireccionesEntregaController::class, 'cliente']);
     Route::post('/', [DireccionesEntregaController::class, 'store']);
     Route::get('/{id}', [DireccionesEntregaController::class, 'show']);
     Route::post('/{id}', [DireccionesEntregaController::class, 'update']);
@@ -241,12 +242,16 @@ Route::prefix('ofertasespeciales')->group(function () {
 
 //CRUD Tabla Orden
 Route::prefix('orden')->group(function () {
+
     Route::get('/', [OrdenController::class, 'index']);
     Route::post('/', [OrdenController::class, 'store']);
     Route::get('/{id}', [OrdenController::class, 'show']);
     Route::get('/cliente/{id}', [OrdenController::class, 'showCliente']);
     Route::put('/{id}', [OrdenController::class, 'update']);
     Route::delete('/{id}', [OrdenController::class, 'destroy']);
+    Route::get('/reportes/reporte', [OrdenController::class, 'reportes']);
+
+    //reportes
 });
 
 //CRUD Tabla PagosOrden
@@ -340,7 +345,3 @@ Route::prefix('variantes')->group(function () {
     Route::delete('/{id}', [VarianteController::class, 'destroy']);
     Route::get('/product/{id}', [VarianteController::class, 'showProduct']);
 });
-
-
-
-
