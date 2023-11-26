@@ -250,6 +250,8 @@ Route::prefix('orden')->group(function () {
     Route::put('/{id}', [OrdenController::class, 'update']);
     Route::delete('/{id}', [OrdenController::class, 'destroy']);
     Route::get('/reportes/reporte', [OrdenController::class, 'reportes']);
+    //cambiar estado
+    Route::post('/cambiarEstado/{id}', [OrdenController::class, 'cambiarEstado']);
 
     //reportes
 });

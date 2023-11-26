@@ -18,12 +18,14 @@ class DireccionesEntrega extends Model
         'estado',
         'parroquia_id',
         'comentarios',
+        'postal',
+        'num_casa'
     ];
 
     public function parroquia()
-{
-    return $this->belongsTo(Parroquias::class, 'parroquia_id', 'id');
-}
+    {
+        return $this->belongsTo(Parroquias::class, 'parroquia_id', 'id');
+    }
     public function cliente()
     {
         return $this->belongsTo(Cliente::class, 'cliente_id');

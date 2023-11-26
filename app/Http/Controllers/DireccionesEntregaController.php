@@ -15,21 +15,21 @@ use App\Models\Provincia;
 
 class DireccionesEntregaController extends Controller
 {
-   public function index()
+    public function index()
     {
         try {
-            $direccionesEntrega = DireccionesEntrega::with('cliente','parroquia')->get();
+            $direccionesEntrega = DireccionesEntrega::with('cliente', 'parroquia')->get();
 
             foreach ($direccionesEntrega as $direccionEntrega) {
                 //parroquia
-                    $parroquia=Parroquias::where('id',$direccionEntrega->parroquia_id)->first();
-                    $direccionEntrega->parroquia=$parroquia;
+                $parroquia = Parroquias::where('id', $direccionEntrega->parroquia_id)->first();
+                $direccionEntrega->parroquia = $parroquia;
                 //ciudad
-                    $ciudad=Ciudad::where('id',$parroquia->ciudad_id)->first();
-                    $direccionEntrega->ciudad=$ciudad;
+                $ciudad = Ciudad::where('id', $parroquia->ciudad_id)->first();
+                $direccionEntrega->ciudad = $ciudad;
                 //provincia
-                    $provincia=Provincia::where('id',$ciudad->provincias_id)->first();
-                    $direccionEntrega->provincia=$provincia;
+                $provincia = Provincia::where('id', $ciudad->provincias_id)->first();
+                $direccionEntrega->provincia = $provincia;
             }
 
             return new JsonResponse([
@@ -49,18 +49,18 @@ class DireccionesEntregaController extends Controller
     public function cliente($id)
     {
         try {
-            $direccionesEntrega = DireccionesEntrega::where('cliente_id',$id)->get();
+            $direccionesEntrega = DireccionesEntrega::where('cliente_id', $id)->get();
 
             foreach ($direccionesEntrega as $direccionEntrega) {
                 //parroquia
-                    $parroquia=Parroquias::where('id',$direccionEntrega->parroquia_id)->first();
-                    $direccionEntrega->parroquia=$parroquia;
+                $parroquia = Parroquias::where('id', $direccionEntrega->parroquia_id)->first();
+                $direccionEntrega->parroquia = $parroquia;
                 //ciudad
-                    $ciudad=Ciudad::where('id',$parroquia->ciudad_id)->first();
-                    $direccionEntrega->ciudad=$ciudad;
+                $ciudad = Ciudad::where('id', $parroquia->ciudad_id)->first();
+                $direccionEntrega->ciudad = $ciudad;
                 //provincia
-                    $provincia=Provincia::where('id',$ciudad->provincias_id)->first();
-                    $direccionEntrega->provincia=$provincia;
+                $provincia = Provincia::where('id', $ciudad->provincias_id)->first();
+                $direccionEntrega->provincia = $provincia;
             }
 
             return new JsonResponse([
@@ -87,6 +87,8 @@ class DireccionesEntregaController extends Controller
                 'estado' => 'nullable|string|max:20',
                 'parroquia_id' => 'required|string',
                 'comentarios' => 'nullable|string|max:255',
+                'postal' => 'nullable|string|max:45',
+                'num_casa' => 'nullable|string|max:45',
             ]);
 
             if ($validator->fails()) {
@@ -140,6 +142,8 @@ class DireccionesEntregaController extends Controller
                 'estado' => 'nullable|string|max:20',
                 'parroquia_id' => 'required|string',
                 'comentarios' => 'nullable|string|max:255',
+                'postal' => 'nullable|string|max:45',
+                'num_casa' => 'nullable|string|max:45',
             ]);
 
             if ($validator->fails()) {

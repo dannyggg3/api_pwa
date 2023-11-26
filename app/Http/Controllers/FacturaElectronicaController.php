@@ -121,6 +121,11 @@ class FacturaElectronicaController extends Controller
 
             $fac = FacturaElectronica::where('factura', $factura)->first();
 
+            if ($fac->estado == 'AUTORIZADO') {
+                $orden->estado_orden_id = 5;
+                $orden->save();
+            }
+
 
             $pdf = asset('storage/public/xml/' . $empresa->ruc . '/' . $claveacceso . '.pdf');
 
@@ -607,12 +612,6 @@ class FacturaElectronicaController extends Controller
             $xmlOriginal = json_decode(json_encode($xmlOriginal), true);
             $this->array_to_xml($xmlOriginal, $xmlOriginalLimpio);
             $xmlOriginalLimpio->asXML($path . $claveAcceso . "_AUT.xml");
-
-
-            //ya esta autorizado y valido q tenga info el xml descargado
-
-            // $this->getpdfall(array('param1'=>$bdcliente));
-
         }
     }
 
@@ -1307,7 +1306,7 @@ class FacturaElectronicaController extends Controller
                     <table id="footer">
                         <tr class="fila">
                             <td>
-                                <span>MAXCLEAN</span>
+                                <span>CONFECCIONES ROCIO</span>
                             </td>
                         </tr>
                     </table>

@@ -4,12 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Orden;
 use App\Models\Producto;
+use App\Models\Empresa;
+use App\Models\Cliente;
 use App\Models\DetallesOrden;
 use App\Models\DetallesCarrito;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
 use App\Models\FacturaElectronica;
+use App\Mail\PedidoGenerado;
+use App\Mail\CambioEstadoPedido;
+use App\Models\DireccionesEntrega;
+use App\Models\Parroquias;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+
+
 
 
 class OrdenController extends Controller
@@ -17,7 +27,9 @@ class OrdenController extends Controller
     public function index()
     {
         try {
-            $ordenes = Orden::with('cliente', 'estadoOrden', 'datosFacturacion', 'direccionEntrega', 'detallesOrden')->get();
+            $ordenes = Orden::with('cliente', 'estadoOrden', 'datosFacturacion', 'direccionEntrega', 'detallesOrden')
+                ->orderBy('id', 'desc')
+                ->get();
 
             //recorre ordenes para ver FacturaElectronica
             foreach ($ordenes as $item) {
@@ -101,12 +113,126 @@ class OrdenController extends Controller
 
             $carrito = DetallesCarrito::where('cliente_id', $request->cliente_id)->delete();
 
+            //enviar correo
+            $empresa = Empresa::where('id', 1)->first();
+            $usuario = Cliente::with('usuario')->where('id', $request->cliente_id)->first();
+            $orden = Orden::with('cliente', 'estadoOrden', 'datosFacturacion', 'direccionEntrega', 'detallesOrden')->where('id', $orden->id)->first();
+
+            $parroquia = Parroquias::with('ciudad')->where('id', $orden->direccionEntrega->parroquia_id)->first();
+
+            $detalle = DetallesOrden::with('variante')->where('orden_id', $orden->id)->get();
+
+            foreach ($detalle as $item) {
+                $producto = Producto::where('id', $item->variante->producto_id)->first();
+                $item->variante->producto = $producto;
+            }
+
+            $orden->detallesOrden = $detalle;
+            $orden->direccionEntrega->parroquia = $parroquia;
+
+            //usuario admin
+            $usuarioAdmin = User::where('rol_id', 1)->first();
+
+
+            $orden->empresa = $empresa;
+
+            //envia el correo con la clave
+            try {
+                //adjunta el pdf y pasarle la data  a EnviarFactura
+                $correo =  Mail::to([$usuario->usuario->email, $usuarioAdmin->email])->send(new PedidoGenerado($orden));
+            } catch (\Exception $e) {
+
+                return new JsonResponse([
+                    'correctProcess' => false,
+                    'message' => $e->getMessage()
+                ], 200);
+            }
+
 
 
             return new JsonResponse([
                 'correctProcess' => true,
                 'data' => $orden,
                 'message' => 'Orden creada correctamente'
+            ], 200);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'correctProcess' => false,
+                'message' => $e->getMessage()
+            ], 200);
+        }
+    }
+
+    public function cambiarEstado(Request $request, $id)
+    {
+        try {
+            $orden = Orden::where('id', $id)->first();
+
+            if (!$orden) {
+                return new JsonResponse([
+                    'correctProcess' => false,
+                    'message' => 'Orden no encontrada'
+                ], 200);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'estado_orden_id' => 'required|integer',
+            ]);
+
+            if ($validator->fails()) {
+                return new JsonResponse([
+                    'correctProcess' => false,
+                    'message' => 'Error de validación',
+                    'errors' => $validator->errors()
+                ], 200);
+            }
+
+            //cambiar estado de la orden
+            $orden->estado_orden_id = $request->estado_orden_id;
+            $orden->save();
+
+            //enviar correo
+            $empresa = Empresa::where('id', 1)->first();
+            $usuario = Cliente::with('usuario')->where('id', $orden->cliente_id)->first();
+            $ordenResult = Orden::with('cliente', 'estadoOrden', 'datosFacturacion', 'direccionEntrega', 'detallesOrden')->where('id', $orden->id)->first();
+
+            $parroquia = Parroquias::with('ciudad')->where('id', $ordenResult->direccionEntrega->parroquia_id)->first();
+
+            $detalle = DetallesOrden::with('variante')->where('orden_id', $ordenResult->id)->get();
+
+            foreach ($detalle as $item) {
+                $producto = Producto::where('id', $item->variante->producto_id)->first();
+                $item->variante->producto = $producto;
+            }
+            $ordenResult->detallesOrden = $detalle;
+            $ordenResult->direccionEntrega->parroquia = $parroquia;
+            //usuario admin
+            $usuarioAdmin = User::where('id', 1)->first();
+            $ordenResult->empresa = $empresa;
+
+            $asunto = 'Cambio de estado de pedido';
+
+            if ((int)$orden->estado_orden_id == 5) {
+                $asunto = 'Pedido finalizado';
+            }
+
+            if ((int)$orden->estado_orden_id == 6) {
+                $asunto = 'Pedido cancelado';
+            }
+
+            if ((int)$orden->estado_orden_id == 4) {
+                $asunto = 'Su orden esta en camino';
+            }
+
+
+
+
+            $correo =  Mail::to([$usuario->usuario->email, $usuarioAdmin->email])->send(new CambioEstadoPedido($ordenResult, $asunto));
+
+            return new JsonResponse([
+                'correctProcess' => true,
+                'data' => $ordenResult,
+                'message' => 'Estado de la orden actualizado correctamente'
             ], 200);
         } catch (\Exception $e) {
             return new JsonResponse([
@@ -177,6 +303,8 @@ class OrdenController extends Controller
     }
 
 
+
+
     public function show($id)
     {
         try {
@@ -206,7 +334,10 @@ class OrdenController extends Controller
     {
 
         try {
-            $orden = Orden::with('cliente', 'estadoOrden', 'datosFacturacion', 'direccionEntrega', 'detallesOrden')->where('cliente_id', $id)->get();
+            $orden = Orden::with('cliente', 'estadoOrden', 'datosFacturacion', 'direccionEntrega', 'detallesOrden')
+                ->where('cliente_id', $id)
+                ->orderBy('id', 'desc')
+                ->get();
 
 
             //foreach de ordenes para agregar variantes
