@@ -8,7 +8,7 @@ class Utils
 {
 
 
-     /**
+    /**
      * Retorna el Método de Pago
      */
     public static function getPaymentType($payment)
@@ -48,9 +48,8 @@ class Utils
      */
     public static function getCodeTax($listTax, $rateTax)
     {
-        foreach ($listTax as $key=>$itemTax){
-            if((float)$itemTax->rate == (float)$rateTax)
-            {
+        foreach ($listTax as $key => $itemTax) {
+            if ((float)$itemTax->rate == (float)$rateTax) {
                 return $itemTax->xml_code;
             }
         }
@@ -60,7 +59,7 @@ class Utils
     /**
      * Genera la Secuencia para el Documento XML
      */
-    public static function claveAcceso($param=array())
+    public static function claveAcceso($param = array())
     {
         $fecha = $param['fechaEmision'];
         $a1 = substr($fecha, 0, 1);
@@ -177,7 +176,132 @@ class Utils
                 $valorBuscado = 1;
                 break;
         }
-        return substr($fecha, 0, 2).substr($fecha, 3, 2).substr($fecha, 6, 4).$tipoComprobante.$ruc.$param['ambiente'].$establecimiento.$ptoEmi.$secuencial.substr($secuencial, 1, 8).$a48.$valorBuscado;
+        return substr($fecha, 0, 2) . substr($fecha, 3, 2) . substr($fecha, 6, 4) . $tipoComprobante . $ruc . $param['ambiente'] . $establecimiento . $ptoEmi . $secuencial . substr($secuencial, 1, 8) . $a48 . $valorBuscado;
     }
 
+    public static function validaCedula($documento)
+    {
+
+
+        if (strlen($documento) != 10) {
+            return false;
+        }
+
+        //valida cedula del ecuador
+        $nro_region = substr($documento, 0, 2);
+        if ($nro_region >= 1 && $nro_region <= 24) {
+            $ult_digito = substr($documento, -1, 1);
+            $valor2 = substr($documento, 1, 1);
+            $valor4 = substr($documento, 3, 1);
+            $valor6 = substr($documento, 5, 1);
+            $valor8 = substr($documento, 7, 1);
+            $suma_pares = ($valor2 + $valor4 + $valor6 + $valor8);
+            $valor1 = substr($documento, 0, 1);
+            $valor1 = ($valor1 * 2);
+            if ($valor1 > 9) {
+                $valor1 = ($valor1 - 9);
+            }
+            $valor3 = substr($documento, 2, 1);
+            $valor3 = ($valor3 * 2);
+            if ($valor3 > 9) {
+                $valor3 = ($valor3 - 9);
+            }
+            $valor5 = substr($documento, 4, 1);
+            $valor5 = ($valor5 * 2);
+            if ($valor5 > 9) {
+                $valor5 = ($valor5 - 9);
+            }
+            $valor7 = substr($documento, 6, 1);
+            $valor7 = ($valor7 * 2);
+            if ($valor7 > 9) {
+                $valor7 = ($valor7 - 9);
+            }
+            $valor9 = substr($documento, 8, 1);
+            $valor9 = ($valor9 * 2);
+            if ($valor9 > 9) {
+                $valor9 = ($valor9 - 9);
+            }
+            $suma_impares = ($valor1 + $valor3 + $valor5 + $valor7 + $valor9);
+            $suma = ($suma_pares + $suma_impares);
+            $dis = substr($suma, 0, 1);
+            $dis = (($dis + 1) * 10);
+            $digito = ($dis - $suma);
+            if ($digito == 10) {
+                $digito = '0';
+            }
+            if ($digito == $ult_digito) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public static function validaRuc($ruc)
+    {
+
+        if (strlen($ruc) != 13) {
+            return false;
+        }
+
+        //valida ruc del ecuador
+        $nro_region = substr($ruc, 0, 2);
+        if ($nro_region >= 1 && $nro_region <= 24) {
+            $ult_digito = substr($ruc, -1, 1);
+            $valor2 = substr($ruc, 1, 1);
+            $valor4 = substr($ruc, 3, 1);
+            $valor6 = substr($ruc, 5, 1);
+            $valor8 = substr($ruc, 7, 1);
+            $valor10 = substr($ruc, 9, 1);
+            $valor12 = substr($ruc, 11, 1);
+            $suma_pares = ($valor2 + $valor4 + $valor6 + $valor8 + $valor10 + $valor12);
+            $valor1 = substr($ruc, 0, 1);
+            $valor1 = ($valor1 * 2);
+            if ($valor1 > 9) {
+                $valor1 = ($valor1 - 9);
+            }
+            $valor3 = substr($ruc, 2, 1);
+            $valor3 = ($valor3 * 2);
+            if ($valor3 > 9) {
+                $valor3 = ($valor3 - 9);
+            }
+            $valor5 = substr($ruc, 4, 1);
+            $valor5 = ($valor5 * 2);
+            if ($valor5 > 9) {
+                $valor5 = ($valor5 - 9);
+            }
+            $valor7 = substr($ruc, 6, 1);
+            $valor7 = ($valor7 * 2);
+            if ($valor7 > 9) {
+                $valor7 = ($valor7 - 9);
+            }
+            $valor9 = substr($ruc, 8, 1);
+            $valor9 = ($valor9 * 2);
+            if ($valor9 > 9) {
+                $valor9 = ($valor9 - 9);
+            }
+            $valor11 = substr($ruc, 10, 1);
+            $valor11 = ($valor11 * 2);
+            if ($valor11 > 9) {
+                $valor11 = ($valor11 - 9);
+            }
+            $suma_impares = ($valor1 + $valor3 + $valor5 + $valor7 + $valor9 + $valor11);
+            $suma = ($suma_pares + $suma_impares);
+            $dis = substr($suma, 0, 1);
+            $dis = (($dis + 1) * 10);
+            $digito = ($dis - $suma);
+            if ($digito == 10) {
+                $digito = '0';
+            }
+            if ($digito == $ult_digito) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 }

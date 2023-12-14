@@ -32,6 +32,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\VarianteController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NosotrosController;
+use App\Http\Controllers\ContactoController;
 
 
 
@@ -238,6 +239,15 @@ Route::prefix('ofertasespeciales')->group(function () {
     Route::get('/{id}', [OfertasEspecialesController::class, 'show']);
     Route::put('/{id}', [OfertasEspecialesController::class, 'update']);
     Route::delete('/{id}', [OfertasEspecialesController::class, 'destroy']);
+});
+
+//CRUD Tabla OfertasEspeciales
+Route::prefix('contactos')->group(function () {
+    Route::get('/', [ContactoController::class, 'index']);
+    Route::post('/', [ContactoController::class, 'store']);
+    Route::get('/{id}', [ContactoController::class, 'show']);
+    Route::put('/{id}', [ContactoController::class, 'update']);
+    Route::delete('/{id}', [ContactoController::class, 'destroy']);
 });
 
 //CRUD Tabla Orden
