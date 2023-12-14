@@ -33,9 +33,7 @@ use App\Http\Controllers\VarianteController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NosotrosController;
 use App\Http\Controllers\ContactoController;
-
-
-
+use App\Http\Controllers\SuscriptorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -194,6 +192,18 @@ Route::prefix('facturaelectronica')->group(function () {
     Route::get('/{id}', [FacturaElectronicaController::class, 'show']);
     Route::put('/{id}', [FacturaElectronicaController::class, 'update']);
     Route::delete('/{id}', [FacturaElectronicaController::class, 'destroy']);
+});
+
+
+//
+
+//CRUD Tabla FacturaElectronica
+Route::prefix('suscriptor')->group(function () {
+    Route::get('/', [SuscriptorController::class, 'index']);
+    Route::post('/', [SuscriptorController::class, 'store']);
+    Route::get('/{id}', [SuscriptorController::class, 'show']);
+    Route::put('/{id}', [SuscriptorController::class, 'update']);
+    Route::delete('/{id}', [SuscriptorController::class, 'destroy']);
 });
 
 //CRUD Tabla FormaPago

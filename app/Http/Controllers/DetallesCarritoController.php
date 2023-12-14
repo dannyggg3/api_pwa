@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\DetallesCarrito;
+use App\Models\Variante;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -50,11 +51,27 @@ class DetallesCarritoController extends Controller
                 ], 200);
             }
 
+
+
             //si ya existe el usuario y la variante en el carrito, se actualiza la cantidad
             $detalleCarrito = DetallesCarrito::where('cliente_id', $request->cliente_id)
                 ->where('variante_id', $request->variante_id)->first();
 
+
+
             if ($detalleCarrito) {
+
+                //valida el stock de la variante
+                $variante = Variante::findOrFail($request->variante_id);
+
+
+                if ($variante->stock < ($request->cantidad + $detalleCarrito->cantidad)) {
+                    return new JsonResponse([
+                        'correctProcess' => false,
+                        'message' => 'No hay stock suficiente para este producto'
+                    ], 200);
+                }
+
                 $detalleCarrito->cantidad = $detalleCarrito->cantidad + $request->cantidad;
                 $detalleCarrito->save();
 
@@ -90,9 +107,8 @@ class DetallesCarritoController extends Controller
             foreach ($detalleCarrito as $detalle) {
 
 
-                $producto=Producto::where('id', $detalle->variante->producto_id)->with('marca', 'categoria')->first();
-                $detalle->variante->producto=$producto;
-
+                $producto = Producto::where('id', $detalle->variante->producto_id)->with('marca', 'categoria')->first();
+                $detalle->variante->producto = $producto;
             }
 
             return new JsonResponse([

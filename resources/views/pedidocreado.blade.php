@@ -85,9 +85,18 @@
             {{ $data->direccionEntrega->parroquia->parroquia }} - {{ $data->direccionEntrega->direccion }}</p>
         <br>
 
-        <h3>Envio</h3>
-        <p>${{ $data->envio }}</p>
-        <br>
+
+        @if ($data->envio > 0)
+            <h3>Envio</h3>
+            <p>${{ $data->envio }}</p>
+            <br>
+        @else
+            <h3>Retira en local</h3>
+            <p>$0,00</p>
+            <br>
+        @endif
+
+
 
         <h3>Total del Pedido</h3>
         <p>${{ $data->total }}</p>

@@ -17,6 +17,7 @@ use App\Mail\CambioEstadoPedido;
 use App\Models\DireccionesEntrega;
 use App\Models\Parroquias;
 use App\Models\User;
+use App\Models\Variante;
 use Illuminate\Support\Facades\Mail;
 
 
@@ -111,7 +112,17 @@ class OrdenController extends Controller
                 ]);
             }
 
+
+
             $carrito = DetallesCarrito::where('cliente_id', $request->cliente_id)->delete();
+
+            //resto el stock de la variante
+            $detallesOrden = DetallesOrden::where('orden_id', $orden->id)->get();
+            foreach ($detallesOrden as $item) {
+                $variante = Variante::where('id', $item->variante_id)->first();
+                $variante->stock = $variante->stock - $item->cantidad;
+                $variante->save();
+            }
 
             //enviar correo
             $empresa = Empresa::where('id', 1)->first();
@@ -222,6 +233,16 @@ class OrdenController extends Controller
 
             if ((int)$orden->estado_orden_id == 4) {
                 $asunto = 'Su orden esta en camino';
+            }
+
+            //si es cancelada sumo el stock a la variante
+            if ((int)$orden->estado_orden_id == 6) {
+                $detallesOrden = DetallesOrden::where('orden_id', $orden->id)->get();
+                foreach ($detallesOrden as $item) {
+                    $variante = Variante::where('id', $item->variante_id)->first();
+                    $variante->stock = $variante->stock + $item->cantidad;
+                    $variante->save();
+                }
             }
 
 

@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class PedidoGenerado extends Mailable
+class NuevoSuscriptor extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -32,8 +32,8 @@ class PedidoGenerado extends Mailable
     {
 
 
-        return $this->view('pedidocreado')
+        return $this->view('nuevo-suscriptor')
             ->from('confeccionesrocio9@gmail.com', 'Confecciones Rocío')
-            ->subject('NUEVO PEDIDO GENERADO');
+            ->subject('NUEVO SUSCRIPTOR');
     }
 }

@@ -16,7 +16,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register','loginP','recuperar']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'loginP', 'recuperar']]);
     }
 
     public function login(Request $request)
@@ -26,6 +26,16 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
         $credentials = $request->only('email', 'password');
+
+        //valida si el usuario tiene el rol_id 1
+        $user = User::where('email', $request->email)->first();
+        if ($user->rol_id != 1) {
+            return response()->json([
+                'correctProcess' => false,
+                'message' => 'No tiene permisos para acceder a esta ruta',
+            ], 200);
+        }
+
 
         $token = Auth::attempt($credentials);
         if (!$token) {
@@ -37,17 +47,16 @@ class AuthController extends Controller
 
         $user = Auth::user();
         return response()->json([
-                'correctProcess' => true,
-                'data' => $user,
-                'authorisation' => [
-                    'token' => $token,
-                    'type' => 'bearer',
-                ]
-            ]);
-
+            'correctProcess' => true,
+            'data' => $user,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ]
+        ]);
     }
 
-     public function loginP(Request $request)
+    public function loginP(Request $request)
     {
         $request->validate([
             'email' => 'required|string|email',
@@ -55,6 +64,15 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->only('email', 'password');
+
+        //valida si el usuario tiene el rol_id 2
+        $user = User::where('email', $request->email)->first();
+        if ($user->rol_id != 2) {
+            return response()->json([
+                'correctProcess' => false,
+                'message' => 'No tiene permisos para acceder a esta ruta',
+            ], 200);
+        }
 
         $token = Auth::attempt($credentials);
         if (!$token) {
@@ -67,9 +85,9 @@ class AuthController extends Controller
         $user = Auth::user();
 
         $cliente = Cliente::with('detallesCarrito')->where('usuario_id', $user->id)->first();
-        $user->cliente=$cliente;
+        $user->cliente = $cliente;
 
-        if($user->rol_id != 2){
+        if ($user->rol_id != 2) {
             return response()->json([
                 'correctProcess' => false,
                 'message' => 'No tiene permisos para acceder a esta ruta',
@@ -77,14 +95,13 @@ class AuthController extends Controller
         }
 
         return response()->json([
-                'correctProcess' => true,
-                'data' => $user,
-                'authorisation' => [
-                    'token' => $token,
-                    'type' => 'bearer',
-                ]
-            ]);
-
+            'correctProcess' => true,
+            'data' => $user,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ]
+        ]);
     }
 
 
@@ -95,7 +112,7 @@ class AuthController extends Controller
         ]);
 
         //si no es email retorna error de email
-        if(!filter_var($request->email, FILTER_VALIDATE_EMAIL)){
+        if (!filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
             return response()->json([
                 'correctProcess' => false,
                 'message' => 'El correo ingresado no es valido',
@@ -115,57 +132,58 @@ class AuthController extends Controller
         }
 
         //si existe desencripta la clave
-        $clave=$user->clave;
+        $clave = $user->clave;
 
         $data = new \stdClass();
         $data->email = $user->email;
         $data->clave = $clave;
 
         //envia el correo con la clave
-         try {
-        Mail::to($user->email)->send(new RecuperarClave($data));
-      } catch(Throwable $e) {
-        return response()->json(['message' => $e->getMessage()], 401);
-      }
+        try {
+            Mail::to($user->email)->send(new RecuperarClave($data));
+        } catch (Throwable $e) {
+            return response()->json(['message' => $e->getMessage()], 401);
+        }
 
         return response()->json([
-                'correctProcess' => true,
-                'message' => 'Se ha enviado un correo con la clave',
-            ]);
+            'correctProcess' => true,
+            'message' => 'Se ha enviado un correo con la clave',
+        ]);
     }
 
 
-    public function register(Request $request){
+    public function register(Request $request)
+    {
 
         try {
-             $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:6',
             ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'rol_id' => 2,
-            'clave' => $request->password,
-        ]);
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'rol_id' => 2,
+                'clave' => $request->password,
+            ]);
 
-        $token = Auth::login($user);
-        return response()->json([
-            'correctProcess'=> true,
-            'message' => 'Usuario creado exitosamente',
-            'data' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ]);
+            $token = Auth::login($user);
+            return response()->json([
+                'correctProcess' => true,
+                'message' => 'Usuario creado exitosamente',
+                'data' => $user,
+                'authorisation' => [
+                    'token' => $token,
+                    'type' => 'bearer',
+                ]
+            ]);
         } catch (\Throwable $th) {
             //return error
             return response()->json([
-                'correctProcess'=> false,
+                'correctProcess' => false,
                 'message' => 'Error al crear el usuario',
                 'data' => $th->getMessage(),
             ]);
@@ -176,7 +194,8 @@ class AuthController extends Controller
 
 
     //actualizar clave de un usuario por el id
-    public function updatePassword(Request $request, $id){
+    public function updatePassword(Request $request, $id)
+    {
         try {
 
             $validator = Validator::make($request->all(), [
@@ -231,12 +250,12 @@ class AuthController extends Controller
     public function clientes()
     {
         try {
-              //retorna los usuarios con rol_id 2
+            //retorna los usuarios con rol_id 2
             $users = User::where('rol_id', 2)->get();
             return response()->json([
                 'correctProcess' => true,
                 'data' => $users,
-        ]);
+            ]);
         } catch (\Throwable $th) {
             //throw $th;
             return response()->json([
