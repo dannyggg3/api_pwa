@@ -1,64 +1,552 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# API PWA - Backend E-commerce con Laravel
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 📋 Descripción
 
-## About Laravel
+**API PWA** es una API REST backend completa para comercio electrónico desarrollada con Laravel 8. Diseñada para servir como backend de una Progressive Web Application (PWA), proporciona todas las funcionalidades necesarias para una tienda online profesional: gestión de productos con variantes, procesamiento de órdenes, carrito de compras, facturación electrónica compatible con SRI Ecuador, autenticación JWT, y notificaciones por email.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Tipo de Proyecto
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**API REST Backend** - E-commerce con Facturación Electrónica
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🛠️ Tecnologías Utilizadas
 
-## Learning Laravel
+- **Laravel 8.75** - Framework PHP MVC
+- **PHP 7.3+ / 8.0+** - Lenguaje backend
+- **MySQL 5.7+** - Base de datos relacional
+- **JWT Authentication** - Autenticación con tokens
+- **DOMPDF** - Generación de PDFs
+- **Intervention Image** - Procesamiento de imágenes
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 📚 Frameworks y Librerías
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Backend Core
+- **Laravel 8.75** - Framework principal
+- **php-open-source-saver/jwt-auth 2.1** - Autenticación JWT
+- **Laravel Passport 10.4** - OAuth2 (configurado)
+- **Laravel Sanctum 2.11** - Autenticación API alternativa
 
-## Laravel Sponsors
+### Generación de Documentos
+- **barryvdh/laravel-dompdf 2.0** - PDFs (facturas)
+- **picqer/php-barcode-generator 2.4** - Códigos de barras
+- **setasign/fpdf 1.8** - Librería FPDF para PDFs
+- **Intervention Image 2.7** - Procesamiento de imágenes
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### Infraestructura
+- **Guzzle HTTP 7.0** - Cliente HTTP
+- **Fruitcake CORS 2.0** - Manejo CORS
 
-### Premium Partners
+### DevOps
+- **Laravel Sail** - Entorno Docker
+- **PHPUnit 9.5** - Testing unitario
+- **Laravel Mix 6** - Compilación de assets
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+## 🏗️ Arquitectura
 
-## Contributing
+### Patrón Arquitectónico: MVC REST API-First
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```
+┌──────────────────────────────────────┐
+│    Cliente PWA (Frontend)            │
+│    JavaScript + Axios                │
+└────────────┬─────────────────────────┘
+             │ HTTP/JSON + JWT
+             ↓
+┌────────────┴─────────────────────────┐
+│  API Router (routes/api.php)         │
+│  371 líneas de endpoints             │
+│  - Middleware: CORS, Auth, Roles     │
+└────────────┬─────────────────────────┘
+             │
+             ↓
+┌────────────┴─────────────────────────┐
+│  Controllers (34 controladores)      │
+│  - Validación JSON                   │
+│  - Lógica de negocio                 │
+│  - Respuestas consistentes           │
+└────────────┬─────────────────────────┘
+             │
+             ↓
+┌────────────┴─────────────────────────┐
+│  Models Eloquent (33 modelos)        │
+│  - Relaciones (belongsTo, hasMany)   │
+│  - Mutadores/Accesores               │
+│  - Cálculos (ej: stock variantes)    │
+└────────────┬─────────────────────────┘
+             │
+             ↓
+┌────────────┴─────────────────────────┐
+│  MySQL Database                      │
+│  - Tablas normalizadas               │
+│  - Relaciones FK                     │
+│  - Índices optimizados               │
+└──────────────────────────────────────┘
+```
 
-## Code of Conduct
+### Arquitectura de Capas
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**6 capas principales:**
+1. **Capa de Presentación** - JSON API
+2. **Capa de Controladores** - 34 controladores REST
+3. **Capa de Validación** - Laravel Validator
+4. **Capa de Servicios** - Mail (6 mailers), Procesamiento
+5. **Capa de Modelos** - 33 modelos Eloquent
+6. **Capa de Persistencia** - MySQL con Eloquent ORM
 
-## Security Vulnerabilities
+## 📁 Estructura del Proyecto
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+api_pwa/
+├── app/
+│   ├── Http/Controllers/     # 34 controladores
+│   ├── Models/               # 33 modelos Eloquent
+│   ├── Mail/                 # 6 clases de notificación
+│   ├── Libraries/            # FPDF personalizado
+│   └── Providers/            # Service providers
+├── routes/
+│   └── api.php               # 371 líneas de endpoints
+├── database/
+│   ├── migrations/           # Esquema de BD
+│   └── seeders/              # Datos iniciales
+├── public/
+│   ├── firmas/               # Firmas digitales
+│   ├── logos/                # Logos de empresa
+│   └── Sri/                  # Archivos SRI
+├── config/
+│   ├── jwt.php               # Configuración JWT
+│   ├── cors.php              # Configuración CORS
+│   └── mail.php              # Configuración email
+└── composer.json             # Dependencias PHP
+```
 
-## License
+## ✨ Características Principales
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 🔐 Autenticación Bifurcada con JWT
+
+**Sistema dual de autenticación:**
+
+1. **Login Administrador** (`POST /api/login`)
+   - Email + contraseña
+   - Valida rol_id = 1 (Admin)
+   - Genera token JWT
+   - Retorna usuario + token bearer
+
+2. **Login Cliente** (`POST /api/loginPortal`)
+   - Email + contraseña
+   - Valida rol_id = 2 (Cliente)
+   - Genera token JWT
+   - Acceso a funcionalidades de cliente
+
+**Características:**
+- Tokens JWT con expiración configurable (60 min)
+- Refresh tokens para renovación
+- Logout con blacklist de tokens
+- Recuperación de contraseña por email
+
+### 📦 Gestión de Productos con Variantes
+
+**Sistema completo de productos:**
+
+- **CRUD de Productos**: 34 controladores
+- **Categorías y Marcas**: Organización jerárquica
+- **Variantes Múltiples**: Color, talla, stock por variante
+- **Imágenes**: Procesamiento con Intervention Image
+- **Stock Inteligente**: Cálculo automático desde variantes
+- **Búsqueda y Filtros**: Por categoría, marca, precio
+
+**Modelo de Variantes:**
+```php
+variantes
+├── variante_id
+├── producto_id (FK)
+├── color
+├── talla
+├── stock (por variante)
+├── precio
+└── imagen
+```
+
+### 🛒 Carrito de Compras
+
+**Sistema de carrito persistente:**
+- Vinculado a cliente autenticado
+- Items asociados a variante específica
+- Gestión de cantidades
+- Cálculo de totales en tiempo real
+- CRUD completo: agregar, actualizar, eliminar
+
+### 📋 Gestión de Órdenes Completa
+
+**Flujo de órdenes:**
+
+1. **Creación de Orden**
+   - Datos de facturación
+   - Dirección de entrega
+   - Productos y cantidades
+   - Método de pago
+   - Cálculo de impuestos (IVA 12%, IVA 0%)
+
+2. **Estructura de Orden**
+```
+orden (cabecera)
+├── orden_id
+├── cliente_id
+├── fecha
+├── estado
+├── subtotal_iva_12
+├── subtotal_iva_0
+├── iva
+├── descuento
+├── envio
+├── total
+└── metodo_pago
+
+detallesorden (líneas)
+├── detalle_id
+├── orden_id (FK)
+├── producto_id
+├── variante_id
+├── cantidad
+├── precio_unitario
+├── subtotal
+└── iva_aplicado
+```
+
+3. **Estados de Orden**
+   - Pendiente
+   - Confirmada
+   - En proceso
+   - Enviada
+   - Entregada
+   - Cancelada
+
+4. **Cambio de Estado**
+   - Endpoint específico
+   - Notificación automática por email
+   - Registro de cambios
+
+### 🧾 Facturación Electrónica SRI (Ecuador)
+
+**Sistema completo de facturación:**
+
+- **Generación de Facturas Electrónicas**
+  - Compatible con SRI Ecuador
+  - Clave de acceso de 49 dígitos
+  - Código de autorización con código de barras
+  - Formato PDF con DOMPDF
+
+- **Componentes de Factura:**
+```
+factura_electronica
+├── factura_id
+├── orden_id (FK)
+├── numero_factura
+├── fecha_emision
+├── clave_acceso (49 dígitos)
+├── codigo_autorizacion
+├── subtotal_iva_12
+├── subtotal_iva_0
+├── iva
+├── total
+├── xml_firmado
+└── pdf_generado
+```
+
+- **Datos de Facturación:**
+  - RUC/Cédula
+  - Razón social
+  - Dirección fiscal
+  - Email
+  - Teléfono
+
+- **Envío Automático:**
+  - Email con PDF adjunto
+  - Mailer: `EnviarFactura`
+
+### 📧 Sistema de Notificaciones (6 Mailers)
+
+1. **RecuperarClave** - Recuperación de contraseña
+2. **PedidoGenerado** - Confirmación de pedido nuevo
+3. **CambioEstadoPedido** - Notificación de cambio de estado
+4. **EnviarFactura** - Envío de factura electrónica
+5. **NuevoSuscriptor** - Confirmación de suscripción
+6. **ContactoMail** - Respuesta a formulario de contacto
+
+### 👥 Gestión de Clientes
+
+**Funcionalidades:**
+- CRUD completo de clientes
+- Datos de contacto (email, teléfono, dirección)
+- Múltiples direcciones de entrega
+- Datos de facturación separados
+- Dashboard del cliente con historial
+- Tablero de estadísticas
+
+### 🌍 Sistema de Ubicaciones Geográficas
+
+**Estructura jerárquica:**
+- **Provincias**: División principal
+- **Ciudades**: Municipios por provincia
+- **Parroquias**: Subdivisiones
+
+**Uso:**
+- Direcciones de entrega
+- Cálculo de costos de envío
+- Validación de cobertura
+
+### 📊 Reportes y Análisis
+
+**Endpoint de reportes:**
+- `GET /api/orden/reportes/reporte`
+- Filtros por fecha, estado, cliente
+- Totales de ventas
+- Estadísticas de productos vendidos
+
+### 🎨 Gestión de Contenido
+
+- **Banners/Sliders**: Página principal
+- **Ofertas Especiales**: Promociones
+- **Publicidad**: Gestión de ads
+- **Nosotros**: Información de empresa
+- **Contactos**: Formulario de contacto
+
+## 🔌 API Endpoints Principales
+
+### Autenticación
+```
+POST   /api/login              # Login admin
+POST   /api/loginPortal        # Login cliente
+POST   /api/register           # Registro
+POST   /api/logout             # Logout
+POST   /api/refresh            # Refresh token
+POST   /api/recuperar          # Recuperar password
+GET    /api/usuariosClientes   # Listar clientes (auth)
+```
+
+### Productos
+```
+GET    /api/producto           # Listar productos
+POST   /api/producto           # Crear producto
+GET    /api/producto/{id}      # Obtener producto
+POST   /api/producto/{id}      # Actualizar producto
+DELETE /api/producto/{id}      # Eliminar producto
+GET    /api/categorias         # Listar categorías
+GET    /api/marca              # Listar marcas
+```
+
+### Variantes
+```
+GET    /api/variantes                  # Listar variantes
+POST   /api/variantes                  # Crear variante
+GET    /api/variantes/{id}             # Obtener variante
+GET    /api/variantes/product/{id}     # Por producto
+```
+
+### Carrito
+```
+GET    /api/detallescarrito            # Items carrito
+POST   /api/detallescarrito            # Agregar item
+GET    /api/detallescarrito/{id}       # Item específico
+POST   /api/detallescarrito/{id}       # Actualizar cantidad
+DELETE /api/detallescarrito/{id}       # Eliminar item
+```
+
+### Órdenes
+```
+GET    /api/orden                      # Listar órdenes
+POST   /api/orden                      # Crear orden
+GET    /api/orden/{id}                 # Obtener orden
+GET    /api/orden/cliente/{id}         # Por cliente
+PUT    /api/orden/{id}                 # Actualizar
+POST   /api/orden/cambiarEstado/{id}   # Cambiar estado
+GET    /api/orden/reportes/reporte     # Reportes
+```
+
+### Facturación
+```
+GET    /api/facturaelectronica         # Listar facturas
+POST   /api/facturaelectronica         # Crear factura
+GET    /api/facturaelectronica/{id}    # Obtener factura
+GET    /api/facturaelectronica/generadoc/{id} # Generar PDF
+```
+
+### Ubicaciones
+```
+GET    /api/provincia                  # Provincias
+GET    /api/ciudades                   # Ciudades
+GET    /api/direccionesentrega         # Direcciones
+GET    /api/direccionesentrega/cliente/{id} # Por cliente
+```
+
+## 🔧 Instalación
+
+### Prerrequisitos
+
+- PHP 7.3+ o 8.0+
+- Composer
+- MySQL 5.7+
+- Node.js (opcional, para assets)
+
+### Pasos
+
+1. Clonar repositorio
+```bash
+git clone https://github.com/dannyggg3/api_pwa.git
+cd api_pwa
+```
+
+2. Instalar dependencias
+```bash
+composer install
+```
+
+3. Configurar entorno
+```bash
+cp .env.example .env
+php artisan key:generate
+php artisan jwt:secret
+```
+
+4. Configurar base de datos en `.env`
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=api_pwa
+DB_USERNAME=root
+DB_PASSWORD=
+
+JWT_SECRET=[generado automáticamente]
+JWT_TTL=60
+```
+
+5. Ejecutar migraciones
+```bash
+php artisan migrate
+php artisan db:seed
+```
+
+6. Configurar email en `.env`
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_FROM_ADDRESS="noreply@api-pwa.com"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+7. Iniciar servidor
+```bash
+php artisan serve
+# API disponible en http://localhost:8000
+```
+
+## 💻 Uso
+
+### Ejemplo: Autenticación
+
+```bash
+curl -X POST http://localhost:8000/api/loginPortal \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "cliente@example.com",
+    "password": "password123"
+  }'
+```
+
+Respuesta:
+```json
+{
+  "correctProcess": true,
+  "data": {
+    "id": 1,
+    "name": "Juan Pérez",
+    "email": "cliente@example.com",
+    "rol_id": 2
+  },
+  "authorisation": {
+    "token": "eyJ0eXAiOiJKV1QiLC...",
+    "type": "bearer"
+  }
+}
+```
+
+### Ejemplo: Crear Orden
+
+```bash
+curl -X POST http://localhost:8000/api/orden \
+  -H "Authorization: Bearer {token}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "cliente_id": 1,
+    "metodo_pago": "tarjeta",
+    "direccion_entrega_id": 1,
+    "datos_facturacion_id": 1,
+    "productos": [
+      {
+        "variante_id": 5,
+        "cantidad": 2,
+        "precio_unitario": 25.50
+      }
+    ]
+  }'
+```
+
+## 📈 Estadísticas del Proyecto
+
+| Métrica | Valor |
+|---------|-------|
+| Controladores | 34 |
+| Modelos Eloquent | 33 |
+| Mail Classes | 6 |
+| API Endpoints | 100+ |
+| Líneas routes/api.php | 371 |
+| Tablas de BD | 30+ |
+
+## 🔒 Seguridad
+
+- JWT con expiración y refresh
+- CORS configurado
+- Validación de input en todos los endpoints
+- Rate limiting en rutas API
+- Sanitización de datos
+- HTTPS recomendado en producción
+
+## 🧪 Testing
+
+```bash
+php artisan test
+php artisan test --coverage
+```
+
+## 🚀 Despliegue
+
+### Producción
+
+```bash
+composer install --optimize-autoloader --no-dev
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+### Docker (Sail)
+
+```bash
+./vendor/bin/sail up -d
+./vendor/bin/sail artisan migrate
+```
+
+## 📄 Licencia
+
+Este proyecto es parte del portafolio de desarrollo de dannyggg3.
+
+## 👤 Autor
+
+**dannyggg3**
+- GitHub: [@dannyggg3](https://github.com/dannyggg3)
+
+---
+
+⭐ Si este proyecto te fue útil, considera darle una estrella
